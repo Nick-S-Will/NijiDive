@@ -17,58 +17,92 @@ namespace NijiDive.Controls
         [SerializeField] [Range(0f, 1f)] private float extraDeceleration = 0f;
 
         [Header("Jumping")]
-        [SerializeField] private float jumpForce = 10f;
-        [SerializeField] [Min(0f)] private float jumpBufferTime = 0.25f, maxGroundDistance = 0.1f, coyoteTime = 0.25f, minJumpInterval = 0.5f;
+        [SerializeField] [Min(0f)] private float jumpForce = 10f;
+        [SerializeField] [Min(0f)] private float variableGravityForce = 5f, jumpBufferTime = 0.25f, coyoteTime = 0.25f, minJumpInterval = 0.5f;
+
+        [Header("Falling")]
+        [SerializeField] [Min(0f)] private float maxFallSpeed = 3f;
+
+        [Header("Collisions")]
+        [SerializeField] [Min(0f)] private float maxGroundDistance = 0.1f;
+        [SerializeField] [Min(0f)] private float groundCollisionWidthScaler = 1f, maxWallDistance = 0.1f, wallCollisionHeightScaler = 1f;
 
         [Header("Visualizers")]
         [SerializeField] private Color gizmoColor = Color.red;
-        [SerializeField] private bool showGroundCheck;
+        [SerializeField] private bool showGroundCheck, showWallCheck;
 
-        private MapManager map;
-        private Rigidbody2D rb2d;
-        private Collider2D hitbox;
+        [Header("Feature Toggles")]
+        [SerializeField] private bool jumpBuffering = true;
+        [SerializeField] private bool coyoteTiming = true;
+
+        protected MapManager Map { get; private set; }
+        protected Rigidbody2D Rb2d { get; private set; }
+        protected Collider2D Hitbox { get; private set; }
+        protected float LastTimeGrounded { get; private set; }
+        /// <summary>
+        /// True within <see cref="coyoteTime"/> seconds of <see cref="GroundCheck"/> finding the ground
+        /// </summary>
+        protected bool OnGround => coyoteTiming ? Time.time - LastTimeGrounded <= coyoteTime : Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
+        protected bool JumpHeld { get; private set; }
+
         private Coroutine jumpTry;
-        private Bounds groundCheckBounds;
-        private float lastTimeGrounded;
-
-        protected bool OnGround => Time.time - lastTimeGrounded <= coyoteTime;
+        private Bounds groundCheckBounds, wallCheckBounds;
 
         protected virtual void Awake()
         {
-            map = FindObjectOfType<MapManager>();
-            if (map == null)
+            Map = FindObjectOfType<MapManager>();
+            if (Map == null)
             {
                 Debug.LogError($"No {typeof(MapManager)} found in scene");
                 enabled = false;
             }
 
-            hitbox = GetComponent<Collider2D>();
-            rb2d = GetComponent<Rigidbody2D>();
+            Hitbox = GetComponent<Collider2D>();
+            Rb2d = GetComponent<Rigidbody2D>();
         }
 
         protected virtual void FixedUpdate()
         {
-            if (GroundCheck()) lastTimeGrounded = Time.time;
+            if (GroundCheck()) LastTimeGrounded = Time.time;
         }
 
+        // Cleaner way to update a single axis of velocity
+        private void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
+        private void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
+
+        /// <summary>
+        /// Updates <see cref="Rb2d"/>'s X axis velocity
+        /// </summary>
+        /// <param name="xInput">Scales the applied movement force</param>
         protected void Move(float xInput)
         {
-            if (xInput == 0f)
+            if (WallCheck(xInput))
             {
-                rb2d.velocity = new Vector2(rb2d.velocity.x / (1f + extraDeceleration), rb2d.velocity.y);
+                SetVelocityX(0f);
+            }
+            else if (xInput == 0f)
+            {
+                Rb2d.AddForce(-extraDeceleration * Rb2d.velocity.x * Vector2.right);
             }
             else
             {
                 var moveForce = xInput * this.moveForce * Vector2.right;
-                if (xInput * rb2d.velocity.x < 0f) moveForce *= reverseForceMultiplier;
-                rb2d.AddForce(moveForce);
+                if (xInput * Rb2d.velocity.x < 0f) moveForce *= reverseForceMultiplier;
+                Rb2d.AddForce(moveForce);
             }
         }
 
+        /// <summary>
+        /// Method for derived classes to queue a jump. Will only queue one jump at a time, hence the "Try"
+        /// </summary>
         protected void TryJump()
         {
-            if (jumpTry == null) jumpTry = StartCoroutine(TryJumpRoutine());
+            if (!jumpBuffering && OnGround) Jump();
+            else if (jumpTry == null) jumpTry = StartCoroutine(TryJumpRoutine());
         }
+        /// <summary>
+        /// Routine which tries to jump every fixed update for <see cref="jumpBufferTime"/> seconds
+        /// </summary>
         private IEnumerator TryJumpRoutine()
         {
             var startTime = Time.time;
@@ -88,27 +122,93 @@ namespace NijiDive.Controls
             yield return new WaitUntil(() => !OnGround || Time.time - startTime > minJumpInterval || !isActiveAndEnabled);
             jumpTry = null;
         }
+        /// <summary>
+        /// Adds <see cref="jumpForce"/> to <see cref="Rb2d"/>'s Y axis velocity
+        /// </summary>
         private void Jump()
         {
-            rb2d.velocity += jumpForce * Vector2.up;
+            JumpHeld = true;
+            Rb2d.velocity = jumpForce * Vector2.up;
         }
 
+        /// <summary>
+        /// Adds <see cref="variableGravityForce"/> downwards to <see cref="Rb2d"/>'s Y axis velocity if jump is released in the air
+        /// </summary>
+        /// <param name="jumpDown">True if the jump command is enabled</param>
+        protected void TryAddVariableGravity(bool jumpDown)
+        {
+            if (!jumpDown) JumpHeld = false;
+            if (JumpHeld || jumpDown || OnGround || Rb2d.velocity.y <= 0) return;
+
+            var gravityForce = variableGravityForce * Vector2.down;
+            Rb2d.AddForce(gravityForce);
+        }
+
+        protected void ClampFallSpeed()
+        {
+            if (-Rb2d.velocity.y > maxFallSpeed) SetVelocityY(-maxFallSpeed);
+        }
+
+        /// <summary>
+        /// Performs <see cref="Physics2D.OverlapBox(Vector2, Vector2, float, int)"/>
+        /// </summary>
+        /// <param name="boxPos">Position of the collision check</param>
+        /// <param name="boxSize">Size of the collision check</param>
+        /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
+        private bool CollisionCheck(Vector2 boxPos, Vector2 boxSize)
+        {
+            var collision = Physics2D.OverlapBox(boxPos, boxSize, 0f, Map.GroundMask);
+            return collision != null;
+        }
+
+        /// <summary>
+        /// Checks for ground below the collider using <see cref="groundCollisionWidthScaler"/> and <see cref="maxGroundDistance"/>
+        /// </summary>
+        /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private bool GroundCheck()
         {
-            var boxPos = transform.position + (maxGroundDistance / 2f * Vector3.down);
-            var boxSize = new Vector2(0.9f * hitbox.bounds.size.x, maxGroundDistance);
+            var boxPos = Rb2d.position + (maxGroundDistance / 2f * Vector2.down);
+            var boxSize = new Vector2(groundCollisionWidthScaler * Hitbox.bounds.size.x, maxGroundDistance);
             if (showGroundCheck) groundCheckBounds = new Bounds(boxPos, boxSize);
 
-            var collision = Physics2D.OverlapBox(boxPos, boxSize, 0f, map.GroundMask);
-            return collision != null;
+            return CollisionCheck(boxPos, boxSize);
+        }
+
+        /// <summary>
+        /// Check for ground beside the collider using <see cref="maxWallDistance"/> and <see cref="wallCollisionHeightScaler"/>
+        /// </summary>
+        /// <param name="xDirection">Direction on the X axis the wall is checked for</param>
+        /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
+        private bool WallCheck(float xDirection)
+        {
+            if (xDirection * Rb2d.velocity.x < 0f || xDirection == 0f) xDirection = Rb2d.velocity.x;
+
+            if (xDirection == 0f)
+            {
+                if (showWallCheck) wallCheckBounds = new Bounds(Vector3.zero, Vector3.zero);
+                return true;
+            }
+
+            var hitboxSize = Hitbox.bounds.size;
+            var dir = xDirection > 0f ? 1f : -1f;
+            var boxPos = Rb2d.position + (dir * (hitboxSize.x + maxWallDistance) / 2f * Vector2.right) + (hitboxSize.y / 2f * Vector2.up);
+            var boxSize = new Vector2(maxWallDistance, wallCollisionHeightScaler * hitboxSize.y);
+            if (showWallCheck) wallCheckBounds = new Bounds(boxPos, boxSize);
+
+            return CollisionCheck(boxPos, boxSize);
         }
 
         private void OnDrawGizmos()
         {
-            if (showGroundCheck && groundCheckBounds != null)
+            if (showGroundCheck)
             {
                 Gizmos.color = gizmoColor;
                 Gizmos.DrawCube(groundCheckBounds.center, groundCheckBounds.size);
+            }
+            if (showWallCheck)
+            {
+                Gizmos.color = gizmoColor;
+                Gizmos.DrawCube(wallCheckBounds.center, wallCheckBounds.size);
             }
         }
     }

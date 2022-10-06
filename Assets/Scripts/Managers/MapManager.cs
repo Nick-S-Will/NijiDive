@@ -8,6 +8,9 @@ namespace NijiDive.Managers
     {
         [SerializeField] private LayerMask groundMask;
 
+        /// <summary>
+        /// <see cref="LayerMask"/> used for ground check collisions
+        /// </summary>
         public LayerMask GroundMask => groundMask;
     }
 }

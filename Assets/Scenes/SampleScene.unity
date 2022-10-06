@@ -1520,7 +1520,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 682635203}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: bc3674e0675fb3c42a935c42f85b7353, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -1542,7 +1542,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2.5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1563,13 +1563,25 @@ MonoBehaviour:
   moveForce: 25
   reverseForceMultiplier: 2
   extraDeceleration: 0.2
-  jumpForce: 5
+  jumpForce: 12
+  variableGravityForce: 30
   jumpBufferTime: 0.2
-  maxGroundDistance: 0.05
   coyoteTime: 0.2
   minJumpInterval: 0.5
+  maxFallSpeed: 5
+  maxGroundDistance: 0.05
+  groundCollisionWidthScaler: 0.25
+  maxWallDistance: 0.02
+  wallCollisionHeightScaler: 0.8
   gizmoColor: {r: 1, g: 0, b: 0, a: 1}
-  showGroundCheck: 1
+  showGroundCheck: 0
+  showWallCheck: 0
+  jumpBuffering: 1
+  coyoteTiming: 1
+  moving: 1
+  jumping: 1
+  variableJumping: 1
+  clampFalling: 1
   jumpKey: 32
 --- !u!4 &682635207
 Transform:
