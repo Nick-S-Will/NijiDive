@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 
 using NijiDive.Managers;
 
-namespace NijiDive.Controls
+namespace NijiDive.Controls.Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
@@ -18,7 +19,7 @@ namespace NijiDive.Controls
 
         [Header("Jumping")]
         [SerializeField] [Min(0f)] private float jumpForce = 10f;
-        [SerializeField] [Min(0f)] private float variableGravityForce = 5f, jumpBufferTime = 0.25f, coyoteTime = 0.25f, minJumpInterval = 0.5f;
+        [SerializeField] [Min(0f)] private float variableGravityForce = 5f, jumpBufferTime = 0.25f, coyoteTime = 0.25f, minJumpInterval = 0.5f, maxJumpSpeed = 10f;
 
         [Header("Falling")]
         [SerializeField] [Min(0f)] private float maxFallSpeed = 3f;
@@ -32,18 +33,26 @@ namespace NijiDive.Controls
         [SerializeField] private bool showGroundCheck, showWallCheck;
 
         [Header("Feature Toggles")]
-        [SerializeField] private bool jumpBuffering = true;
-        [SerializeField] private bool coyoteTiming = true;
+        [SerializeField] private bool moving = true;
+        [SerializeField] private bool jumping = true, variableJumping = true, clampVertical = true, jumpBuffering = true, coyoteTiming = true;
 
-        protected MapManager Map { get; private set; }
-        protected Rigidbody2D Rb2d { get; private set; }
-        protected Collider2D Hitbox { get; private set; }
-        protected float LastTimeGrounded { get; private set; }
+        [Space]
+        public UnityEvent OnMove;
+        public UnityEvent OnJump, OnLand;
+
+        public MapManager Map { get; private set; }
+        public Rigidbody2D Rb2d { get; private set; }
+        public Collider2D Hitbox { get; private set; }
+        public float LastTimeGrounded { get; private set; }
         /// <summary>
         /// True within <see cref="coyoteTime"/> seconds of <see cref="GroundCheck"/> finding the ground
         /// </summary>
-        protected bool OnGround => coyoteTiming ? Time.time - LastTimeGrounded <= coyoteTime : Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
-        protected bool JumpHeld { get; private set; }
+        public bool IsOnGround => coyoteTiming ? Time.time - LastTimeGrounded <= coyoteTime : Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
+        /// <summary>
+        /// True only when finding the ground
+        /// </summary>
+        public bool IsOnGroundRaw => Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
+        public bool JumpHeld { get; private set; }
 
         private Coroutine jumpTry;
         private Bounds groundCheckBounds, wallCheckBounds;
@@ -63,7 +72,11 @@ namespace NijiDive.Controls
 
         protected virtual void FixedUpdate()
         {
-            if (GroundCheck()) LastTimeGrounded = Time.time;
+            if (GroundCheck())
+            {
+                if (Time.time - LastTimeGrounded > 2 * Time.fixedDeltaTime) OnLand?.Invoke();
+                LastTimeGrounded = Time.time;
+            }
         }
 
         // Cleaner way to update a single axis of velocity
@@ -76,6 +89,8 @@ namespace NijiDive.Controls
         /// <param name="xInput">Scales the applied movement force</param>
         protected void Move(float xInput)
         {
+            if (!moving) return;
+
             if (WallCheck(xInput))
             {
                 SetVelocityX(0f);
@@ -86,6 +101,8 @@ namespace NijiDive.Controls
             }
             else
             {
+                if (Rb2d.velocity.x == 0f) OnMove?.Invoke();
+
                 var moveForce = xInput * this.moveForce * Vector2.right;
                 if (xInput * Rb2d.velocity.x < 0f) moveForce *= reverseForceMultiplier;
                 Rb2d.AddForce(moveForce);
@@ -97,7 +114,9 @@ namespace NijiDive.Controls
         /// </summary>
         protected void TryJump()
         {
-            if (!jumpBuffering && OnGround) Jump();
+            if (!jumping) return;
+
+            if (!jumpBuffering && IsOnGround) Jump();
             else if (jumpTry == null) jumpTry = StartCoroutine(TryJumpRoutine());
         }
         /// <summary>
@@ -109,7 +128,7 @@ namespace NijiDive.Controls
 
             while (Time.time - startTime <= jumpBufferTime && isActiveAndEnabled)
             {
-                if (OnGround)
+                if (IsOnGround)
                 {
                     Jump();
                     break;
@@ -119,7 +138,7 @@ namespace NijiDive.Controls
             }
 
             startTime = Time.time;
-            yield return new WaitUntil(() => !OnGround || Time.time - startTime > minJumpInterval || !isActiveAndEnabled);
+            yield return new WaitUntil(() => !IsOnGround || Time.time - startTime > minJumpInterval || !isActiveAndEnabled);
             jumpTry = null;
         }
         /// <summary>
@@ -129,6 +148,8 @@ namespace NijiDive.Controls
         {
             JumpHeld = true;
             Rb2d.velocity = jumpForce * Vector2.up;
+
+            OnJump?.Invoke();
         }
 
         /// <summary>
@@ -137,16 +158,23 @@ namespace NijiDive.Controls
         /// <param name="jumpDown">True if the jump command is enabled</param>
         protected void TryAddVariableGravity(bool jumpDown)
         {
+            if (!variableJumping) return;
+
             if (!jumpDown) JumpHeld = false;
-            if (JumpHeld || jumpDown || OnGround || Rb2d.velocity.y <= 0) return;
+            if (JumpHeld || jumpDown || IsOnGround || Rb2d.velocity.y <= 0) return;
 
             var gravityForce = variableGravityForce * Vector2.down;
             Rb2d.AddForce(gravityForce);
         }
 
-        protected void ClampFallSpeed()
+        /// <summary>
+        /// Clamps <see cref="Rb2d"/>'s Y velocity to -<see cref="maxFallSpeed"/>
+        /// </summary>
+        protected void TryClampVerticalSpeed()
         {
-            if (-Rb2d.velocity.y > maxFallSpeed) SetVelocityY(-maxFallSpeed);
+            if (!clampVertical) return;
+
+            SetVelocityY(Mathf.Clamp(Rb2d.velocity.y, -maxFallSpeed, maxJumpSpeed));
         }
 
         /// <summary>

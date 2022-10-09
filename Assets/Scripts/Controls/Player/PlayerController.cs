@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NijiDive.Controls
+namespace NijiDive.Controls.Player
 {
     public class PlayerController : HumanoidControls
     {
-        [SerializeField] private bool moving = true, jumping = true, variableJumping = true, clampFalling = true;
-
         [Header("Key Mapping")]
         [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+
+        public KeyCode JumpKey => jumpKey;
 
         private float xInput;
 
@@ -18,16 +18,16 @@ namespace NijiDive.Controls
         private void Update()
         {
             xInput = Input.GetAxisRaw("Horizontal");
-            if (jumping && Input.GetKeyDown(jumpKey)) TryJump();
+            if (Input.GetKeyDown(jumpKey)) TryJump();
         }
 
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            if (moving) Move(xInput);
-            if (variableJumping) TryAddVariableGravity(Input.GetKey(jumpKey));
-            if (clampFalling) ClampFallSpeed();
+            Move(xInput);
+            TryAddVariableGravity(Input.GetKey(jumpKey));
+            TryClampVerticalSpeed();
         }
     }
 }
