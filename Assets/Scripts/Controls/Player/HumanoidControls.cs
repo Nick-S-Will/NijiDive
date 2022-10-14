@@ -15,7 +15,7 @@ namespace NijiDive.Controls.Player
         [SerializeField] private float moveForce = 5f;
         [Tooltip("The force multiplier added when starting to move the opposite way")]
         [SerializeField] [Min(1f)] private float reverseForceMultiplier = 1f;
-        [SerializeField] [Range(0f, 1f)] private float extraDeceleration = 0f;
+        [SerializeField] [Min(0f)] private float extraDeceleration = 0f;
 
         [Header("Jumping")]
         [SerializeField] [Min(0f)] private float jumpForce = 10f;

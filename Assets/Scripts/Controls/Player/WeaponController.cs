@@ -11,7 +11,7 @@ namespace NijiDive.Controls.Player
     public class WeaponController : MonoBehaviour
     {
         [SerializeField] private Weapon startingWeapon;
-
+        [Space]
         public UnityEvent OnShoot;
 
         private PlayerController movement;
@@ -56,15 +56,9 @@ namespace NijiDive.Controls.Player
         {
             do
             {
-                for (int burst = 0; burst < currentWeapon.ProjectilesPerBurst; burst++)
+                for (int burst = 0; burst < Mathf.Min(currentWeapon.LeftInClip, currentWeapon.ProjectilesPerBurst); burst++)
                 {
-                    for (int volley = 0; volley < Mathf.Min(currentWeapon.LeftInClip, currentWeapon.ProjectilesPerVolley); volley++)
-                    {
-                        var rotation = Quaternion.Euler(0, 0, (1f - currentWeapon.Accuracy) * Random.Range(-90f, 90f));
-                        var projectile = Instantiate(currentWeapon.Projectile, transform.position, rotation);
-                        projectile.SetSpeed(currentWeapon.ProjectileSpeed);
-                        movement.Rb2d.velocity += currentWeapon.RecoilSpeed * Vector2.up;
-                    }
+                    for (int volley = 0; volley < currentWeapon.ProjectilesPerVolley; volley++) ShootSingle();
                     OnShoot?.Invoke();
 
                     if (currentWeapon.ClipIsEmpty) goto endShooting;
@@ -74,12 +68,21 @@ namespace NijiDive.Controls.Player
                 if (currentWeapon.IsAutomatic)
                 {
                     yield return new WaitForSeconds(currentWeapon.ShotInterval);
-                    if (!Input.GetKey(movement.JumpKey)) break;
+                    if (!Input.GetKey(movement.JumpKey) || movement.IsOnGround) break;
                 }
             } while (currentWeapon.IsAutomatic && currentWeapon.LeftInClip > 0);
 
-            endShooting:
+        endShooting:
             shooting = null;
+        }
+        private void ShootSingle()
+        {
+            var height = (currentWeapon.Projectile.transform.lossyScale.x + currentWeapon.Projectile.transform.lossyScale.y) / 2f;
+            var position = (Vector2)transform.position + (height * Vector2.down);
+            var rotation = Quaternion.Euler(0, 0, (1f - currentWeapon.Accuracy) * Random.Range(-90f, 90f));
+            var projectile = Instantiate(currentWeapon.Projectile, position, rotation);
+            projectile.SetSpeed(currentWeapon.ProjectileSpeed - movement.Rb2d.velocity.y);
+            movement.Rb2d.velocity += currentWeapon.RecoilSpeed * Vector2.up;
         }
     }
 }

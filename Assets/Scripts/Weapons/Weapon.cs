@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NijiDive.Weapons
 {
-    [CreateAssetMenu()]
+    [CreateAssetMenu(menuName = "NijiDive/Weapon", order = 0)]
     public class Weapon : ScriptableObject
     {
         [SerializeField] private Projectile projectile;
@@ -54,7 +54,7 @@ namespace NijiDive.Weapons
         public void CompleteVolley()
         {
             lastShotTime = Time.time;
-            LeftInClip -= projectilesPerVolley;
+            LeftInClip -= 1;
         }
 
         public void Reload()

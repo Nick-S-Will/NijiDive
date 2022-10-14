@@ -27,9 +27,10 @@ namespace NijiDive.Weapons
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            var damageable = collision.GetComponent<IDamageable>();
-            if (damageable != null && damageable.TakeDamage(damage, damageType))
+            var damageable = collision.GetComponentInParent<IDamageable>();
+            if (damageable != null)
             {
+                _ = damageable.TakeDamage(damage, damageType, collision.ClosestPoint(transform.position));
                 OnHit?.Invoke();
                 Destroy(gameObject);
             }
