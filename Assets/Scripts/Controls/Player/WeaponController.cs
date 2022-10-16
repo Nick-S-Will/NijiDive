@@ -12,7 +12,8 @@ namespace NijiDive.Controls.Player
     {
         [SerializeField] private Weapon startingWeapon;
         [Space]
-        public UnityEvent OnShoot;
+        public UnityEvent<Weapon> OnEquip;
+        public UnityEvent OnShoot, OnEmpty;
 
         private PlayerController movement;
         private Weapon currentWeapon;
@@ -35,7 +36,7 @@ namespace NijiDive.Controls.Player
             if (Input.GetKeyDown(movement.JumpKey) && !movement.IsOnGroundRaw) TryShoot();
         }
 
-        private void EquipWeapon(Weapon newWeapon)
+        public void EquipWeapon(Weapon newWeapon)
         {
             if (currentWeapon != null)
             {
@@ -46,6 +47,8 @@ namespace NijiDive.Controls.Player
             currentWeapon = newWeapon;
             movement.OnLand.AddListener(currentWeapon.Reload);
             OnShoot.AddListener(currentWeapon.CompleteVolley);
+
+            OnEquip?.Invoke(currentWeapon);
         }
 
         private void TryShoot()
@@ -61,7 +64,11 @@ namespace NijiDive.Controls.Player
                     for (int volley = 0; volley < currentWeapon.ProjectilesPerVolley; volley++) ShootSingle();
                     OnShoot?.Invoke();
 
-                    if (currentWeapon.ClipIsEmpty) goto endShooting;
+                    if (currentWeapon.ClipIsEmpty)
+                    {
+                        OnEmpty?.Invoke();
+                        goto endShooting;
+                    }
                     else if (currentWeapon.ProjectilesPerBurst > 1) yield return new WaitForSeconds(currentWeapon.BurstProjectileInterval);
                 }
 
@@ -81,8 +88,8 @@ namespace NijiDive.Controls.Player
             var position = (Vector2)transform.position + (height * Vector2.down);
             var rotation = Quaternion.Euler(0, 0, (1f - currentWeapon.Accuracy) * Random.Range(-90f, 90f));
             var projectile = Instantiate(currentWeapon.Projectile, position, rotation);
-            projectile.SetSpeed(currentWeapon.ProjectileSpeed - movement.Rb2d.velocity.y);
-            movement.Rb2d.velocity += currentWeapon.RecoilSpeed * Vector2.up;
+            projectile.SetSpeed(currentWeapon.ProjectileSpeed - movement.GetVelocity().y);
+            movement.SetVelocityY(currentWeapon.RecoilSpeed);
         }
     }
 }

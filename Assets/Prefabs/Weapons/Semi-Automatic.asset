@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Semi-Automatic
   m_EditorClassIdentifier: 
   projectile: {fileID: 786754530702179011, guid: 6bf83d72271a22f46831f6ff13285b2a, type: 3}
-  accuracy: 0.95
+  accuracy: 0.98
   projectileSpeed: 25
-  recoilSpeed: 5
+  recoilSpeed: 1
   shotInterval: 0.33333334
   burstProjectileInterval: 0
   projectilesPerVolley: 1

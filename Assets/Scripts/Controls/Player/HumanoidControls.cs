@@ -40,9 +40,9 @@ namespace NijiDive.Controls.Player
         public UnityEvent OnMove;
         public UnityEvent OnJump, OnLand;
 
-        public MapManager Map { get; private set; }
-        public Rigidbody2D Rb2d { get; private set; }
-        public Collider2D Hitbox { get; private set; }
+        protected MapManager Map { get; private set; }
+        protected Rigidbody2D Rb2d { get; private set; }
+        protected Collider2D Hitbox { get; private set; }
         public float LastTimeGrounded { get; private set; }
         /// <summary>
         /// True within <see cref="coyoteTime"/> seconds of <see cref="GroundCheck"/> finding the ground
@@ -79,9 +79,10 @@ namespace NijiDive.Controls.Player
             }
         }
 
+        public Vector2 GetVelocity() => Rb2d.velocity;
         // Cleaner way to update a single axis of velocity
-        private void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
-        private void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
+        public void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
+        public void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
 
         /// <summary>
         /// Updates <see cref="Rb2d"/>'s X axis velocity
