@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 
@@ -11,9 +10,10 @@ namespace NijiDive.Controls.Player
     public class WeaponController : MonoBehaviour
     {
         [SerializeField] private Weapon startingWeapon;
+        [SerializeField] private LayerMask damageLayers;
         [Space]
         public UnityEvent<Weapon> OnEquip;
-        public UnityEvent OnShoot, OnEmpty;
+        public UnityEvent OnShoot, OnEmpty, OnStomp;
 
         private PlayerController movement;
         private Weapon currentWeapon;
@@ -34,6 +34,13 @@ namespace NijiDive.Controls.Player
         private void Update()
         {
             if (Input.GetKeyDown(movement.JumpKey) && !movement.IsOnGroundRaw) TryShoot();
+        }
+
+        private void FixedUpdate()
+        {
+            var bounds = movement.GroundCheckBounds;
+            var collider = Physics2D.OverlapBox(bounds.center, bounds.size, 0f, damageLayers);
+            if (collider) TryDamage(collider, collider.ClosestPoint(transform.position));
         }
 
         public void EquipWeapon(Weapon newWeapon)
@@ -84,12 +91,21 @@ namespace NijiDive.Controls.Player
         }
         private void ShootSingle()
         {
-            var height = (currentWeapon.Projectile.transform.lossyScale.x + currentWeapon.Projectile.transform.lossyScale.y) / 2f;
-            var position = (Vector2)transform.position + (height * Vector2.down);
+            var position = transform.position;
             var rotation = Quaternion.Euler(0, 0, (1f - currentWeapon.Accuracy) * Random.Range(-90f, 90f));
             var projectile = Instantiate(currentWeapon.Projectile, position, rotation);
             projectile.SetSpeed(currentWeapon.ProjectileSpeed - movement.GetVelocity().y);
             movement.SetVelocityY(currentWeapon.RecoilSpeed);
+        }
+
+        private void TryDamage(Collider2D collider, Vector3 point)
+        {
+            var damageable = collider.GetComponentInParent<IDamageable>();
+            if (damageable != null)
+            {
+                _ = damageable.TakeDamage(int.MaxValue, DamageType.Player | DamageType.Contact, point);
+                OnStomp?.Invoke();
+            }
         }
     }
 }

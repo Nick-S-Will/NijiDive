@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Test Back
+  m_Script: {fileID: 11500000, guid: 40ce25f4dea03d54489f2f5cc895d5b1, type: 3}
+  m_Name: Test Breakable
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 7482667652216324306, guid: f8138b4fe8929994eaa7cc149f5f4be2, type: 3}
-  m_Color: {r: 1, g: 0.47547168, b: 0.57099295, a: 1}
+  m_Sprite: {fileID: -424272688099050025, guid: 6f47d12ef3a10d54492a86df93c8e735, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
     e01: 0
@@ -34,3 +34,7 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 1
   m_ColliderType: 2
+  vulnerableTypes: 17
+  OnBreak:
+    m_PersistentCalls:
+      m_Calls: []

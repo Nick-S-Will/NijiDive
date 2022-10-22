@@ -15,7 +15,7 @@ MonoBehaviour:
   projectile: {fileID: 786754530702179011, guid: 6bf83d72271a22f46831f6ff13285b2a, type: 3}
   accuracy: 0.75
   projectileSpeed: 30
-  recoilSpeed: 3
+  recoilSpeed: 5
   shotInterval: 1
   burstProjectileInterval: 0
   projectilesPerVolley: 20

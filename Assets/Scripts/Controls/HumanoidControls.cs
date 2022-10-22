@@ -5,7 +5,7 @@ using UnityEngine;
 
 using NijiDive.Managers;
 
-namespace NijiDive.Controls.Player
+namespace NijiDive.Controls
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
@@ -40,9 +40,14 @@ namespace NijiDive.Controls.Player
         public UnityEvent OnMove;
         public UnityEvent OnJump, OnLand;
 
+        private Coroutine jumpTry;
+        private Bounds groundCheckBounds, wallCheckBounds;
+
         protected MapManager Map { get; private set; }
         protected Rigidbody2D Rb2d { get; private set; }
         protected Collider2D Hitbox { get; private set; }
+        public Bounds GroundCheckBounds => groundCheckBounds;
+        public Bounds WallCheckBounds => wallCheckBounds;
         public float LastTimeGrounded { get; private set; }
         /// <summary>
         /// True within <see cref="coyoteTime"/> seconds of <see cref="GroundCheck"/> finding the ground
@@ -53,9 +58,6 @@ namespace NijiDive.Controls.Player
         /// </summary>
         public bool IsOnGroundRaw => Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
         public bool JumpHeld { get; private set; }
-
-        private Coroutine jumpTry;
-        private Bounds groundCheckBounds, wallCheckBounds;
 
         protected virtual void Awake()
         {
@@ -198,7 +200,7 @@ namespace NijiDive.Controls.Player
         {
             var boxPos = Rb2d.position + (maxGroundDistance / 2f * Vector2.down);
             var boxSize = new Vector2(groundCollisionWidthScaler * Hitbox.bounds.size.x, maxGroundDistance);
-            if (showGroundCheck) groundCheckBounds = new Bounds(boxPos, boxSize);
+            groundCheckBounds = new Bounds(boxPos, boxSize);
 
             return CollisionCheck(boxPos, boxSize);
         }
@@ -214,7 +216,7 @@ namespace NijiDive.Controls.Player
 
             if (xDirection == 0f)
             {
-                if (showWallCheck) wallCheckBounds = new Bounds(Vector3.zero, Vector3.zero);
+                wallCheckBounds = new Bounds(Vector3.zero, Vector3.zero);
                 return true;
             }
 
@@ -222,7 +224,7 @@ namespace NijiDive.Controls.Player
             var dir = xDirection > 0f ? 1f : -1f;
             var boxPos = Rb2d.position + (dir * (hitboxSize.x + maxWallDistance) / 2f * Vector2.right) + (hitboxSize.y / 2f * Vector2.up);
             var boxSize = new Vector2(maxWallDistance, wallCollisionHeightScaler * hitboxSize.y);
-            if (showWallCheck) wallCheckBounds = new Bounds(boxPos, boxSize);
+            wallCheckBounds = new Bounds(boxPos, boxSize);
 
             return CollisionCheck(boxPos, boxSize);
         }
