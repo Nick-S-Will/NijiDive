@@ -12,7 +12,7 @@ namespace NijiDive
         /// <param name="damageType"><see cref="DamageType"/> of the damage source</param>
         /// <param name="point">Point on the collider where the damage is taken</param>
         /// <returns>True if damage was inflicted on this</returns>
-        public bool TakeDamage(int damage, DamageType damageType, Vector2 point);
+        public bool TryDamage(int damage, DamageType damageType, Vector2 point);
     }
 
     /// <summary>
@@ -21,15 +21,16 @@ namespace NijiDive
     [Flags]
     public enum DamageType
     {
-        // Last 6 binary make up the damage type
+        // Binary of enum makes up the damage type
         // Damage sources
-        Enemy = 32,
-        Player = 16,
-        Environment = 8,
+        Enemy = 1 << 31,
+        Player = 1 << 30,
+        Environment = 1 << 29,
 
         // Damage types
-        Suffocation = 4,
-        Contact = 2,
+        Suffocation = 1 << 3,
+        Headbutt = 1 << 2,
+        Stomp = 1 << 1,
         Projectile = 1
     }
 
@@ -37,7 +38,8 @@ namespace NijiDive
     {
         public static bool IsVulnerableTo(this DamageType vulnerableTypes, DamageType inflictingTypes)
         {
-            return vulnerableTypes == 0 ? false : Mathf.Log((float)(vulnerableTypes & inflictingTypes), 2f) % 1 != 0;
+            var count = BitwiseUtilities.BitCount((int)(vulnerableTypes & inflictingTypes));
+            return count > 1;
         }
     }
 }

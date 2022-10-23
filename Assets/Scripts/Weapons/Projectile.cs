@@ -42,7 +42,7 @@ namespace NijiDive.Weapons
             var damageable = collider.GetComponentInParent<IDamageable>();
             if (damageable != null)
             {
-                _ = damageable.TakeDamage(damage, damageType, point);
+                _ = damageable.TryDamage(damage, damageType, point);
                 OnHit?.Invoke();
                 Destroy(gameObject);
             }

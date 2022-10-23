@@ -22,19 +22,21 @@ namespace NijiDive.Managers
         /// </summary>
         public LayerMask GroundMask => groundMask;
 
-        public bool TakeDamage(int damage, DamageType damageType, Vector2 point)
+        public bool TryDamage(int damage, DamageType damageType, Vector2 point)
         {
             var tileCell = groundMap.WorldToCell(point);
-            if (groundMap.GetTile(tileCell) is BreakableTile bt)
+            damagePoint = tileCell;
+            if (groundMap.GetTile(tileCell) is BreakableTile bt && bt.VulnerableTypes.IsVulnerableTo(damageType))
             {
-                if (!bt.VulnerableTypes.IsVulnerableTo(damageType)) return false;
                 damagePoint = point;
 
                 bt.OnBreak?.Invoke();
                 groundMap.SetTile(tileCell, null);
+                
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         private void OnDrawGizmos()

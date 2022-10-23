@@ -13,7 +13,7 @@ namespace NijiDive.Controls.Player
         [SerializeField] private LayerMask damageLayers;
         [Space]
         public UnityEvent<Weapon> OnEquip;
-        public UnityEvent OnShoot, OnEmpty, OnStomp;
+        public UnityEvent OnShoot, OnEmpty, OnStomp, OnHeadbutt;
 
         private PlayerController movement;
         private Weapon currentWeapon;
@@ -38,10 +38,17 @@ namespace NijiDive.Controls.Player
 
         private void FixedUpdate()
         {
-            var bounds = movement.GroundCheckBounds;
-            var collider = Physics2D.OverlapBox(bounds.center, bounds.size, 0f, damageLayers);
-            if (collider) TryDamage(collider, collider.ClosestPoint(transform.position));
+            var collider = CheckBounds(movement.GroundCheckBounds);
+            if (collider) TryDamage(collider, DamageType.Player | DamageType.Stomp, transform.position);
+
+            if (!movement.IsOnGroundRaw)
+            {
+                collider = CheckBounds(movement.CeilingCheckBounds);
+                if (collider) TryDamage(collider, DamageType.Player | DamageType.Headbutt, movement.CeilingCheckBounds.center);
+            }
         }
+
+        private Collider2D CheckBounds(Bounds bounds) => Physics2D.OverlapBox(bounds.center, bounds.size, 0f, damageLayers);
 
         public void EquipWeapon(Weapon newWeapon)
         {
@@ -98,13 +105,16 @@ namespace NijiDive.Controls.Player
             movement.SetVelocityY(currentWeapon.RecoilSpeed);
         }
 
-        private void TryDamage(Collider2D collider, Vector3 point)
+        private void TryDamage(Collider2D collider, DamageType damageType, Vector3 point)
         {
             var damageable = collider.GetComponentInParent<IDamageable>();
             if (damageable != null)
             {
-                _ = damageable.TakeDamage(int.MaxValue, DamageType.Player | DamageType.Contact, point);
-                OnStomp?.Invoke();
+                if (damageable.TryDamage(int.MaxValue, damageType, collider.ClosestPoint(point)))
+                {
+                    if ((damageType & DamageType.Stomp) != 0) OnStomp?.Invoke();
+                    else if ((damageType & DamageType.Headbutt) != 0) OnHeadbutt?.Invoke();
+                }
             }
         }
     }

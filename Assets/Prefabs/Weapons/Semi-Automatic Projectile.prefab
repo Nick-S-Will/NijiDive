@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeTime: 0.25
   damage: 1
-  damageType: 17
+  damageType: 1073741825
   OnHit:
     m_PersistentCalls:
       m_Calls: []
@@ -286,8 +286,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 7482667652216324306, guid: f8138b4fe8929994eaa7cc149f5f4be2, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: e41fb1cf4f77806499fb8aac1155ba2b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

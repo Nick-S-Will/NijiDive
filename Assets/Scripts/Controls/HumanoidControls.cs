@@ -26,11 +26,11 @@ namespace NijiDive.Controls
 
         [Header("Collisions")]
         [SerializeField] [Min(0f)] private float maxGroundDistance = 0.1f;
-        [SerializeField] [Min(0f)] private float groundCollisionWidthScaler = 1f, maxWallDistance = 0.1f, wallCollisionHeightScaler = 1f;
+        [SerializeField] [Min(0f)] private float groundCollisionWidthScaler = 1f, maxWallDistance = 0.1f, wallCollisionHeightScaler = 1f, maxCeilingDistance = 0.1f, ceilingCollisionWidthScaler = 1f;
 
         [Header("Visualizers")]
         [SerializeField] private Color gizmoColor = Color.red;
-        [SerializeField] private bool showGroundCheck, showWallCheck;
+        [SerializeField] private bool showGroundCheck, showWallCheck, showCeilingCheck;
 
         [Header("Feature Toggles")]
         [SerializeField] private bool moving = true;
@@ -41,20 +41,21 @@ namespace NijiDive.Controls
         public UnityEvent OnJump, OnLand;
 
         private Coroutine jumpTry;
-        private Bounds groundCheckBounds, wallCheckBounds;
+        private Bounds groundCheckBounds, wallCheckBounds, ceilingCheckBounds;
 
         protected MapManager Map { get; private set; }
         protected Rigidbody2D Rb2d { get; private set; }
         protected Collider2D Hitbox { get; private set; }
         public Bounds GroundCheckBounds => groundCheckBounds;
         public Bounds WallCheckBounds => wallCheckBounds;
+        public Bounds CeilingCheckBounds => ceilingCheckBounds;
         public float LastTimeGrounded { get; private set; }
         /// <summary>
         /// True within <see cref="coyoteTime"/> seconds of <see cref="GroundCheck"/> finding the ground
         /// </summary>
         public bool IsOnGround => coyoteTiming ? Time.time - LastTimeGrounded <= coyoteTime : Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
         /// <summary>
-        /// True only when finding the ground
+        /// True only when <see cref="GroundCheck"/> is finding the ground
         /// </summary>
         public bool IsOnGroundRaw => Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
         public bool JumpHeld { get; private set; }
@@ -94,6 +95,7 @@ namespace NijiDive.Controls
         {
             if (!moving) return;
 
+            _ = CeilingCheck();
             if (WallCheck(xInput))
             {
                 SetVelocityX(0f);
@@ -198,7 +200,7 @@ namespace NijiDive.Controls
         /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private bool GroundCheck()
         {
-            var boxPos = Rb2d.position + (maxGroundDistance / 2f * Vector2.down);
+            var boxPos = Rb2d.position + (maxGroundDistance / 2f * -(Vector2)transform.up);
             var boxSize = new Vector2(groundCollisionWidthScaler * Hitbox.bounds.size.x, maxGroundDistance);
             groundCheckBounds = new Bounds(boxPos, boxSize);
 
@@ -222,9 +224,19 @@ namespace NijiDive.Controls
 
             var hitboxSize = Hitbox.bounds.size;
             var dir = xDirection > 0f ? 1f : -1f;
-            var boxPos = Rb2d.position + (dir * (hitboxSize.x + maxWallDistance) / 2f * Vector2.right) + (hitboxSize.y / 2f * Vector2.up);
+            var boxPos = Rb2d.position + (dir * (hitboxSize.x + maxWallDistance) / 2f * (Vector2)transform.right) + (hitboxSize.y / 2f * (Vector2)transform.up);
             var boxSize = new Vector2(maxWallDistance, wallCollisionHeightScaler * hitboxSize.y);
             wallCheckBounds = new Bounds(boxPos, boxSize);
+
+            return CollisionCheck(boxPos, boxSize);
+        }
+
+        private bool CeilingCheck()
+        {
+            var hitboxSize = Hitbox.bounds.size;
+            var boxPos = Rb2d.position + ((hitboxSize.y + maxCeilingDistance / 2) * (Vector2)transform.up);
+            var boxSize = new Vector2(ceilingCollisionWidthScaler * hitboxSize.x, maxCeilingDistance);
+            ceilingCheckBounds = new Bounds(boxPos, boxSize);
 
             return CollisionCheck(boxPos, boxSize);
         }
@@ -240,6 +252,11 @@ namespace NijiDive.Controls
             {
                 Gizmos.color = gizmoColor;
                 Gizmos.DrawCube(wallCheckBounds.center, wallCheckBounds.size);
+            }
+            if (showCeilingCheck)
+            {
+                Gizmos.color = gizmoColor;
+                Gizmos.DrawCube(ceilingCheckBounds.center, ceilingCheckBounds.size);
             }
         }
     }
