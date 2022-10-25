@@ -38,14 +38,8 @@ namespace NijiDive.Controls.Player
 
         private void FixedUpdate()
         {
-            var collider = CheckBounds(movement.GroundCheckBounds);
-            if (collider) TryDamage(collider, DamageType.Player | DamageType.Stomp, transform.position);
-
-            if (!movement.IsOnGroundRaw)
-            {
-                collider = CheckBounds(movement.CeilingCheckBounds);
-                if (collider) TryDamage(collider, DamageType.Player | DamageType.Headbutt, movement.CeilingCheckBounds.center);
-            }
+            TryStomp();
+            TryHeadbutt();
         }
 
         private Collider2D CheckBounds(Bounds bounds) => Physics2D.OverlapBox(bounds.center, bounds.size, 0f, damageLayers);
@@ -65,10 +59,12 @@ namespace NijiDive.Controls.Player
             OnEquip?.Invoke(currentWeapon);
         }
 
+        #region Shooting
         private void TryShoot()
         {
             if (shooting == null && currentWeapon.CanShoot()) shooting = StartCoroutine(ShootingRoutine());
         }
+
         private IEnumerator ShootingRoutine()
         {
             do
@@ -96,16 +92,37 @@ namespace NijiDive.Controls.Player
         endShooting:
             shooting = null;
         }
+
         private void ShootSingle()
         {
             var position = transform.position;
             var rotation = Quaternion.Euler(0, 0, (1f - currentWeapon.Accuracy) * Random.Range(-90f, 90f));
             var projectile = Instantiate(currentWeapon.Projectile, position, rotation);
-            projectile.SetSpeed(currentWeapon.ProjectileSpeed - movement.GetVelocity().y);
+            projectile.SetSpeed(currentWeapon.ProjectileSpeed);
             movement.SetVelocityY(currentWeapon.RecoilSpeed);
         }
+        #endregion
 
-        private void TryDamage(Collider2D collider, DamageType damageType, Vector3 point)
+        #region Contact Damage
+        private void TryStomp()
+        {
+            var collider = CheckBounds(movement.GroundCheckBounds);
+            if (collider) TryDamage(collider, DamageType.Player | DamageType.Stomp, transform.position);
+        }
+
+        private void TryHeadbutt()
+        {
+            if (!movement.IsOnGroundRaw)
+            {
+                var collider = CheckBounds(movement.CeilingCheckBounds);
+                if (collider && TryDamage(collider, DamageType.Player | DamageType.Headbutt, movement.CeilingCheckBounds.center))
+                {
+                    movement.SetVelocityY(0f);
+                }
+            }
+        }
+
+        private bool TryDamage(Collider2D collider, DamageType damageType, Vector3 point)
         {
             var damageable = collider.GetComponentInParent<IDamageable>();
             if (damageable != null)
@@ -114,8 +131,13 @@ namespace NijiDive.Controls.Player
                 {
                     if ((damageType & DamageType.Stomp) != 0) OnStomp?.Invoke();
                     else if ((damageType & DamageType.Headbutt) != 0) OnHeadbutt?.Invoke();
+
+                    return true;
                 }
             }
+
+            return false;
         }
+        #endregion
     }
 }
