@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 using NijiDive.Tiles;
 
-namespace NijiDive.Managers
+namespace NijiDive.Managers.Map
 {
     public class MapManager : MonoBehaviour, IDamageable
     {

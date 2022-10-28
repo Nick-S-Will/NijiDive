@@ -924,7 +924,6 @@ GameObject:
   m_Component:
   - component: {fileID: 682635207}
   - component: {fileID: 682635206}
-  - component: {fileID: 682635208}
   - component: {fileID: 682635205}
   - component: {fileID: 682635210}
   - component: {fileID: 682635209}
@@ -968,16 +967,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b64d749781ef6ea4f8433b960ad487eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveForce: 25
-  reverseForceMultiplier: 2
-  extraDeceleration: 0.2
-  jumpForce: 12
-  variableGravityForce: 30
-  jumpBufferTime: 0.2
-  coyoteTime: 0.2
-  minJumpInterval: 0.5
-  maxJumpSpeed: 10
-  maxFallSpeed: 10
   maxGroundDistance: 0.05
   groundCollisionWidthScaler: 0.95
   maxWallDistance: 0.02
@@ -985,24 +974,63 @@ MonoBehaviour:
   maxCeilingDistance: 0.06
   ceilingCollisionWidthScaler: 0.95
   gizmoColor: {r: 1, g: 0, b: 0, a: 1}
-  showGroundCheck: 0
-  showWallCheck: 0
-  showCeilingCheck: 0
-  moving: 1
-  jumping: 1
-  variableJumping: 1
-  clampVertical: 1
-  jumpBuffering: 1
-  coyoteTiming: 1
-  OnMove:
-    m_PersistentCalls:
-      m_Calls: []
-  OnJump:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLand:
-    m_PersistentCalls:
-      m_Calls: []
+  showGroundCheck: 1
+  showWallCheck: 1
+  showCeilingCheck: 1
+  walking:
+    mob: {fileID: 0}
+    walkForce: 25
+    reverseForceMultiplier: 2
+    extraDeceleration: 2
+    OnStartWalk:
+      m_PersistentCalls:
+        m_Calls: []
+  jumping:
+    mob: {fileID: 0}
+    jumpForce: 10
+    variableGravityForce: 5
+    jumpBufferTime: 0.25
+    coyoteTime: 0.25
+    minJumpInterval: 0.5
+    maxJumpSpeed: 10
+    maxFallSpeed: 10
+    OnJump:
+      m_PersistentCalls:
+        m_Calls: []
+    OnLand:
+      m_PersistentCalls:
+        m_Calls: []
+  weaponController:
+    mob: {fileID: 0}
+    damageLayers:
+      serializedVersion: 2
+      m_Bits: 8
+    startingWeapon: {fileID: 11400000, guid: 0eaf9bb479fad67458206ffa57c7ab2d, type: 2}
+    OnEquip:
+      m_PersistentCalls:
+        m_Calls: []
+    OnShoot:
+      m_PersistentCalls:
+        m_Calls: []
+    OnEmpty:
+      m_PersistentCalls:
+        m_Calls: []
+  stomping:
+    mob: {fileID: 0}
+    damageLayers:
+      serializedVersion: 2
+      m_Bits: 8
+    OnStomp:
+      m_PersistentCalls:
+        m_Calls: []
+  headbutting:
+    mob: {fileID: 0}
+    damageLayers:
+      serializedVersion: 2
+      m_Bits: 8
+    OnHeadbutt:
+      m_PersistentCalls:
+        m_Calls: []
   jumpKey: 32
 --- !u!4 &682635207
 Transform:
@@ -1019,37 +1047,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &682635208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 682635203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5cc16a309268a418baf68c3fc45164, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingWeapon: {fileID: 11400000, guid: 0eaf9bb479fad67458206ffa57c7ab2d, type: 2}
-  damageLayers:
-    serializedVersion: 2
-    m_Bits: 9
-  OnEquip:
-    m_PersistentCalls:
-      m_Calls: []
-  OnShoot:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEmpty:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStomp:
-    m_PersistentCalls:
-      m_Calls: []
-  OnHeadbutt:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &682635209
 MonoBehaviour:
   m_ObjectHideFlags: 0

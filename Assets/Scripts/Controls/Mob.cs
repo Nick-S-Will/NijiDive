@@ -1,30 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Events;
 using UnityEngine;
 
-using NijiDive.Managers;
+using NijiDive.Managers.Map;
+using NijiDive.Controls.Movement;
+using NijiDive.Controls.Attacks;
 
 namespace NijiDive.Controls
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
-    public abstract class HumanoidControls : MonoBehaviour
+    public abstract class Mob : MonoBehaviour
     {
-        #region Inspector Variables
-        [Header("Moving")]
-        [SerializeField] private float moveForce = 5f;
-        [Tooltip("The force multiplier added when starting to move the opposite way")]
-        [SerializeField] [Min(1f)] private float reverseForceMultiplier = 1f;
-        [SerializeField] [Min(0f)] private float extraDeceleration = 0f;
-
-        [Header("Jumping")]
-        [SerializeField] [Min(0f)] private float jumpForce = 10f;
-        [SerializeField] [Min(0f)] private float variableGravityForce = 5f, jumpBufferTime = 0.25f, coyoteTime = 0.25f, minJumpInterval = 0.5f, maxJumpSpeed = 10f;
-
-        [Header("Falling")]
-        [SerializeField] [Min(0f)] private float maxFallSpeed = 3f;
-
         [Header("Collisions")]
         [SerializeField] [Min(0f)] private float maxGroundDistance = 0.1f;
         [SerializeField] [Min(0f)] private float groundCollisionWidthScaler = 1f, maxWallDistance = 0.1f, wallCollisionHeightScaler = 1f, maxCeilingDistance = 0.1f, ceilingCollisionWidthScaler = 1f;
@@ -33,18 +21,6 @@ namespace NijiDive.Controls
         [SerializeField] private Color gizmoColor = Color.red;
         [SerializeField] private bool showGroundCheck, showWallCheck, showCeilingCheck;
 
-        [Header("Feature Toggles")]
-        [SerializeField] private bool moving = true;
-        [SerializeField] private bool jumping = true, variableJumping = true, clampVertical = true, jumpBuffering = true, coyoteTiming = true;
-
-        [Space]
-        public UnityEvent OnMove;
-        public UnityEvent OnJump, OnLand;
-        #endregion
-
-        private Coroutine jumpTry;
-        private Bounds groundCheckBounds, wallCheckBounds, ceilingCheckBounds;
-
         #region Properties
         protected MapManager Map { get; private set; }
         protected Rigidbody2D Rb2d { get; private set; }
@@ -52,22 +28,22 @@ namespace NijiDive.Controls
         public Bounds GroundCheckBounds => groundCheckBounds;
         public Bounds WallCheckBounds => wallCheckBounds;
         public Bounds CeilingCheckBounds => ceilingCheckBounds;
+        public Inputs LastInputs { get; private set; }
         public Vector2 GetVelocity() => Rb2d.velocity;
         // Cleaner way to update a single axis of velocity
         public void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
         public void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
-        public float LastTimeGrounded { get; private set; }
-        /// <summary>
-        /// True within <see cref="coyoteTime"/> seconds of <see cref="GroundCheck"/> finding the ground
-        /// </summary>
-        public bool IsOnGround => coyoteTiming ? Time.time - LastTimeGrounded <= coyoteTime : Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
-        /// <summary>
-        /// True only when <see cref="GroundCheck"/> is finding the ground
-        /// </summary>
-        public bool IsOnGroundRaw => Time.time - LastTimeGrounded <= Time.fixedDeltaTime;
-        public bool JumpHeld { get; private set; }
+        public bool lastGroundCheck { get; private set; }
+        public bool lastWallCheck { get; private set; }
+        public bool lastCeilingCheck { get; private set; }
         #endregion
 
+        protected Control[] controls;
+        private Bounds groundCheckBounds, wallCheckBounds, ceilingCheckBounds;
+
+        /// <summary>
+        /// Override and set <see cref="controls"/> before calling to initialize them
+        /// </summary>
         protected virtual void Awake()
         {
             Map = FindObjectOfType<MapManager>();
@@ -76,118 +52,43 @@ namespace NijiDive.Controls
                 Debug.LogError($"No {typeof(MapManager)} found in scene");
                 enabled = false;
             }
-
             Hitbox = GetComponent<Collider2D>();
             Rb2d = GetComponent<Rigidbody2D>();
-        }
 
-        protected virtual void FixedUpdate()
-        {
-            if (GroundCheck())
+            foreach (var control in controls)
             {
-                if (Time.time - LastTimeGrounded > 2 * Time.fixedDeltaTime) OnLand?.Invoke();
-                LastTimeGrounded = Time.time;
-            }
-            _ = WallCheck(Rb2d.velocity.x);
-            _ = CeilingCheck();
-        }
-
-        /// <summary>
-        /// Updates <see cref="Rb2d"/>'s X axis velocity
-        /// </summary>
-        /// <param name="xInput">Scales the applied movement force</param>
-        protected void Move(float xInput)
-        {
-            if (!moving) return;
-
-            if (xInput == 0f)
-            {
-                Rb2d.AddForce(-extraDeceleration * Rb2d.velocity.x * Vector2.right);
-            }
-            else
-            {
-                if (Rb2d.velocity.x == 0f) OnMove?.Invoke();
-
-                var moveForce = xInput * this.moveForce * Vector2.right;
-                if (xInput * Rb2d.velocity.x < 0f) moveForce *= reverseForceMultiplier;
-                Rb2d.AddForce(moveForce);
+                control.mob = this;
+                control.Awake();
+                control.Start();
             }
         }
 
-        #region Jumping
-        /// <summary>
-        /// Method for derived classes to queue a jump. Will only queue one jump at a time, hence the "Try"
-        /// </summary>
-        protected void TryJump()
+        protected void FixedUpdate(Inputs inputs)
         {
-            if (!jumping) return;
+            lastGroundCheck = GroundCheck();
+            lastWallCheck = WallCheck(GetVelocity().x);
+            lastCeilingCheck = CeilingCheck();
 
-            if (!jumpBuffering && IsOnGround) Jump();
-            else if (jumpTry == null) jumpTry = StartCoroutine(TryJumpRoutine());
+            LastInputs = inputs;
+            foreach (var control in controls) control.FixedUpdate();
         }
+
+        public T GetMovingType<T>() where T : Moving
+        {
+            foreach (var type in controls) if (type is T t) return t;
+
+            return default;
+        }
+
+        public T GetAttackType<T>() where T : Attacking
+        {
+            foreach (var type in controls) if (type is T t) return t;
+
+            return default;
+        }
+
+        public void AddForce(Vector2 force) => Rb2d.AddForce(force);
         
-        /// <summary>
-        /// Routine which tries to jump every fixed update for <see cref="jumpBufferTime"/> seconds
-        /// </summary>
-        private IEnumerator TryJumpRoutine()
-        {
-            var startTime = Time.time;
-
-            while (Time.time - startTime <= jumpBufferTime && isActiveAndEnabled)
-            {
-                if (IsOnGround)
-                {
-                    Jump();
-                    break;
-                }
-
-                yield return new WaitForFixedUpdate();
-            }
-
-            startTime = Time.time;
-            yield return new WaitUntil(() => !IsOnGround || Time.time - startTime > minJumpInterval || !isActiveAndEnabled);
-            jumpTry = null;
-        }
-        
-        /// <summary>
-        /// Adds <see cref="jumpForce"/> to <see cref="Rb2d"/>'s Y axis velocity
-        /// </summary>
-        private void Jump()
-        {
-            JumpHeld = true;
-            Rb2d.velocity = jumpForce * Vector2.up;
-
-            OnJump?.Invoke();
-        }
-        #endregion
-
-        #region Velocity Clamping
-        /// <summary>
-        /// Adds <see cref="variableGravityForce"/> downwards to <see cref="Rb2d"/>'s Y axis velocity if jump is released in the air
-        /// </summary>
-        /// <param name="jumpDown">True if the jump command is enabled</param>
-        protected void TryAddVariableGravity(bool jumpDown)
-        {
-            if (!variableJumping) return;
-
-            if (!jumpDown) JumpHeld = false;
-            if (JumpHeld || jumpDown || IsOnGround || Rb2d.velocity.y <= 0) return;
-
-            var gravityForce = variableGravityForce * Vector2.down;
-            Rb2d.AddForce(gravityForce);
-        }
-
-        /// <summary>
-        /// Clamps <see cref="Rb2d"/>'s Y velocity to -<see cref="maxFallSpeed"/>
-        /// </summary>
-        protected void TryClampVerticalSpeed()
-        {
-            if (!clampVertical) return;
-
-            SetVelocityY(Mathf.Clamp(Rb2d.velocity.y, -maxFallSpeed, maxJumpSpeed));
-        }
-        #endregion
-
         #region Collision Checks
         /// <summary>
         /// Performs <see cref="Physics2D.OverlapBox(Vector2, Vector2, float, int)"/>
@@ -265,6 +166,19 @@ namespace NijiDive.Controls
             {
                 Gizmos.color = gizmoColor;
                 Gizmos.DrawCube(ceilingCheckBounds.center, ceilingCheckBounds.size);
+            }
+        }
+
+        public struct Inputs
+        {
+            public Vector2 lStick;
+            public bool actionDown, actionDownThisFrame;
+
+            public Inputs(Vector2 lStick, bool actionDown, bool actionDownThisFrame)
+            {
+                this.lStick = lStick;
+                this.actionDown = actionDown;
+                this.actionDownThisFrame = actionDownThisFrame;
             }
         }
     }
