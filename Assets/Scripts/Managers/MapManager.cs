@@ -7,7 +7,7 @@ namespace NijiDive.Managers.Map
 {
     public class MapManager : MonoBehaviour, IDamageable
     {
-        [SerializeField] private Tilemap groundMap;
+        [SerializeField] private Tilemap[] groundMaps;
         [Space]
         [SerializeField] private LayerMask groundMask;
 
@@ -22,18 +22,20 @@ namespace NijiDive.Managers.Map
         /// </summary>
         public LayerMask GroundMask => groundMask;
 
-        public bool TryDamage(int damage, DamageType damageType, Vector2 point)
+        public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
         {
-            var tileCell = groundMap.WorldToCell(point);
-            damagePoint = tileCell;
-            if (groundMap.GetTile(tileCell) is BreakableTile bt && bt.VulnerableTypes.IsVulnerableTo(damageType))
-            {
-                damagePoint = point;
+            foreach (var groundMap in groundMaps) {
+                var tileCell = groundMap.WorldToCell(point);
+                damagePoint = tileCell;
+                if (groundMap.GetTile(tileCell) is BreakableTile bt && bt.VulnerableTypes.IsVulnerableTo(damageType))
+                {
+                    damagePoint = point;
 
-                bt.OnBreak?.Invoke();
-                groundMap.SetTile(tileCell, null);
-                
-                return true;
+                    bt.OnBreak?.Invoke(sourceObject);
+                    groundMap.SetTile(tileCell, null);
+
+                    return true;
+                } 
             }
 
             return false;

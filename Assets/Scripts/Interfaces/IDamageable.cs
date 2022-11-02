@@ -12,7 +12,7 @@ namespace NijiDive
         /// <param name="damageType"><see cref="DamageType"/> of the damage source</param>
         /// <param name="point">Point on the collider where the damage is taken</param>
         /// <returns>True if damage was inflicted on this</returns>
-        public bool TryDamage(int damage, DamageType damageType, Vector2 point);
+        public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point);
     }
 
     /// <summary>

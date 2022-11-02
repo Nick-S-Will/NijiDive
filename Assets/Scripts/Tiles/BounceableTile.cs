@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Controls.Player;
+using NijiDive.Controls;
 
 namespace NijiDive.Tiles
 {
@@ -14,10 +14,11 @@ namespace NijiDive.Tiles
         /// <summary>
         /// Used by <see cref="BreakableTile.OnBreak"/> to bounce player by <see cref="bounceSpeed"/>
         /// </summary>
-        public void BouncePlayer()
+        public void TryBounceDamageSource(GameObject sourceObject)
         {
-            var player = FindObjectOfType<PlayerController>();
-            player.SetVelocityY(bounceSpeed);
+            Debug.Log(sourceObject);
+            var mob = sourceObject.GetComponent<Mob>();
+            if (mob) mob.SetVelocityY(bounceSpeed);
         }
     }
 }

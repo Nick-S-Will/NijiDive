@@ -10,13 +10,10 @@ namespace NijiDive.Controls.Attacks
 
         protected Collider2D CheckBounds(Bounds bounds) => Physics2D.OverlapBox(bounds.center, bounds.size, 0f, damageLayers);
 
-        protected bool TryDamage(Collider2D collider, DamageType damageType, Vector3 point)
+        public static bool TryDamageCollider(GameObject sourceObject, Collider2D collider, DamageType damageType, Vector3 point)
         {
             var damageable = collider.GetComponentInParent<IDamageable>();
-            if (damageable != null && damageable.TryDamage(int.MaxValue, damageType, collider.ClosestPoint(point)))
-            {
-                return true;
-            }
+            if (damageable != null) return damageable.TryDamage(sourceObject, int.MaxValue, damageType, collider.ClosestPoint(point));
 
             return false;
         }

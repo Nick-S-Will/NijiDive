@@ -1,14 +1,17 @@
-public static class BitwiseUtilities
+namespace NijiDive
 {
-    public static int BitCount(int n)
+    public static class BitwiseUtilities
     {
-        var count = 0;
-        while (n > 0)
+        public static int BitCount(int n)
         {
-            count++;
-            n &= (n - 1);
-        }
+            var count = 0;
+            while (n > 0)
+            {
+                count++;
+                n &= (n - 1);
+            }
 
-        return count;
+            return count;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace NijiDive.Controls.Attacks
             if (!mob.lastGroundCheck)
             {
                 var collider = CheckBounds(mob.CeilingCheckBounds);
-                if (collider && TryDamage(collider, DamageType.Player | DamageType.Headbutt, mob.CeilingCheckBounds.center))
+                if (collider && TryDamageCollider(mob.gameObject, collider, DamageType.Player | DamageType.Headbutt, mob.CeilingCheckBounds.center))
                 {
                     OnHeadbutt?.Invoke();
                     mob.SetVelocityY(0f);

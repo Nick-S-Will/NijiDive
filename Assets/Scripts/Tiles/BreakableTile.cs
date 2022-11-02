@@ -9,7 +9,8 @@ namespace NijiDive.Tiles
     {
         [SerializeField] private DamageType vulnerableTypes = DamageType.Player | DamageType.Projectile;
         [Space]
-        public UnityEvent OnBreak;
+        ///<see cref="GameObject"/> is the source object which broke this tile
+        public UnityEvent<GameObject> OnBreak;
 
         public DamageType VulnerableTypes => vulnerableTypes;
     }

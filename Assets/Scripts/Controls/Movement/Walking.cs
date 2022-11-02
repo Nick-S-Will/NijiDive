@@ -10,9 +10,11 @@ namespace NijiDive.Controls.Movement
         [SerializeField] private float walkForce = 5f;
         [Tooltip("The force multiplier added when starting to move the opposite way")]
         [SerializeField] [Min(1f)] private float reverseForceMultiplier = 1f;
-        [SerializeField] [Min(0f)] private float extraDeceleration = 0f;
+        [SerializeField] [Min(0f)] private float extraDeceleration = 0f, minVelocity = 0.1f;
         [Space]
-        public UnityEvent OnStartWalk;
+        public UnityEvent OnStartWalk, OnStopWalk;
+
+        private bool wasMoving;
 
         public override void FixedUpdate()
         {
@@ -28,16 +30,25 @@ namespace NijiDive.Controls.Movement
             var xVelocity = mob.GetVelocity().x;
             if (xInput == 0f)
             {
+                if (wasMoving && IsUnderMinVelocity()) OnStopWalk?.Invoke();
+                
                 mob.AddForce(-extraDeceleration * xVelocity * Vector2.right);
             }
             else
             {
-                if (xVelocity == 0f) OnStartWalk?.Invoke();
+                if (IsUnderMinVelocity()) OnStartWalk?.Invoke();
 
                 var moveForce = xInput * walkForce * Vector2.right;
                 if (xInput * xVelocity < 0f) moveForce *= reverseForceMultiplier;
                 mob.AddForce(moveForce);
             }
+
+            wasMoving = !IsUnderMinVelocity();
+        }
+
+        private bool IsUnderMinVelocity()
+        {
+            return Mathf.Abs(mob.GetVelocity().x) < minVelocity;
         }
     }
 }

@@ -1,18 +1,19 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using NijiDive.Managers.Map;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.Attacks;
+using NijiDive.Health;
 
 namespace NijiDive.Controls
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
-    public abstract class Mob : MonoBehaviour
+    public abstract class Mob : MonoBehaviour, IDamageable
     {
+        [SerializeField] private DamageType vulnerableTypes;
+        [SerializeField] private HealthData health;
+
         [Header("Collisions")]
         [SerializeField] [Min(0f)] private float maxGroundDistance = 0.1f;
         [SerializeField] [Min(0f)] private float groundCollisionWidthScaler = 1f, maxWallDistance = 0.1f, wallCollisionHeightScaler = 1f, maxCeilingDistance = 0.1f, ceilingCollisionWidthScaler = 1f;
@@ -28,7 +29,7 @@ namespace NijiDive.Controls
         public Bounds GroundCheckBounds => groundCheckBounds;
         public Bounds WallCheckBounds => wallCheckBounds;
         public Bounds CeilingCheckBounds => ceilingCheckBounds;
-        public Inputs LastInputs { get; private set; }
+        public InputData LastInputs { get; private set; }
         public Vector2 GetVelocity() => Rb2d.velocity;
         // Cleaner way to update a single axis of velocity
         public void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
@@ -61,9 +62,11 @@ namespace NijiDive.Controls
                 control.Awake();
                 control.Start();
             }
+
+            health.Reset();
         }
 
-        protected void FixedUpdate(Inputs inputs)
+        protected void FixedUpdate(InputData inputs)
         {
             lastGroundCheck = GroundCheck();
             lastWallCheck = WallCheck(GetVelocity().x);
@@ -71,6 +74,14 @@ namespace NijiDive.Controls
 
             LastInputs = inputs;
             foreach (var control in controls) control.FixedUpdate();
+        }
+
+        public virtual bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
+        {
+            var canDamage = vulnerableTypes.IsVulnerableTo(damageType);
+            if (canDamage) health.LoseHealth(damage);
+            
+            return canDamage;
         }
 
         public T GetMovingType<T>() where T : Moving
@@ -169,12 +180,12 @@ namespace NijiDive.Controls
             }
         }
 
-        public struct Inputs
+        public struct InputData
         {
             public Vector2 lStick;
             public bool actionDown, actionDownThisFrame;
 
-            public Inputs(Vector2 lStick, bool actionDown, bool actionDownThisFrame)
+            public InputData(Vector2 lStick = default, bool actionDown = false, bool actionDownThisFrame = false)
             {
                 this.lStick = lStick;
                 this.actionDown = actionDown;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 using NijiDive.Controls.Movement;
@@ -40,7 +39,7 @@ namespace NijiDive.Controls.Player
 
         private void FixedUpdate()
         {
-            FixedUpdate(new Inputs(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame));
+            FixedUpdate(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame));
             jumpDownThisFrame = false;
         }
     }
