@@ -1127,6 +1127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b64d749781ef6ea4f8433b960ad487eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 861309045}
   vulnerableTypes: -1610612721
   health:
     baseMaxHealth: 4
@@ -1136,12 +1137,14 @@ MonoBehaviour:
         m_Calls: []
   maxGroundDistance: 0.05
   groundCollisionWidthScaler: 0.95
+  edgeCollisionOffset: 0.05
   maxWallDistance: 0.02
   wallCollisionHeightScaler: 0.95
   maxCeilingDistance: 0.06
   ceilingCollisionWidthScaler: 0.95
   gizmoColor: {r: 1, g: 0, b: 0, a: 1}
   showGroundCheck: 0
+  showEdgeCheck: 0
   showWallCheck: 0
   showCeilingCheck: 0
   walking:

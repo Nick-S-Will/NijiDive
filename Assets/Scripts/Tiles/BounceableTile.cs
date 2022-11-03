@@ -1,7 +1,5 @@
 using UnityEngine;
 
-using NijiDive.Controls;
-
 namespace NijiDive.Tiles
 {
     [CreateAssetMenu(menuName = "NijiDive/Tiles/BounceableTile")]
@@ -16,9 +14,8 @@ namespace NijiDive.Tiles
         /// </summary>
         public void TryBounceDamageSource(GameObject sourceObject)
         {
-            Debug.Log(sourceObject);
-            var mob = sourceObject.GetComponent<Mob>();
-            if (mob) mob.SetVelocityY(bounceSpeed);
+            var bounceable = sourceObject.GetComponent<IBounceable>();
+            if (bounceable != null) bounceable.Bounce(bounceSpeed);
         }
     }
 }

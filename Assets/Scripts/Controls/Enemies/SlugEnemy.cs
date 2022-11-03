@@ -20,12 +20,17 @@ namespace NijiDive.Controls.Enemies
 
         private void Update()
         {
-            xInput = 0f;
+            CalculateMovement();
         }
 
         private void FixedUpdate()
         {
             FixedUpdate(new InputData(new Vector2(xInput, 0)));
+        }
+
+        private void CalculateMovement()
+        {
+            xInput = 0f;
         }
     }
 }

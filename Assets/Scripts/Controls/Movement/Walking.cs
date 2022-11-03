@@ -27,7 +27,7 @@ namespace NijiDive.Controls.Movement
         /// <param name="xInput">Scales the applied movement force</param>
         protected void Move(float xInput)
         {
-            var xVelocity = mob.GetVelocity().x;
+            var xVelocity = mob.Velocity.x;
             if (xInput == 0f)
             {
                 if (wasMoving && IsUnderMinVelocity()) OnStopWalk?.Invoke();
@@ -48,7 +48,7 @@ namespace NijiDive.Controls.Movement
 
         private bool IsUnderMinVelocity()
         {
-            return Mathf.Abs(mob.GetVelocity().x) < minVelocity;
+            return Mathf.Abs(mob.Velocity.x) < minVelocity;
         }
     }
 }
