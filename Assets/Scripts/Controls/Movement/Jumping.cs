@@ -100,7 +100,7 @@ namespace NijiDive.Controls.Movement
         /// </summary>
         protected void TryClampVerticalSpeed()
         {
-            mob.SetVelocityY(Mathf.Clamp(mob.Velocity.y, -maxFallSpeed, maxJumpSpeed));
+            mob.SetVelocityY(Mathf.Clamp(mob.velocity.y, -maxFallSpeed, maxJumpSpeed));
         }
     }
 }

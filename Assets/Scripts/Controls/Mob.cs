@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Managers.Map;
 using NijiDive.Controls.Movement;
@@ -12,27 +14,23 @@ namespace NijiDive.Controls
     public abstract class Mob : MonoBehaviour, IDamageable, IBounceable
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private DamageType vulnerableTypes;
-        [SerializeField] private HealthData health;
-
-        [Header("Collisions")]
-        [SerializeField] [Min(0f)] private float maxGroundDistance = 0.1f;
-        [SerializeField] [Min(0f)] private float groundCollisionWidthScaler = 1f, edgeCollisionOffset = 0f, maxWallDistance = 0.1f, wallCollisionHeightScaler = 1f, maxCeilingDistance = 0.1f, ceilingCollisionWidthScaler = 1f;
-
-        [Header("Visualizers")]
-        [SerializeField] private Color gizmoColor = Color.red;
-        [SerializeField] private bool showGroundCheck, showEdgeCheck, showWallCheck, showCeilingCheck;
+        [SerializeField] protected DamageType vulnerableTypes;
+        [Space]
+        [SerializeField] private CollisionData collisions;
+        [Space]
+        public UnityEvent<GameObject, DamageType> OnDeath;
 
         #region Properties
         protected MapManager Map { get; private set; }
         protected Rigidbody2D Rb2d { get; private set; }
         protected Collider2D Hitbox { get; private set; }
+        public abstract HealthData Health { get; }
         public Bounds GroundCheckBounds => groundCheckBounds;
         public Bounds EdgeCheckBounds => edgeCheckBounds;
         public Bounds WallCheckBounds => wallCheckBounds;
         public Bounds CeilingCheckBounds => ceilingCheckBounds;
         public InputData LastInputs { get; private set; }
-        public Vector2 Velocity => Rb2d.velocity;
+        public Vector2 velocity { get => Rb2d.velocity; set => Rb2d.velocity = value; }
         // Cleaner way to update a single axis of velocity
         public void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
         public void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
@@ -72,7 +70,7 @@ namespace NijiDive.Controls
                 control.Start();
             }
 
-            health.Reset();
+            Health.Reset();
         }
 
         protected void FixedUpdate(InputData inputs)
@@ -82,7 +80,7 @@ namespace NijiDive.Controls
             lastWallCheck = WallCheck(inputs.lStick.x);
             lastCeilingCheck = CeilingCheck();
 
-            var dot = Vector2.Dot(transform.right, Velocity.normalized);
+            var dot = Vector2.Dot(transform.right, velocity.normalized);
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
 
             LastInputs = inputs;
@@ -92,7 +90,11 @@ namespace NijiDive.Controls
         public virtual bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
         {
             var canDamage = vulnerableTypes.IsVulnerableTo(damageType);
-            if (canDamage) health.LoseHealth(damage);
+            if (canDamage)
+            {
+                Health.LoseHealth(damage);
+                if (Health.IsEmpty) OnDeath?.Invoke(sourceObject, damageType);
+            }
 
             return canDamage;
         }
@@ -134,8 +136,8 @@ namespace NijiDive.Controls
         /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private bool GroundCheck()
         {
-            var boxPos = Rb2d.position + (maxGroundDistance / 2f * -(Vector2)transform.up);
-            var boxSize = new Vector2(groundCollisionWidthScaler * Hitbox.bounds.size.x, maxGroundDistance);
+            var boxPos = Rb2d.position + (collisions.maxGroundDistance / 2f * -(Vector2)transform.up);
+            var boxSize = new Vector2(collisions.groundCollisionWidthScaler * Hitbox.bounds.size.x, collisions.maxGroundDistance);
             groundCheckBounds = new Bounds(boxPos, boxSize);
 
             return CollisionCheck(boxPos, boxSize);
@@ -147,7 +149,7 @@ namespace NijiDive.Controls
         /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private bool EdgeCheck(float localRightDirection)
         {
-            var velocityR = Vector3.Project(Velocity, transform.right).magnitude;
+            var velocityR = Vector3.Project(velocity, transform.right).magnitude;
             if (localRightDirection == 0f) localRightDirection = velocityR;
 
             if (localRightDirection == 0f)
@@ -158,8 +160,8 @@ namespace NijiDive.Controls
 
             var hitboxSizeX = Hitbox.bounds.size.x;
             var dir = localRightDirection > 0f ? 1f : -1f;
-            var boxPos = Rb2d.position + (dir * ((hitboxSizeX + maxGroundDistance) / 2f + edgeCollisionOffset) * (Vector2)transform.right) + (maxGroundDistance / 2f * -(Vector2)transform.up);
-            var boxSize = new Vector2(maxGroundDistance, maxGroundDistance);
+            var boxPos = Rb2d.position + (dir * ((hitboxSizeX + collisions.maxGroundDistance) / 2f + collisions.edgeCollisionOffset) * (Vector2)transform.right) + (collisions.maxGroundDistance / 2f * -(Vector2)transform.up);
+            var boxSize = new Vector2(collisions.maxGroundDistance, collisions.maxGroundDistance);
             edgeCheckBounds = new Bounds(boxPos, boxSize);
 
             return CollisionCheck(boxPos, boxSize);
@@ -172,7 +174,7 @@ namespace NijiDive.Controls
         /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private bool WallCheck(float localRightDirection)
         {
-            var velocityR = Vector3.Project(Velocity, transform.right).magnitude;
+            var velocityR = Vector3.Project(velocity, transform.right).magnitude;
             if (localRightDirection == 0f) localRightDirection = velocityR;
 
             if (localRightDirection == 0f)
@@ -183,8 +185,8 @@ namespace NijiDive.Controls
 
             var hitboxSize = Hitbox.bounds.size;
             var dir = localRightDirection > 0f ? 1f : -1f;
-            var boxPos = Rb2d.position + (dir * (hitboxSize.x + maxWallDistance) / 2f * (Vector2)transform.right) + (hitboxSize.y / 2f * (Vector2)transform.up);
-            var boxSize = new Vector2(maxWallDistance, wallCollisionHeightScaler * hitboxSize.y);
+            var boxPos = Rb2d.position + (dir * (hitboxSize.x + collisions.maxWallDistance) / 2f * (Vector2)transform.right) + (hitboxSize.y / 2f * (Vector2)transform.up);
+            var boxSize = new Vector2(collisions.maxWallDistance, collisions.wallCollisionHeightScaler * hitboxSize.y);
             wallCheckBounds = new Bounds(boxPos, boxSize);
 
             return CollisionCheck(boxPos, boxSize);
@@ -193,33 +195,55 @@ namespace NijiDive.Controls
         private bool CeilingCheck()
         {
             var hitboxSize = Hitbox.bounds.size;
-            var boxPos = Rb2d.position + ((hitboxSize.y + maxCeilingDistance / 2) * (Vector2)transform.up);
-            var boxSize = new Vector2(ceilingCollisionWidthScaler * hitboxSize.x, maxCeilingDistance);
+            var boxPos = Rb2d.position + ((hitboxSize.y + collisions.maxCeilingDistance / 2) * (Vector2)transform.up);
+            var boxSize = new Vector2(collisions.ceilingCollisionWidthScaler * hitboxSize.x, collisions.maxCeilingDistance);
             ceilingCheckBounds = new Bounds(boxPos, boxSize);
 
             return CollisionCheck(boxPos, boxSize);
         }
         #endregion
 
+        protected abstract void Death(GameObject sourceObject, DamageType damageType);
+
         private void OnDrawGizmos()
         {
-            Gizmos.color = gizmoColor;
-            if (showGroundCheck)
+            if (collisions.showGroundCheck)
             {
+                Gizmos.color = lastGroundCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(groundCheckBounds.center, groundCheckBounds.size);
             }
-            if (showEdgeCheck)
+            if (collisions.showEdgeCheck)
             {
+                Gizmos.color = lastEdgeCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(edgeCheckBounds.center, edgeCheckBounds.size);
             }
-            if (showWallCheck)
+            if (collisions.showWallCheck)
             {
+                Gizmos.color = lastWallCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(wallCheckBounds.center, wallCheckBounds.size);
             }
-            if (showCeilingCheck)
+            if (collisions.showCeilingCheck)
             {
+                Gizmos.color = lastCeilingCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(ceilingCheckBounds.center, ceilingCheckBounds.size);
             }
+        }
+
+        [Serializable]
+        private class CollisionData
+        {
+            [Min(0f)] public float maxGroundDistance = 0.1f, groundCollisionWidthScaler = 0.9f, edgeCollisionOffset = 0f;
+            [Space]
+            [Min(0f)] public float maxWallDistance = 0.1f;
+            [Min(0f)] public float wallCollisionHeightScaler = 0.9f;
+            [Space]
+            [Min(0f)] public float maxCeilingDistance = 0.1f;
+            [Min(0f)] public float ceilingCollisionWidthScaler = 0.9f;
+
+            [Header("Visualizers")]
+            public Color gizmoColorNone = Color.red;
+            public Color gizmoColorFound = Color.green;
+            public bool showGroundCheck, showEdgeCheck, showWallCheck, showCeilingCheck;
         }
 
         public struct InputData

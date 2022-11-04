@@ -7,47 +7,35 @@ namespace NijiDive.Health
     [Serializable]
     public class HealthData
     {
-        [SerializeField] [Min(1)] private int baseMaxHealth = 4, maxBonusHealth = 4;
+        [SerializeField] [Min(1)] protected int baseMaxHealth = 1;
         [Space]
         public UnityEvent OnChangeHealth;
 
-        public int MaxHealth { get; private set; }
-        public int MaxBonusHealth => maxBonusHealth;
-        public int Health { get; private set; }
-        public int BonusHealth { get; private set; }
+        public int Health { get; protected set; }
+        public bool IsEmpty => Health == 0;
 
-        public void Reset()
+        public virtual void Reset()
         {
             Health = baseMaxHealth;
-            MaxHealth = baseMaxHealth;
-            BonusHealth = 0;
         }
 
-        public void ReceiveHealth(int amount)
+        private void ChangeHealth(int amount)
         {
-            if (amount < 1) return;
-
-            Health += amount;
-            int surplus = Health > MaxHealth ? Health - MaxHealth : 0;
-
-            BonusHealth += surplus;
-            int healthUp = BonusHealth / maxBonusHealth;
-
-            MaxHealth += healthUp;
-
-            Health = Mathf.Min(Health, MaxHealth);
-            BonusHealth = BonusHealth % maxBonusHealth;
+            Health = Mathf.Clamp(Health + amount, 0, baseMaxHealth);
 
             OnChangeHealth?.Invoke();
         }
 
-        public void LoseHealth(int amount)
+        public virtual void ReceiveHealth(int amount)
         {
             if (amount < 1) return;
+            ChangeHealth(amount);
+        }
 
-            Health -= amount;
-
-            OnChangeHealth?.Invoke();
+        public virtual void LoseHealth(int amount)
+        {
+            if (amount < 1) return;
+            ChangeHealth(-amount);
         }
     }
 }

@@ -2,13 +2,15 @@ using UnityEngine;
 
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.Attacks;
+using NijiDive.Health;
 
 namespace NijiDive.Controls.Player
 {
     public class PlayerController : Mob
     {
+        [SerializeField] private PlayerHealthData health;
         [Header("Control Types")]
-        [SerializeField] private Walking walking;
+        [SerializeField] private LocalRightAnalogMoving walking;
         [SerializeField] private Jumping jumping;
         [SerializeField] private WeaponController weaponController;
         [SerializeField] private Stomping stomping;
@@ -17,6 +19,7 @@ namespace NijiDive.Controls.Player
         [Header("Key Mapping")]
         [SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
+        public override HealthData Health => health;
         public KeyCode JumpKey => jumpKey;
 
         private float xInput;
@@ -41,6 +44,11 @@ namespace NijiDive.Controls.Player
         {
             FixedUpdate(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame));
             jumpDownThisFrame = false;
+        }
+
+        protected override void Death(GameObject sourceObject, DamageType damageType)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

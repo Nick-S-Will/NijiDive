@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Cinemachine;
 
@@ -9,16 +10,15 @@ namespace NijiDive.CinemachineAddons
     [AddComponentMenu("")] // Hide in menu
     public class VirtualCameraConstrainedAxis : CinemachineExtension
     {
-        [SerializeField] private int mapExtent = 6;
+        [SerializeField] private int mapWidth = 13;
 
         protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
         {
             if (stage == CinemachineCore.Stage.Body)
             {
                 var pos = state.RawPosition;
-                var xDir = Mathf.RoundToInt(pos.x / Mathf.Abs(pos.x));
-                var xShifts = Mathf.Abs(pos.x) >= mapExtent ? ((int)pos.x + xDir * mapExtent) / (2 * mapExtent) : ((int)pos.x / mapExtent);
-                pos.x = 2 * mapExtent * xShifts;
+                var xShifts = (int)Math.Round(pos.x / mapWidth, MidpointRounding.AwayFromZero);
+                pos.x = xShifts * mapWidth;
                 state.RawPosition = pos;
             }
         }

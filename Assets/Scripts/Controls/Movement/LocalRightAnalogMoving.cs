@@ -5,16 +5,11 @@ using UnityEngine.Events;
 namespace NijiDive.Controls.Movement
 {
     [Serializable]
-    public class Walking : Moving
+    public class LocalRightAnalogMoving : LocalRightDigitalMoving
     {
-        [SerializeField] private float walkForce = 5f;
         [Tooltip("The force multiplier added when starting to move the opposite way")]
         [SerializeField] [Min(1f)] private float reverseForceMultiplier = 1f;
-        [SerializeField] [Min(0f)] private float extraDeceleration = 0f, minVelocity = 0.1f;
-        [Space]
-        public UnityEvent OnStartWalk, OnStopWalk;
-
-        private bool wasMoving;
+        [SerializeField] [Min(0f)] private float extraDeceleration = 0f;
 
         public override void FixedUpdate()
         {
@@ -25,30 +20,25 @@ namespace NijiDive.Controls.Movement
         /// Updates <see cref="Rb2d"/>'s X axis velocity
         /// </summary>
         /// <param name="xInput">Scales the applied movement force</param>
-        protected void Move(float xInput)
+        protected override void Move(float xInput)
         {
-            var xVelocity = mob.Velocity.x;
+            var xVelocity = mob.velocity.x;
             if (xInput == 0f)
             {
                 if (wasMoving && IsUnderMinVelocity()) OnStopWalk?.Invoke();
                 
-                mob.AddForce(-extraDeceleration * xVelocity * Vector2.right);
+                mob.AddForce(-extraDeceleration * xVelocity * mob.transform.right);
             }
             else
             {
                 if (IsUnderMinVelocity()) OnStartWalk?.Invoke();
 
-                var moveForce = xInput * walkForce * Vector2.right;
+                var moveForce = xInput * moveSpeed * mob.transform.right;
                 if (xInput * xVelocity < 0f) moveForce *= reverseForceMultiplier;
                 mob.AddForce(moveForce);
             }
 
             wasMoving = !IsUnderMinVelocity();
-        }
-
-        private bool IsUnderMinVelocity()
-        {
-            return Mathf.Abs(mob.Velocity.x) < minVelocity;
         }
     }
 }
