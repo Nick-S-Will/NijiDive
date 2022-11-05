@@ -45,10 +45,5 @@ namespace NijiDive.Controls.Player
             FixedUpdate(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame));
             jumpDownThisFrame = false;
         }
-
-        protected override void Death(GameObject sourceObject, DamageType damageType)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

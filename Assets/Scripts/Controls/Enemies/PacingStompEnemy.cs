@@ -6,7 +6,7 @@ using NijiDive.Health;
 
 namespace NijiDive.Controls.Enemies
 {
-    public class PacingEnemy : Mob
+    public class PacingStompEnemy : Enemy
     {
         [SerializeField] private HealthData health;
         [Header("Control Types")] 
@@ -29,7 +29,7 @@ namespace NijiDive.Controls.Enemies
 
         private void Update()
         {
-            CalculateDirection();
+            CalculateMovement();
         }
 
         private void FixedUpdate()
@@ -37,23 +37,12 @@ namespace NijiDive.Controls.Enemies
             FixedUpdate(new InputData(new Vector2(xInput, 0)));
         }
 
-        private void CalculateDirection()
+        private void CalculateMovement()
         {
             if (lastWallCheck || !lastEdgeCheck)
             {
                 xInput *= -1f;
             }
-        }
-
-        protected override void Death(GameObject sourceObject, DamageType damageType)
-        {
-            if ((damageType & DamageType.Stomp) > 0)
-            {
-                var bounceable = sourceObject.GetComponent<IBounceable>();
-                if (bounceable != null) bounceable.Bounce(10);
-            }
-
-            Destroy(gameObject);
         }
     }
 }

@@ -33,12 +33,10 @@ namespace NijiDive.Managers.Map
 
                     bt.OnBreak?.Invoke(sourceObject);
                     groundMap.SetTile(tileCell, null);
-
-                    return true;
-                } 
+                }
             }
 
-            return false;
+            return true;
         }
 
         private void OnDrawGizmos()

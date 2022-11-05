@@ -43,7 +43,7 @@ namespace NijiDive.Weapons
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (Time.time - startTime > Time.fixedDeltaTime && Attacking.TryDamageCollider(gameObject, collision, damageType, collision.ClosestPoint(transform.position)))
-            {
+            {   
                 OnHit?.Invoke();
                 Destroy(gameObject);
             }

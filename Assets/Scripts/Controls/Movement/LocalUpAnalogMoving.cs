@@ -4,13 +4,13 @@ using UnityEngine;
 namespace NijiDive.Controls.Movement
 {
     [Serializable]
-    public class LocalRightAnalogMoving : LinearAnalogMoving
+    public class LocalUpAnalogMoving : LinearAnalogMoving
     {
-        protected override Vector2 MoveAxis => Vector2.right;
+        protected override Vector2 MoveAxis => Vector2.up;
 
         public override void FixedUpdate()
         {
-            Move(mob.LastInputs.lStick.x);
+            Move(mob.LastInputs.lStick.y);
         }
     }
 }

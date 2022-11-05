@@ -13,12 +13,12 @@ namespace NijiDive.Controls
     [RequireComponent(typeof(Collider2D))]
     public abstract class Mob : MonoBehaviour, IDamageable, IBounceable
     {
+        public UnityEvent<GameObject, DamageType> OnDeath;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] protected DamageType vulnerableTypes;
+        [SerializeField] protected float bounceSpeed = 10f;
         [Space]
         [SerializeField] private CollisionData collisions;
-        [Space]
-        public UnityEvent<GameObject, DamageType> OnDeath;
 
         #region Properties
         protected MapManager Map { get; private set; }
@@ -92,6 +92,8 @@ namespace NijiDive.Controls
             var canDamage = vulnerableTypes.IsVulnerableTo(damageType);
             if (canDamage)
             {
+                Bounce(bounceSpeed);
+                Bounce(sourceObject, bounceSpeed);
                 Health.LoseHealth(damage);
                 if (Health.IsEmpty) OnDeath?.Invoke(sourceObject, damageType);
             }
@@ -100,6 +102,12 @@ namespace NijiDive.Controls
         }
 
         public virtual void Bounce(float velocity) => SetVelocityY(velocity);
+
+        private void Bounce(GameObject other, float velocity)
+        {
+            var bounceable = other.GetComponent<IBounceable>();
+            if (bounceable != null) bounceable.Bounce(bounceSpeed);
+        }
 
         public T GetMovingType<T>() where T : Moving
         {
@@ -203,7 +211,10 @@ namespace NijiDive.Controls
         }
         #endregion
 
-        protected abstract void Death(GameObject sourceObject, DamageType damageType);
+        protected virtual void Death(GameObject sourceObject, DamageType damageType)
+        {
+            Destroy(gameObject);
+        }
 
         private void OnDrawGizmos()
         {
