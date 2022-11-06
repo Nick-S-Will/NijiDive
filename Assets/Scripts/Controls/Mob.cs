@@ -50,14 +50,14 @@ namespace NijiDive.Controls
         {
             if (spriteRenderer == null)
             {
-                Debug.LogError("No sprite renderer assigned");
+                Debug.LogError($"No {typeof(SpriteRenderer)} assigned", this);
                 enabled = false;
             }
 
             Map = FindObjectOfType<MapManager>();
             if (Map == null)
             {
-                Debug.LogError($"No {typeof(MapManager)} found in scene");
+                Debug.LogError($"No {typeof(MapManager)} found in scene", this);
                 enabled = false;
             }
             Hitbox = GetComponent<Collider2D>();
@@ -71,14 +71,12 @@ namespace NijiDive.Controls
             }
 
             Health.Reset();
+            OnDeath.AddListener(Death);
         }
 
         protected void FixedUpdate(InputData inputs)
         {
-            lastGroundCheck = GroundCheck();
-            lastEdgeCheck = EdgeCheck(inputs.lStick.x);
-            lastWallCheck = WallCheck(inputs.lStick.x);
-            lastCeilingCheck = CeilingCheck();
+            UpdateCollisions(inputs.lStick.x);
 
             var dot = Vector2.Dot(transform.right, velocity.normalized);
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
@@ -106,26 +104,20 @@ namespace NijiDive.Controls
         private void Bounce(GameObject other, float velocity)
         {
             var bounceable = other.GetComponent<IBounceable>();
-            if (bounceable != null) bounceable.Bounce(bounceSpeed);
-        }
-
-        public T GetMovingType<T>() where T : Moving
-        {
-            foreach (var type in controls) if (type is T t) return t;
-
-            return default;
-        }
-
-        public T GetAttackType<T>() where T : Attacking
-        {
-            foreach (var type in controls) if (type is T t) return t;
-
-            return default;
+            if (bounceable != null) bounceable.Bounce(velocity);
         }
 
         public void AddForce(Vector2 force) => Rb2d.AddForce(force);
 
         #region Collision Checks
+        private void UpdateCollisions(float localRightInput)
+        {
+            lastGroundCheck = GroundCheck();
+            lastEdgeCheck = EdgeCheck(localRightInput);
+            lastWallCheck = WallCheck(localRightInput);
+            lastCeilingCheck = CeilingCheck();
+        }
+
         /// <summary>
         /// Performs <see cref="Physics2D.OverlapBox(Vector2, Vector2, float, int)"/>
         /// </summary>
@@ -211,12 +203,19 @@ namespace NijiDive.Controls
         }
         #endregion
 
+        public T GetControlType<T>() where T : Control
+        {
+            foreach (var type in controls) if (type is T t) return t;
+
+            return default;
+        }
+
         protected virtual void Death(GameObject sourceObject, DamageType damageType)
         {
             Destroy(gameObject);
         }
 
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
             if (collisions.showGroundCheck)
             {

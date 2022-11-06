@@ -22,14 +22,14 @@ namespace NijiDive.Controls.Attacks
         {
             if (startingWeapon == null)
             {
-                Debug.LogError("No starting weapon assigned");
+                Debug.LogError("No starting weapon assigned", mob);
                 mob.enabled = false;
             }
             else EquipWeapon(startingWeapon);
 
-            if (mob.GetMovingType<Jumping>() == default)
+            if (mob.GetControlType<Jumping>() == default)
             {
-                Debug.LogError($"{mob.name} is missing {typeof(Jumping)} but {typeof(WeaponController)}");
+                Debug.LogError($"{mob.name} is missing {typeof(Jumping)}. {typeof(WeaponController)} requires it", mob);
                 mob.enabled = false;
             }
         }
@@ -41,7 +41,7 @@ namespace NijiDive.Controls.Attacks
 
         public void EquipWeapon(Weapon newWeapon)
         {
-            var jumping = mob.GetMovingType<Jumping>();
+            var jumping = mob.GetControlType<Jumping>();
 
             if (currentWeapon != null)
             {

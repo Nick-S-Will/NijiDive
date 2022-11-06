@@ -9,8 +9,8 @@ namespace NijiDive.Weapons
     [RequireComponent(typeof(Collider2D))]
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private float lifeTime;
-        [SerializeField] private int damage;
+        [SerializeField] [Min(0f)] private float lifeTime = 0.2f;
+        [SerializeField] [Min(1)] private int damage = 1;
         [SerializeField] private DamageType damageType = DamageType.Player | DamageType.Projectile;
         [Space]
 
@@ -39,10 +39,10 @@ namespace NijiDive.Weapons
             if (hitInfo.collider != null) TryDamage(hitInfo.collider, hitInfo.point);
         }*/
 
-        // Using trigger instead of raycast because raycast doesn't work with composite collider
+        // Switched to trigger instead of raycast because raycast doesn't work with composite collider
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (Time.time - startTime > Time.fixedDeltaTime && Attacking.TryDamageCollider(gameObject, collision, damageType, collision.ClosestPoint(transform.position)))
+            if (Time.time - startTime > Time.fixedDeltaTime && Attacking.TryDamageCollider(gameObject, collision, damageType, damage, collision.ClosestPoint(transform.position)))
             {   
                 OnHit?.Invoke();
                 Destroy(gameObject);
