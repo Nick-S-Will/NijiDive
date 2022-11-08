@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NijiDive
+namespace NijiDive.Utilities
 {
     public static class BitwiseUtilities
     {

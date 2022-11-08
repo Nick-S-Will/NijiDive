@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+using NijiDive.Utilities;
+
 namespace NijiDive
 {
     public interface IDamageable

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NijiDive.Tiles
+namespace NijiDive.Terrain.Tiles
 {
     [CreateAssetMenu(menuName = "NijiDive/Tiles/BounceableTile")]
     public class BounceableTile : BreakableTile
@@ -10,7 +10,7 @@ namespace NijiDive.Tiles
         public float BounceSpeed => bounceSpeed;
 
         /// <summary>
-        /// Used by <see cref="BreakableTile.OnBreak"/> to bounce player by <see cref="bounceSpeed"/>
+        /// Used by <see cref="BreakableTile.OnBreak"/> to bounce <paramref name="sourceObject"/> by <see cref="bounceSpeed"/>
         /// </summary>
         public void TryBounceDamageSource(GameObject sourceObject)
         {

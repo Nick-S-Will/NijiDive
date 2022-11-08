@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.Events;
 
-namespace NijiDive.Tiles
+namespace NijiDive.Terrain.Tiles
 {
     [CreateAssetMenu(menuName = "NijiDive/Tiles/BreakableTile")]
     public class BreakableTile : Tile
