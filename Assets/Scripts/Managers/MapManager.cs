@@ -1,18 +1,20 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-using NijiDive.Terrain.Chunks;
-using NijiDive.Terrain.Tiles;
+using NijiDive.Map.Chunks;
 
 namespace NijiDive.Managers.Map
 {
     public class MapManager : MonoBehaviour, IDamageable
     {
         [SerializeField] private Tilemap groundMap, platformMap;
+        [SerializeField] private Grid enemyGrid;
         [SerializeField] private LayerMask groundMask;
 
         [Space]
         [SerializeField] private Chunk[] chunkOptions;
+        [SerializeField] private int chunksInLevel = 15;
+        [SerializeField] private bool generateAtStart = true;
 
         [Header("Visualizers")]
         [SerializeField] private Color gizmoColor = Color.red;
@@ -28,44 +30,49 @@ namespace NijiDive.Managers.Map
         public LayerMask GroundMask => groundMask;
         private BoundsInt NextChunkBounds => new BoundsInt(Chunk.SIZE / 2 * Vector3Int.left + chunkCount * Chunk.SIZE * Vector3Int.down, Chunk.BoundSize);
 
-        private void Start()
+        private void Awake()
         {
             maps = new Tilemap[] { groundMap, platformMap };
             damagePoint = float.MaxValue * Vector3.up;
             chunkCount = 0;
 
             if (chunkOptions.Length == 0) Debug.LogError($"{nameof(chunkOptions)} is empty");
-            else AddChunk();
-            AddChunk();
+            else if (generateAtStart) for (int i = 0; i < chunksInLevel; i++) AddChunk();
         }
 
+        [ContextMenu("Add New Chunk")]
         public void AddChunk()
         {
+            if (!Application.isPlaying)
+            {
+                Debug.LogWarning("\"Add New Chunk\" must be used at runtime.");
+                return;
+            }
+
             var chunk = chunkOptions[Random.Range(0, chunkOptions.Length)];
             var bounds = NextChunkBounds;
 
             groundMap.SetTilesBlock(bounds, chunk.groundTiles);
             platformMap.SetTilesBlock(bounds, chunk.platformTiles);
+            foreach (var enemy in chunk.enemies) _ = enemy.Spawn(enemyGrid.transform, bounds.min);
 
             chunkCount++;
         }
 
         public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
         {
-            foreach (var groundMap in maps) {
-                var tileCell = groundMap.WorldToCell(point);
-                print(tileCell);
-                damagePoint = tileCell;
-                if (groundMap.GetTile(tileCell) is BreakableTile bt && bt.VulnerableTypes.IsVulnerableTo(damageType))
-                {
-                    damagePoint = point;
+            damagePoint = point;
 
-                    bt.OnBreak?.Invoke(sourceObject);
+            foreach (var groundMap in maps)
+            {
+                var tileCell = groundMap.WorldToCell(point);
+                if (groundMap.GetTile(tileCell) is IDamageable damageable && damageable.TryDamage(sourceObject, damage, damageType, point))
+                {
                     groundMap.SetTile(tileCell, null);
                 }
             }
 
-            return true;
+            return false;
         }
 
         private void OnDrawGizmos()
@@ -80,6 +87,11 @@ namespace NijiDive.Managers.Map
                 var bounds = NextChunkBounds;
                 Gizmos.DrawCube(transform.position + bounds.center, bounds.size);
             }
+        }
+
+        private void OnValidate()
+        {
+            if (chunkOptions.Length > 0) enabled = true;
         }
     }
 }

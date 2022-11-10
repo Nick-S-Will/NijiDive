@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Map;
-using NijiDive.Controls.Movement;
-using NijiDive.Controls.Attacks;
 using NijiDive.Health;
 
 namespace NijiDive.Controls
@@ -239,16 +237,21 @@ namespace NijiDive.Controls
             }
         }
 
+        private void OnValidate()
+        {
+            if (spriteRenderer && Map) enabled = true;
+        }
+
         [Serializable]
         private class CollisionData
         {
-            [Min(0f)] public float maxGroundDistance = 0.1f, groundCollisionWidthScaler = 0.9f, edgeCollisionOffset = 0f;
+            [Min(0f)] public float maxCeilingDistance = 0.1f, ceilingCollisionWidthScaler = 0.9f;
             [Space]
             [Min(0f)] public float maxWallDistance = 0.1f;
             [Min(0f)] public float wallCollisionHeightScaler = 0.9f;
             [Space]
-            [Min(0f)] public float maxCeilingDistance = 0.1f;
-            [Min(0f)] public float ceilingCollisionWidthScaler = 0.9f;
+            [Min(0f)] public float maxGroundDistance = 0.1f;
+            [Min(0f)] public float groundCollisionWidthScaler = 0.9f, edgeCollisionOffset = 0f;
 
             [Header("Visualizers")]
             public Color gizmoColorNone = Color.red;

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-using NijiDive.Terrain.Chunks;
+using NijiDive.Map.Chunks;
 
 namespace NijiDive.Editors
 {

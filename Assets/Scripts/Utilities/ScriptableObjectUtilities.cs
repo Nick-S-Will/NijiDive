@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEditor;
 
-using NijiDive.Terrain.Chunks;
+using NijiDive.Map.Chunks;
 
 namespace NijiDive.Utilities
 {

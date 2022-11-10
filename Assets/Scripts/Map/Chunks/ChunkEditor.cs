@@ -1,15 +1,19 @@
-using System.Collections;
+#if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEditor;
 
 using NijiDive.Utilities;
+using NijiDive.Controls.Enemies;
 
-namespace NijiDive.Terrain.Chunks
+namespace NijiDive.Map.Chunks
 {
     public class ChunkEditor : MonoBehaviour
     {
         [SerializeField] private Tilemap groundMap, platformMap;
+        [SerializeField] private Grid enemyGrid;
         [Space]
         [SerializeField] private Chunk toLoad;
         [Space]
@@ -25,17 +29,20 @@ namespace NijiDive.Terrain.Chunks
                 return;
             }
 
+            ClearEnemies();
+
             groundMap.SetTilesBlock(EditorBounds, toLoad.groundTiles);
             platformMap.SetTilesBlock(EditorBounds, toLoad.platformTiles);
+            foreach (var enemyPosition in toLoad.enemies) _ = enemyPosition.Spawn(enemyGrid.transform);
         }
 
         public void SaveChunk()
         {
             var newChunk = ScriptableObject.CreateInstance<Chunk>();
             newChunk.name = newChunkFileName;
-
             newChunk.groundTiles = groundMap.GetTilesBlock(EditorBounds);
             newChunk.platformTiles = platformMap.GetTilesBlock(EditorBounds);
+            newChunk.enemies = GetEnemyPositions();
 
             ScriptableObjectUtilities.ForceSaveChunkAsset(newChunk);
         }
@@ -44,6 +51,26 @@ namespace NijiDive.Terrain.Chunks
         {
             groundMap.ClearAllTiles();
             platformMap.ClearAllTiles();
+            ClearEnemies();
+        }
+
+        private EnemyPosition[] GetEnemyPositions()
+        {
+            var enemies = new List<EnemyPosition>();
+            foreach (Transform child in enemyGrid.transform)
+            {
+                var enemy = PrefabUtility.GetCorrespondingObjectFromSource(child.GetComponent<Enemy>());
+                if (enemy == null) continue;
+                enemies.Add(new EnemyPosition(enemy, child.position - EditorBounds.min));
+            }
+
+            return enemies.ToArray();
+        }
+
+        private void ClearEnemies()
+        {
+            foreach (Transform child in enemyGrid.transform.Cast<Transform>().ToList()) DestroyImmediate(child.gameObject);
         }
     }
 }
+#endif

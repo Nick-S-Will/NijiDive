@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NijiDive.Terrain.Tiles
+namespace NijiDive.Map.Tiles
 {
     [CreateAssetMenu(menuName = "NijiDive/Tiles/BounceableTile")]
     public class BounceableTile : BreakableTile

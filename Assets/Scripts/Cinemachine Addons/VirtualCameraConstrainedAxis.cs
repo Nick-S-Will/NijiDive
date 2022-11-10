@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
-using NijiDive.Terrain.Chunks;
+using NijiDive.Map.Chunks;
 
 namespace NijiDive.CinemachineAddons
 {
@@ -12,14 +12,17 @@ namespace NijiDive.CinemachineAddons
     [AddComponentMenu("")] // Hide in menu
     public class VirtualCameraConstrainedAxis : CinemachineExtension
     {
+        [SerializeField] private float xOffset;
+
         protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
         {
             if (stage == CinemachineCore.Stage.Body)
             {
                 var mapWidth = Chunk.SIZE;
                 var pos = state.RawPosition;
-                var xShifts = (int)Math.Round(pos.x / mapWidth, MidpointRounding.AwayFromZero);
-                pos.x = xShifts * mapWidth;
+                var xShifts = (int)Math.Round((pos.x - xOffset) / mapWidth, MidpointRounding.AwayFromZero);
+                pos.x = xShifts * mapWidth + xOffset;
+
                 state.RawPosition = pos;
             }
         }
