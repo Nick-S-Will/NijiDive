@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 using NijiDive.Controls.Attacks;
 
-namespace NijiDive.Weapons
+namespace NijiDive.Weaponry
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NijiDive.Weapons
+namespace NijiDive.Weaponry
 {
     [CreateAssetMenu(menuName = "NijiDive/Weapon", order = 0)]
     public class Weapon : ScriptableObject

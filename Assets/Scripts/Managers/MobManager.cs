@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using NijiDive.Map.Chunks;
-using NijiDive.Controls.Enemies;
+using NijiDive.Controls;
 
 namespace NijiDive.Managers.Mobs
 {
     public class MobManager : MonoBehaviour
     {
         [SerializeField] private Transform target;
-        [SerializeField] private float enableDistance = Chunk.SIZE;
+        [SerializeField] private float enableDistance = GameConstants.CHUNK_SIZE, destroyDistance = GameConstants.CHUNK_SIZE;
 
-        private List<Transform> enemyTransforms = new List<Transform>();
+        private List<Transform> disabledMobs = new List<Transform>(), enabledMobs = new List<Transform>();
 
         private void Start()
         {
@@ -23,9 +22,9 @@ namespace NijiDive.Managers.Mobs
 
             foreach (Transform t in transform)
             {
-                if (t.GetComponent<Enemy>() != null)
+                if (t.GetComponent<Mob>() != null)
                 {
-                    enemyTransforms.Add(t);
+                    disabledMobs.Add(t);
                     t.gameObject.SetActive(false);
                 }
             }
@@ -33,14 +32,45 @@ namespace NijiDive.Managers.Mobs
 
         private void Update()
         {
-            if (target == null) enabled = false;
+            if (target == null || (disabledMobs.Count == 0 && enabledMobs.Count == 0)) enabled = false;
 
-            foreach (var enemy in enemyTransforms.ToArray())
+            EnableMobs();
+            DestroyMobs();
+        }
+
+        /// <summary>
+        /// Enables mobs within <see cref="enableDistance"/> of <see cref="target"/>
+        /// </summary>
+        private void EnableMobs()
+        {
+            foreach (var mob in disabledMobs.ToArray())
             {
-                if (Mathf.Abs(target.position.y - enemy.position.y) < enableDistance)
+                if (target.position.y - mob.position.y < enableDistance)
                 {
-                    enemy.gameObject.SetActive(true);
-                    enemyTransforms.Remove(enemy);
+                    mob.gameObject.SetActive(true);
+                    disabledMobs.Remove(mob);
+                    enabledMobs.Add(mob);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Destroys enabled mobs that exceed <see cref="destroyDistance"/> of <see cref="target"/>
+        /// </summary>
+        private void DestroyMobs()
+        {
+            foreach (var mob in enabledMobs.ToArray())
+            {
+                if (mob == null)
+                {
+                    enabledMobs.Remove(mob);
+                    continue;
+                }
+
+                if (mob.position.y - target.position.y > destroyDistance)
+                {
+                    enabledMobs.Remove(mob);
+                    Destroy(mob.gameObject);
                 }
             }
         }

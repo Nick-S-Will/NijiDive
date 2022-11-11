@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine.Events;
 using UnityEngine;
 
-using NijiDive.Weapons;
+using NijiDive.Weaponry;
 using NijiDive.Controls.Movement;
 
 namespace NijiDive.Controls.Attacks

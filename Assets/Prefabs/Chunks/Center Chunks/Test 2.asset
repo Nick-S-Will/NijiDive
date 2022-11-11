@@ -352,8 +352,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  enemies:
-  - enemy: {fileID: 5915131502278509976, guid: e96c373740ec5c74186524305fd62ef0, type: 3}
-    position: {x: 8.5, y: 3, z: 0}
-  - enemy: {fileID: 2957843517561446906, guid: 35cdb47f7ada51e44835d0f3d97c1385, type: 3}
+  entities:
+  - entity: {fileID: 2957843517561446908, guid: 35cdb47f7ada51e44835d0f3d97c1385, type: 3}
     position: {x: 2.5, y: 2.5, z: 0}
+  - entity: {fileID: 5915131502278509979, guid: e96c373740ec5c74186524305fd62ef0, type: 3}
+    position: {x: 8.5, y: 3, z: 0}
+  leftChunk: {fileID: 0}
+  rightChunk: {fileID: 0}

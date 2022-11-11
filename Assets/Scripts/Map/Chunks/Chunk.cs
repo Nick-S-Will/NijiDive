@@ -2,53 +2,51 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-using NijiDive.Controls.Enemies;
-
 namespace NijiDive.Map.Chunks
 {
     [Serializable]
     public class Chunk : ScriptableObject
     {
-        public TileBase[] groundTiles = new TileBase[SIZE * SIZE], platformTiles = new TileBase[SIZE * SIZE];
-        public EnemyPosition[] enemies;
+        public TileBase[] groundTiles = new TileBase[GameConstants.CHUNK_SIZE * GameConstants.CHUNK_SIZE], platformTiles = new TileBase[GameConstants.CHUNK_SIZE * GameConstants.CHUNK_SIZE];
+        public EntityPosition[] entities;
+        [Space]
+        public Chunk leftChunk;
+        public Chunk rightChunk;
 
-        /// <summary>
-        /// Width and height of chunks in NijiDive
-        /// </summary>
-        public const int SIZE = 13;
-        public static readonly Vector3Int BoundSize = new Vector3Int(SIZE, SIZE, 1);
+        public static readonly Vector3Int BoundSize = new Vector3Int(GameConstants.CHUNK_SIZE, GameConstants.CHUNK_SIZE, 1);
+
 
         private void OnValidate()
         {
-            var fixedArrayLength = SIZE * SIZE;
+            var fixedArrayLength = GameConstants.CHUNK_SIZE * GameConstants.CHUNK_SIZE;
             if (groundTiles.Length != fixedArrayLength)
             {
-                Debug.LogWarning($"{nameof(groundTiles)}'s length must be {nameof(Chunk)}.{nameof(SIZE)} squared.");
-                Array.Resize(ref groundTiles, SIZE);
+                Debug.LogWarning($"{nameof(groundTiles)}'s length must be {nameof(Chunk)}.{nameof(GameConstants.CHUNK_SIZE)} squared.");
+                Array.Resize(ref groundTiles, GameConstants.CHUNK_SIZE);
             }
             if (platformTiles.Length != fixedArrayLength)
             {
-                Debug.LogWarning($"{nameof(platformTiles)}'s length must be {nameof(Chunk)}.{nameof(SIZE)} squared.");
-                Array.Resize(ref platformTiles, SIZE);
+                Debug.LogWarning($"{nameof(platformTiles)}'s length must be {nameof(Chunk)}.{nameof(GameConstants.CHUNK_SIZE)} squared.");
+                Array.Resize(ref platformTiles, GameConstants.CHUNK_SIZE);
             }
         }
     }
 
     [Serializable]
-    public class EnemyPosition
+    public class EntityPosition
     {
-        public Enemy enemy;
+        public GameObject entity;
         public Vector3 position;
 
-        public EnemyPosition(Enemy enemy, Vector3 position)
+        public EntityPosition(GameObject entity, Vector3 position)
         {
-            this.enemy = enemy;
+            this.entity = entity;
             this.position = position;
         }
 
         public Transform Spawn(Transform parent, Vector3 positionOffset = default)
         {
-            return UnityEngine.Object.Instantiate(enemy, position + positionOffset, Quaternion.identity, parent).transform;
+            return UnityEngine.Object.Instantiate(entity, position + positionOffset, Quaternion.identity, parent).transform;
         }
     }
 }

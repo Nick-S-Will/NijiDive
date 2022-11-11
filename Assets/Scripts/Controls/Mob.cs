@@ -107,6 +107,13 @@ namespace NijiDive.Controls
 
         public void AddForce(Vector2 force) => Rb2d.AddForce(force);
 
+        public T GetControlType<T>() where T : Control
+        {
+            foreach (var type in controls) if (type is T t) return t;
+
+            return default;
+        }
+
         #region Collision Checks
         private void UpdateCollisions(float localRightInput)
         {
@@ -200,13 +207,6 @@ namespace NijiDive.Controls
             return CollisionCheck(boxPos, boxSize);
         }
         #endregion
-
-        public T GetControlType<T>() where T : Control
-        {
-            foreach (var type in controls) if (type is T t) return t;
-
-            return default;
-        }
 
         protected virtual void Death(GameObject sourceObject, DamageType damageType)
         {

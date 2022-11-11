@@ -6,20 +6,19 @@ using UnityEngine.Tilemaps;
 using UnityEditor;
 
 using NijiDive.Utilities;
-using NijiDive.Controls.Enemies;
 
 namespace NijiDive.Map.Chunks
 {
     public class ChunkEditor : MonoBehaviour
     {
         [SerializeField] private Tilemap groundMap, platformMap;
-        [SerializeField] private Grid enemyGrid;
+        [SerializeField] private Grid entityGrid;
         [Space]
         [SerializeField] private Chunk toLoad;
         [Space]
         [SerializeField] private string newChunkFileName = "New Chunk";
 
-        private static readonly BoundsInt EditorBounds = new BoundsInt(new Vector3Int(0, 1 - Chunk.SIZE, 0), Chunk.BoundSize);
+        private static readonly BoundsInt EditorBounds = new BoundsInt(new Vector3Int(0, 1 - GameConstants.CHUNK_SIZE, 0), Chunk.BoundSize);
 
         public void LoadChunk()
         {
@@ -29,11 +28,11 @@ namespace NijiDive.Map.Chunks
                 return;
             }
 
-            ClearEnemies();
+            ClearEntities();
 
             groundMap.SetTilesBlock(EditorBounds, toLoad.groundTiles);
             platformMap.SetTilesBlock(EditorBounds, toLoad.platformTiles);
-            foreach (var enemyPosition in toLoad.enemies) _ = enemyPosition.Spawn(enemyGrid.transform);
+            foreach (var entityPosition in toLoad.entities) _ = entityPosition.Spawn(entityGrid.transform, EditorBounds.min);
         }
 
         public void SaveChunk()
@@ -42,7 +41,7 @@ namespace NijiDive.Map.Chunks
             newChunk.name = newChunkFileName;
             newChunk.groundTiles = groundMap.GetTilesBlock(EditorBounds);
             newChunk.platformTiles = platformMap.GetTilesBlock(EditorBounds);
-            newChunk.enemies = GetEnemyPositions();
+            newChunk.entities = GetEntityPositions();
 
             ScriptableObjectUtilities.ForceSaveChunkAsset(newChunk);
         }
@@ -51,25 +50,25 @@ namespace NijiDive.Map.Chunks
         {
             groundMap.ClearAllTiles();
             platformMap.ClearAllTiles();
-            ClearEnemies();
+            ClearEntities();
         }
 
-        private EnemyPosition[] GetEnemyPositions()
+        private EntityPosition[] GetEntityPositions()
         {
-            var enemies = new List<EnemyPosition>();
-            foreach (Transform child in enemyGrid.transform)
+            var entities = new List<EntityPosition>();
+            foreach (Transform child in entityGrid.transform)
             {
-                var enemy = PrefabUtility.GetCorrespondingObjectFromSource(child.GetComponent<Enemy>());
-                if (enemy == null) continue;
-                enemies.Add(new EnemyPosition(enemy, child.position - EditorBounds.min));
+                var entityPrefab = PrefabUtility.GetCorrespondingObjectFromSource(child.gameObject);
+                if (entityPrefab == null) continue;
+                entities.Add(new EntityPosition(entityPrefab, child.position - EditorBounds.min));
             }
 
-            return enemies.ToArray();
+            return entities.ToArray();
         }
 
-        private void ClearEnemies()
+        private void ClearEntities()
         {
-            foreach (Transform child in enemyGrid.transform.Cast<Transform>().ToList()) DestroyImmediate(child.gameObject);
+            foreach (Transform child in entityGrid.transform.Cast<Transform>().ToList()) DestroyImmediate(child.gameObject);
         }
     }
 }

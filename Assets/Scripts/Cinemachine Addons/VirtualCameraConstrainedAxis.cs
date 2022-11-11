@@ -2,8 +2,6 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
-using NijiDive.Map.Chunks;
-
 namespace NijiDive.CinemachineAddons
 {
     // Based on LockCameraZ class from https://forum.unity.com/threads/follow-only-along-a-certain-axis.544511/
@@ -18,7 +16,7 @@ namespace NijiDive.CinemachineAddons
         {
             if (stage == CinemachineCore.Stage.Body)
             {
-                var mapWidth = Chunk.SIZE;
+                var mapWidth = GameConstants.CHUNK_SIZE;
                 var pos = state.RawPosition;
                 var xShifts = (int)Math.Round((pos.x - xOffset) / mapWidth, MidpointRounding.AwayFromZero);
                 pos.x = xShifts * mapWidth + xOffset;
