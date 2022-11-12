@@ -3,13 +3,14 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Map;
+using NijiDive.Controls;
 using NijiDive.Health;
 
-namespace NijiDive.Controls
+namespace NijiDive.Entities
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
-    public abstract class Mob : MonoBehaviour, IDamageable, IBounceable
+    public abstract class Mob : Entity, IDamageable, IBounceable
     {
         public UnityEvent<GameObject, DamageType> OnDeath;
         [SerializeField] private SpriteRenderer spriteRenderer;
@@ -19,7 +20,6 @@ namespace NijiDive.Controls
         [SerializeField] private CollisionData collisions;
 
         #region Properties
-        protected MapManager Map { get; private set; }
         protected Rigidbody2D Rb2d { get; private set; }
         protected Collider2D Hitbox { get; private set; }
         public abstract HealthData Health { get; }
@@ -32,10 +32,10 @@ namespace NijiDive.Controls
         // Cleaner way to update a single axis of velocity
         public void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
         public void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
-        public bool lastGroundCheck { get; private set; }
-        public bool lastEdgeCheck { get; private set; }
-        public bool lastWallCheck { get; private set; }
-        public bool lastCeilingCheck { get; private set; }
+        public bool LastGroundCheck { get; private set; }
+        public bool LastEdgeCheck { get; private set; }
+        public bool LastWallCheck { get; private set; }
+        public bool LastCeilingCheck { get; private set; }
         #endregion
 
         protected Control[] controls;
@@ -52,12 +52,6 @@ namespace NijiDive.Controls
                 enabled = false;
             }
 
-            Map = FindObjectOfType<MapManager>();
-            if (Map == null)
-            {
-                Debug.LogError($"No {typeof(MapManager)} found in scene", this);
-                enabled = false;
-            }
             Hitbox = GetComponent<Collider2D>();
             Rb2d = GetComponent<Rigidbody2D>();
 
@@ -117,10 +111,10 @@ namespace NijiDive.Controls
         #region Collision Checks
         private void UpdateCollisions(float localRightInput)
         {
-            lastGroundCheck = GroundCheck();
-            lastEdgeCheck = EdgeCheck(localRightInput);
-            lastWallCheck = WallCheck(localRightInput);
-            lastCeilingCheck = CeilingCheck();
+            LastGroundCheck = GroundCheck();
+            LastEdgeCheck = EdgeCheck(localRightInput);
+            LastWallCheck = WallCheck(localRightInput);
+            LastCeilingCheck = CeilingCheck();
         }
 
         /// <summary>
@@ -131,7 +125,7 @@ namespace NijiDive.Controls
         /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private bool CollisionCheck(Vector2 boxPos, Vector2 boxSize)
         {
-            var collision = Physics2D.OverlapBox(boxPos, boxSize, 0f, Map.GroundMask);
+            var collision = Physics2D.OverlapBox(boxPos, boxSize, 0f, MapManager.singleton.GroundMask);
             return collision != null;
         }
 
@@ -208,6 +202,17 @@ namespace NijiDive.Controls
         }
         #endregion
 
+        public override void SetPaused(bool paused)
+        {
+            if (IsPaused == paused) return;
+
+            enabled = !paused;
+            Rb2d.simulated = enabled;
+            var animator = GetComponentInChildren<Animator>();
+            if (animator) animator.enabled = enabled;
+            IsPaused = paused;
+        }
+
         protected virtual void Death(GameObject sourceObject, DamageType damageType)
         {
             Destroy(gameObject);
@@ -217,29 +222,29 @@ namespace NijiDive.Controls
         {
             if (collisions.showGroundCheck)
             {
-                Gizmos.color = lastGroundCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
+                Gizmos.color = LastGroundCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(groundCheckBounds.center, groundCheckBounds.size);
             }
             if (collisions.showEdgeCheck)
             {
-                Gizmos.color = lastEdgeCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
+                Gizmos.color = LastEdgeCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(edgeCheckBounds.center, edgeCheckBounds.size);
             }
             if (collisions.showWallCheck)
             {
-                Gizmos.color = lastWallCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
+                Gizmos.color = LastWallCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(wallCheckBounds.center, wallCheckBounds.size);
             }
             if (collisions.showCeilingCheck)
             {
-                Gizmos.color = lastCeilingCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
+                Gizmos.color = LastCeilingCheck ? collisions.gizmoColorFound : collisions.gizmoColorNone;
                 Gizmos.DrawCube(ceilingCheckBounds.center, ceilingCheckBounds.size);
             }
         }
 
         private void OnValidate()
         {
-            if (spriteRenderer && Map) enabled = true;
+            if (spriteRenderer) enabled = true;
         }
 
         [Serializable]

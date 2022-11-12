@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using NijiDive.Entities;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.Attacks;
 using NijiDive.Health;
@@ -38,6 +39,8 @@ namespace NijiDive.Controls.Player
             jumpDown = Input.GetKey(JumpKey);
             // Different because FixedUpdate won't always line up and catch the single frame
             if (Input.GetKeyDown(jumpKey)) jumpDownThisFrame = true;
+
+            print(Managers.Map.MapManager.singleton.PointInCenter(transform.position));
         }
 
         private void FixedUpdate()
@@ -45,5 +48,8 @@ namespace NijiDive.Controls.Player
             FixedUpdate(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame));
             jumpDownThisFrame = false;
         }
+
+        // Player doesn't get paused
+        public override void SetPaused(bool pause) { }
     }
 }

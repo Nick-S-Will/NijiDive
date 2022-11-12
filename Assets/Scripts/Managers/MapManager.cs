@@ -30,8 +30,18 @@ namespace NijiDive.Managers.Map
         public LayerMask GroundMask => groundMask;
         private BoundsInt NextChunkBounds => new BoundsInt(GameConstants.CHUNK_SIZE / 2 * Vector3Int.left + chunkCount * GameConstants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);
 
+        public static MapManager singleton;
+
         private void Awake()
         {
+            if (singleton == null) singleton = this;
+            else
+            {
+                Debug.LogError($"Multiple {typeof(MapManager)}s exist", this);
+                gameObject.SetActive(false);
+                return;
+            }
+
             maps = new Tilemap[] { groundMap, platformMap };
             damagePoint = float.MaxValue * Vector3.up;
             chunkCount = 0;
@@ -51,6 +61,7 @@ namespace NijiDive.Managers.Map
             return bounds;
         }
 
+        #region Level Generation
         private void AddChunk(Chunk chunk, BoundsInt chunkBounds)
         {
             groundMap.SetTilesBlock(chunkBounds, chunk.groundTiles);
@@ -85,6 +96,12 @@ namespace NijiDive.Managers.Map
 
             chunkCount++;
         }
+        #endregion
+
+        public bool PointInCenter(Vector3 point)
+        {
+            return Mathf.Abs(point.x - entityGrid.transform.position.x) < GameConstants.CHUNK_SIZE / 2f;
+        }
 
         public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
         {
@@ -100,6 +117,11 @@ namespace NijiDive.Managers.Map
             }
 
             return false;
+        }
+
+        private void OnDestroy()
+        {
+            if (singleton == this) singleton = null;
         }
 
         private void OnDrawGizmos()

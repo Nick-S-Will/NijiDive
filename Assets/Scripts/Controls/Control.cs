@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+using NijiDive.Entities;
+
 namespace NijiDive.Controls
 {
     [Serializable]

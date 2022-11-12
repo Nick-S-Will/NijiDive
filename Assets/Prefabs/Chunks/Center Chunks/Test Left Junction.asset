@@ -357,5 +357,7 @@ MonoBehaviour:
     position: {x: 6.5, y: 2, z: 0}
   - entity: {fileID: 2957843517561446908, guid: 35cdb47f7ada51e44835d0f3d97c1385, type: 3}
     position: {x: 9.5, y: 7.5, z: 0}
+  - entity: {fileID: 8439716142641332695, guid: 5c376e431ae6d0042837573ed571c112, type: 3}
+    position: {x: 0.5, y: 6, z: 0}
   leftChunk: {fileID: 11400000, guid: d5fdb91b6372f8d449d06d652c3e6ae6, type: 2}
   rightChunk: {fileID: 0}

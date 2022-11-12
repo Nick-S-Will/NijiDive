@@ -10,13 +10,14 @@ namespace NijiDive.Controls.Enemies
         [Header("Control Types")]
         [SerializeField] private LocalRightDigitalMoving walking;
         [SerializeField] private Stomping stomping;
+        [SerializeField] private Shoving shoving;
         [SerializeField] private bool startFacingRight = true;
 
         private float xInput;
 
         protected override void Awake()
         {
-            controls = new Control[] { walking, stomping };
+            controls = new Control[] { walking, stomping, shoving };
             xInput = startFacingRight ? 1f : -1f;
 
             base.Awake();
@@ -34,7 +35,7 @@ namespace NijiDive.Controls.Enemies
 
         protected override void CalculateInput()
         {
-            if (lastWallCheck || (!lastEdgeCheck && lastGroundCheck))
+            if (LastWallCheck || (!LastEdgeCheck && LastGroundCheck))
             {
                 xInput *= -1f;
             }

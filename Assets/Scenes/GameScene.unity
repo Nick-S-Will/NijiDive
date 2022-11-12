@@ -4357,10 +4357,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 264
   chunkOptions:
-  - {fileID: 11400000, guid: c2b19728daa5400408ed0944b54f836a, type: 2}
-  - {fileID: 11400000, guid: c76b1566a6933f940b90a460c9df4483, type: 2}
-  - {fileID: 11400000, guid: 000ab2a109a6705489e6c883314b9096, type: 2}
-  chunksInLevel: 5
+  - {fileID: 11400000, guid: 465f59e7750b17b468c7a8bc9baea660, type: 2}
+  chunksInLevel: 1
   generateAtStart: 1
   gizmoColor: {r: 1, g: 0, b: 0, a: 0.5019608}
   showLastDamagePoint: 0
@@ -4464,7 +4462,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   spriteRenderer: {fileID: 1203412870}
-  vulnerableTypes: -1610612721
+  vulnerableTypes: -1610612705
   bounceSpeed: 4
   collisions:
     maxCeilingDistance: 0.1

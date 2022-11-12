@@ -13,12 +13,13 @@ namespace NijiDive.Controls.Enemies
         [SerializeField] private LocalRightAnalogMoving flyingX;
         [SerializeField] private LocalUpAnalogMoving flyingY;
         [SerializeField] private Stomping stomping;
+        [SerializeField] private Shoving shoving;
 
         private Vector2 input;
 
         protected override void Awake()
         {
-            controls = new Control[] { flyingX, flyingY, stomping };
+            controls = new Control[] { flyingX, flyingY, stomping, shoving };
 
             base.Awake();
         }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using NijiDive.Controls;
+using NijiDive.Entities;
 
 namespace NijiDive.Managers.Mobs
 {

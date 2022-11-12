@@ -36,7 +36,7 @@ namespace NijiDive.Controls.Attacks
 
         public override void FixedUpdate()
         {
-            if (!mob.lastGroundCheck && mob.LastInputs.actionDownThisFrame) TryShoot();
+            if (!mob.LastGroundCheck && mob.LastInputs.actionDownThisFrame) TryShoot();
         }
 
         public void EquipWeapon(Weapon newWeapon)
@@ -82,7 +82,7 @@ namespace NijiDive.Controls.Attacks
                 if (currentWeapon.IsAutomatic)
                 {
                     yield return new WaitForSeconds(currentWeapon.ShotInterval);
-                    if (!mob.LastInputs.actionDown || mob.lastGroundCheck) break;
+                    if (!mob.LastInputs.actionDown || mob.LastGroundCheck) break;
                 }
             } while (currentWeapon.IsAutomatic && currentWeapon.LeftInClip > 0);
 

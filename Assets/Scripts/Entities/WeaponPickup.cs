@@ -1,12 +1,12 @@
 using UnityEngine;
 
-using NijiDive.Controls;
 using NijiDive.Controls.Attacks;
+using NijiDive.Weaponry;
 
-namespace NijiDive.Weaponry
+namespace NijiDive.Entities
 {
     [RequireComponent(typeof(Collider2D))]
-    public class WeaponPickup : MonoBehaviour
+    public class WeaponPickup : Entity
     {
         [SerializeField] private TextMesh weaponNameText;
         [Space]

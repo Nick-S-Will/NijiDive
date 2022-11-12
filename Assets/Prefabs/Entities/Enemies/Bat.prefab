@@ -50,16 +50,16 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   spriteRenderer: {fileID: 2957843517798356015}
-  vulnerableTypes: 1073741827
+  vulnerableTypes: 1610612739
   bounceSpeed: 10
   collisions:
+    maxCeilingDistance: 0.1
+    ceilingCollisionWidthScaler: 0.9
+    maxWallDistance: 0.1
+    wallCollisionHeightScaler: 0.9
     maxGroundDistance: 0.1
     groundCollisionWidthScaler: 0.9
     edgeCollisionOffset: 0
-    maxWallDistance: 0.1
-    wallCollisionHeightScaler: 0.9
-    maxCeilingDistance: 0.1
-    ceilingCollisionWidthScaler: 0.9
     gizmoColorNone: {r: 1, g: 0, b: 0, a: 1}
     gizmoColorFound: {r: 0, g: 1, b: 0, a: 1}
     showGroundCheck: 0

@@ -32,7 +32,11 @@ namespace NijiDive.Map.Chunks
 
             groundMap.SetTilesBlock(EditorBounds, toLoad.groundTiles);
             platformMap.SetTilesBlock(EditorBounds, toLoad.platformTiles);
-            foreach (var entityPosition in toLoad.entities) _ = entityPosition.Spawn(entityGrid.transform, EditorBounds.min);
+            foreach (var entityPosition in toLoad.entities)
+            {
+                var entity = (GameObject)PrefabUtility.InstantiatePrefab(entityPosition.entity, entityGrid.transform);
+                entity.transform.position = entityPosition.position + EditorBounds.min;
+            }
         }
 
         public void SaveChunk()

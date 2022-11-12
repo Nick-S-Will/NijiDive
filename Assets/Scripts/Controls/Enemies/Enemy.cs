@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using NijiDive.Entities;
 using NijiDive.Health;
 
 namespace NijiDive.Controls.Enemies

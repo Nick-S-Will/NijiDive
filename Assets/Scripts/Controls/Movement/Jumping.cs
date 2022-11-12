@@ -28,7 +28,7 @@ namespace NijiDive.Controls.Movement
 
         public override void FixedUpdate()
         {
-            if (mob.lastGroundCheck)
+            if (mob.LastGroundCheck)
             {
                 if (Time.time - LastTimeGrounded > 2 * Time.fixedDeltaTime) OnLand?.Invoke();
                 LastTimeGrounded = Time.time;
@@ -44,7 +44,7 @@ namespace NijiDive.Controls.Movement
         /// </summary>
         protected void TryJump()
         {
-            if (mob.lastGroundCheck) Jump();
+            if (mob.LastGroundCheck) Jump();
             else if (jumpBuffering == null) jumpBuffering = mob.StartCoroutine(JumpBufferRoutine());
         }
 

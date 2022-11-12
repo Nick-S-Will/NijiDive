@@ -30,6 +30,8 @@ namespace NijiDive
         Environment = 1 << 29,
 
         // Damage types
+        Void = 1 << 5,
+        Shove = 1 << 4,
         Suffocation = 1 << 3,
         Headbutt = 1 << 2,
         Stomp = 1 << 1,

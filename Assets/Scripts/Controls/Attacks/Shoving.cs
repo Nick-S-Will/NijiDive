@@ -5,25 +5,24 @@ using UnityEngine.Events;
 namespace NijiDive.Controls.Attacks
 {
     [Serializable]
-    public class Headbutting : Attacking
+    public class Shoving : Attacking
     {
         [Space]
-        public UnityEvent OnHeadbutt;
+        public UnityEvent OnShove;
 
         public override void FixedUpdate()
         {
-            TryHeadbutt();
+            TryShove();
         }
 
-        private void TryHeadbutt()
+        private void TryShove()
         {
-            if (!mob.LastGroundCheck)
+            if (!mob.LastWallCheck)
             {
-                var collider = CheckBounds(mob.CeilingCheckBounds);
+                var collider = CheckBounds(mob.WallCheckBounds);
                 if (collider && TryDamageCollider(mob.gameObject, collider, damageType, damage, mob.CeilingCheckBounds.center))
                 {
-                    OnHeadbutt?.Invoke();
-                    mob.SetVelocityY(0f);
+                    OnShove?.Invoke();
                 }
             }
         }
