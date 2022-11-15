@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 using NijiDive.Controls.Attacks;
 
@@ -12,10 +11,8 @@ namespace NijiDive.Weaponry
         [SerializeField] [Min(0f)] private float lifeTime = 0.2f;
         [SerializeField] [Min(1)] private int damage = 1;
         [SerializeField] private DamageType damageType = DamageType.Player | DamageType.Projectile;
-        [Space]
 
-        public UnityEvent OnHit;
-
+        private WeaponController source;
         private Rigidbody2D rb2d;
         private float startTime;
 
@@ -27,8 +24,10 @@ namespace NijiDive.Weaponry
             Destroy(gameObject, lifeTime);
         }
 
-        public void SetSpeed(float magnitude)
+        public void Setup(WeaponController source, float magnitude)
         {
+            this.source = source;
+
             if (rb2d == null) rb2d = GetComponent<Rigidbody2D>();
             rb2d.velocity = magnitude * -transform.up;
         }
@@ -44,7 +43,8 @@ namespace NijiDive.Weaponry
         {
             if (Time.time - startTime > Time.fixedDeltaTime && Attacking.TryDamageCollider(gameObject, collision, damageType, damage, collision.ClosestPoint(transform.position)))
             {
-                OnHit?.Invoke();
+                source.OnDamage?.Invoke();
+                if (Attacking.IsDead(collision)) source.OnKill?.Invoke();
             }
 
             Destroy(gameObject);

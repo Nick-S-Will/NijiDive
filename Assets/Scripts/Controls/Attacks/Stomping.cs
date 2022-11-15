@@ -7,8 +7,6 @@ namespace NijiDive.Controls.Attacks
     [Serializable]
     public class Stomping : Attacking
     {
-        [Space]
-        public UnityEvent OnStomp;
 
         public override void FixedUpdate()
         {
@@ -20,7 +18,8 @@ namespace NijiDive.Controls.Attacks
             var collider = CheckBounds(mob.GroundCheckBounds);
             if (collider && TryDamageCollider(mob.gameObject, collider, damageType, damage, mob.transform.position))
             {
-                OnStomp?.Invoke();
+                OnDamage?.Invoke();
+                if (IsDead(collider)) OnKill?.Invoke();
             }
         }
     }

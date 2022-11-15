@@ -39,8 +39,6 @@ namespace NijiDive.Controls.Player
             jumpDown = Input.GetKey(JumpKey);
             // Different because FixedUpdate won't always line up and catch the single frame
             if (Input.GetKeyDown(jumpKey)) jumpDownThisFrame = true;
-
-            print(Managers.Map.MapManager.singleton.PointInCenter(transform.position));
         }
 
         private void FixedUpdate()

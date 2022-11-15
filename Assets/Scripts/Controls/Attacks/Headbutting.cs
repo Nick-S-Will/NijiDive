@@ -7,9 +7,6 @@ namespace NijiDive.Controls.Attacks
     [Serializable]
     public class Headbutting : Attacking
     {
-        [Space]
-        public UnityEvent OnHeadbutt;
-
         public override void FixedUpdate()
         {
             TryHeadbutt();
@@ -22,7 +19,8 @@ namespace NijiDive.Controls.Attacks
                 var collider = CheckBounds(mob.CeilingCheckBounds);
                 if (collider && TryDamageCollider(mob.gameObject, collider, damageType, damage, mob.CeilingCheckBounds.center))
                 {
-                    OnHeadbutt?.Invoke();
+                    OnDamage?.Invoke();
+                    if (IsDead(collider)) OnKill?.Invoke();
                     mob.SetVelocityY(0f);
                 }
             }

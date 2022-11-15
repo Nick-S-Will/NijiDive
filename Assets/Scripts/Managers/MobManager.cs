@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Entities;
 
@@ -7,6 +8,7 @@ namespace NijiDive.Managers.Mobs
 {
     public class MobManager : MonoBehaviour
     {
+        public UnityEvent OnMobDeath;
         [SerializeField] private Transform target;
         [SerializeField] private float enableDistance = GameConstants.CHUNK_SIZE, destroyDistance = GameConstants.CHUNK_SIZE;
 
@@ -45,6 +47,8 @@ namespace NijiDive.Managers.Mobs
         {
             foreach (var mob in disabledMobs.ToArray())
             {
+                if (target == null) return;
+
                 if (target.position.y - mob.position.y < enableDistance)
                 {
                     mob.gameObject.SetActive(true);
@@ -63,6 +67,7 @@ namespace NijiDive.Managers.Mobs
             {
                 if (mob == null)
                 {
+                    OnMobDeath?.Invoke();
                     enabledMobs.Remove(mob);
                     continue;
                 }

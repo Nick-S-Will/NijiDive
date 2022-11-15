@@ -18,7 +18,7 @@ namespace NijiDive.Managers.Map
 
         [Header("Visualizers")]
         [SerializeField] private Color gizmoColor = Color.red;
-        [SerializeField] private bool showLastDamagePoint, showChunkBounds;
+        [SerializeField] private bool showLastDamagePoint, showNextChunkBounds;
 
         private Tilemap[] maps;
         private Vector3 damagePoint;
@@ -103,6 +103,19 @@ namespace NijiDive.Managers.Map
             return Mathf.Abs(point.x - entityGrid.transform.position.x) < GameConstants.CHUNK_SIZE / 2f;
         }
 
+        public TileBase GetTile(Vector2 point)
+        {
+            foreach (var groundMap in maps)
+            {
+                var tileCell = groundMap.WorldToCell(point);
+                var tile = groundMap.GetTile(tileCell);
+
+                if (tile != null) return tile;
+            }
+
+            return null;
+        }
+
         public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
         {
             damagePoint = point;
@@ -131,7 +144,7 @@ namespace NijiDive.Managers.Map
             {
                 Gizmos.DrawSphere(damagePoint, 0.1f);
             }
-            if (showChunkBounds)
+            if (showNextChunkBounds)
             {
                 var bounds = NextChunkBounds;
                 Gizmos.DrawCube(transform.position + bounds.center, bounds.size);

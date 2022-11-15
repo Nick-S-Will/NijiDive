@@ -22,6 +22,10 @@ namespace NijiDive.Entities
         #region Properties
         protected Rigidbody2D Rb2d { get; private set; }
         protected Collider2D Hitbox { get; private set; }
+        public Collider2D LastGroundCheck { get; private set; }
+        public Collider2D LastEdgeCheck { get; private set; }
+        public Collider2D LastWallCheck { get; private set; }
+        public Collider2D LastCeilingCheck { get; private set; }
         public abstract HealthData Health { get; }
         public Bounds GroundCheckBounds => groundCheckBounds;
         public Bounds EdgeCheckBounds => edgeCheckBounds;
@@ -32,10 +36,6 @@ namespace NijiDive.Entities
         // Cleaner way to update a single axis of velocity
         public void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
         public void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
-        public bool LastGroundCheck { get; private set; }
-        public bool LastEdgeCheck { get; private set; }
-        public bool LastWallCheck { get; private set; }
-        public bool LastCeilingCheck { get; private set; }
         #endregion
 
         protected Control[] controls;
@@ -122,18 +122,18 @@ namespace NijiDive.Entities
         /// </summary>
         /// <param name="boxPos">Position of the collision check</param>
         /// <param name="boxSize">Size of the collision check</param>
-        /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
-        private bool CollisionCheck(Vector2 boxPos, Vector2 boxSize)
+        /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
+        private Collider2D CollisionCheck(Vector2 boxPos, Vector2 boxSize)
         {
             var collision = Physics2D.OverlapBox(boxPos, boxSize, 0f, MapManager.singleton.GroundMask);
-            return collision != null;
+            return collision;
         }
 
         /// <summary>
         /// Checks for ground below the collider using <see cref="groundCollisionWidthScaler"/> and <see cref="maxGroundDistance"/>
         /// </summary>
-        /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
-        private bool GroundCheck()
+        /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
+        private Collider2D GroundCheck()
         {
             var boxPos = Rb2d.position + (collisions.maxGroundDistance / 2f * -(Vector2)transform.up);
             var boxSize = new Vector2(collisions.groundCollisionWidthScaler * Hitbox.bounds.size.x, collisions.maxGroundDistance);
@@ -145,8 +145,8 @@ namespace NijiDive.Entities
         /// <summary>
         /// Checks for ground below and just in front of the collider using <see cref="edgeCollisionOffset"/> and <see cref="maxGroundDistance"/>
         /// </summary>
-        /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
-        private bool EdgeCheck(float localRightDirection)
+        /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
+        private Collider2D EdgeCheck(float localRightDirection)
         {
             var velocityR = Vector3.Project(velocity, transform.right).magnitude;
             if (localRightDirection == 0f) localRightDirection = velocityR;
@@ -154,7 +154,7 @@ namespace NijiDive.Entities
             if (localRightDirection == 0f)
             {
                 edgeCheckBounds = new Bounds(Vector3.zero, Vector3.zero);
-                return false;
+                return null;
             }
 
             var hitboxSizeX = Hitbox.bounds.size.x;
@@ -170,8 +170,8 @@ namespace NijiDive.Entities
         /// Check for ground beside the collider using <see cref="maxWallDistance"/> and <see cref="wallCollisionHeightScaler"/>
         /// </summary>
         /// <param name="localRightDirection">Direction on the X axis the wall is checked for</param>
-        /// <returns>True if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
-        private bool WallCheck(float localRightDirection)
+        /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
+        private Collider2D WallCheck(float localRightDirection)
         {
             var velocityR = Vector3.Project(velocity, transform.right).magnitude;
             if (localRightDirection == 0f) localRightDirection = velocityR;
@@ -179,7 +179,7 @@ namespace NijiDive.Entities
             if (localRightDirection == 0f)
             {
                 wallCheckBounds = new Bounds(Vector3.zero, Vector3.zero);
-                return false;
+                return null;
             }
 
             var hitboxSize = Hitbox.bounds.size;
@@ -191,7 +191,7 @@ namespace NijiDive.Entities
             return CollisionCheck(boxPos, boxSize);
         }
 
-        private bool CeilingCheck()
+        private Collider2D CeilingCheck()
         {
             var hitboxSize = Hitbox.bounds.size;
             var boxPos = Rb2d.position + ((hitboxSize.y + collisions.maxCeilingDistance / 2) * (Vector2)transform.up);

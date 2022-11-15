@@ -35,8 +35,8 @@ namespace NijiDive.Controls.Movement
             }
 
             if (mob.LastInputs.actionDownThisFrame) TryJump();
-            TryAddVariableGravity(mob.LastInputs.actionDown);
-            TryClampVerticalSpeed();
+            AddVariableGravity(mob.LastInputs.actionDown);
+            ClampVerticalSpeed();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace NijiDive.Controls.Movement
         /// Adds <see cref="variableGravityForce"/> downwards to <see cref="Rb2d"/>'s Y axis velocity if jump is released in the air
         /// </summary>
         /// <param name="jumpDown">True if the jump command is enabled</param>
-        protected void TryAddVariableGravity(bool jumpDown)
+        protected void AddVariableGravity(bool jumpDown)
         {
             if (!jumpDown) JumpHeld = false;
             if (JumpHeld || jumpDown || IsOnGround) return;
@@ -98,7 +98,7 @@ namespace NijiDive.Controls.Movement
         /// <summary>
         /// Clamps <see cref="Rb2d"/>'s Y velocity to -<see cref="maxFallSpeed"/>
         /// </summary>
-        protected void TryClampVerticalSpeed()
+        protected void ClampVerticalSpeed()
         {
             mob.SetVelocityY(Mathf.Clamp(mob.velocity.y, -maxFallSpeed, maxJumpSpeed));
         }

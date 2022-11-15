@@ -3761,11 +3761,11 @@ PlatformEffector2D:
   m_UseColliderMask: 1
   m_ColliderMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0
-  m_SurfaceArc: 180
+  m_SurfaceArc: 1
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 0
@@ -4357,12 +4357,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 264
   chunkOptions:
-  - {fileID: 11400000, guid: 465f59e7750b17b468c7a8bc9baea660, type: 2}
-  chunksInLevel: 1
+  - {fileID: 11400000, guid: c76b1566a6933f940b90a460c9df4483, type: 2}
+  chunksInLevel: 2
   generateAtStart: 1
   gizmoColor: {r: 1, g: 0, b: 0, a: 0.5019608}
   showLastDamagePoint: 0
-  showChunkBounds: 0
+  showNextChunkBounds: 0
 --- !u!4 &1511705045
 Transform:
   m_ObjectHideFlags: 0
@@ -4390,6 +4390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1604703209}
   - component: {fileID: 1604703208}
+  - component: {fileID: 1604703210}
   - component: {fileID: 1604703207}
   - component: {fileID: 1604703206}
   m_Layer: 7
@@ -4470,7 +4471,7 @@ MonoBehaviour:
     maxWallDistance: 0.1
     wallCollisionHeightScaler: 0.9
     maxGroundDistance: 0.1
-    groundCollisionWidthScaler: 1.1
+    groundCollisionWidthScaler: 0.9
     edgeCollisionOffset: 0.05
     gizmoColorNone: {r: 1, g: 0, b: 0, a: 1}
     gizmoColorFound: {r: 0, g: 1, b: 0, a: 1}
@@ -4574,6 +4575,12 @@ MonoBehaviour:
         m_Calls: []
   weaponController:
     mob: {fileID: 0}
+    OnDamage:
+      m_PersistentCalls:
+        m_Calls: []
+    OnKill:
+      m_PersistentCalls:
+        m_Calls: []
     damageLayers:
       serializedVersion: 2
       m_Bits: 265
@@ -4591,24 +4598,30 @@ MonoBehaviour:
         m_Calls: []
   stomping:
     mob: {fileID: 0}
+    OnDamage:
+      m_PersistentCalls:
+        m_Calls: []
+    OnKill:
+      m_PersistentCalls:
+        m_Calls: []
     damageLayers:
       serializedVersion: 2
       m_Bits: 257
     damageType: 1073741826
     damage: 2147483647
-    OnStomp:
-      m_PersistentCalls:
-        m_Calls: []
   headbutting:
     mob: {fileID: 0}
+    OnDamage:
+      m_PersistentCalls:
+        m_Calls: []
+    OnKill:
+      m_PersistentCalls:
+        m_Calls: []
     damageLayers:
       serializedVersion: 2
       m_Bits: 8
     damageType: 1073741828
     damage: 2147483647
-    OnHeadbutt:
-      m_PersistentCalls:
-        m_Calls: []
   jumpKey: 32
 --- !u!4 &1604703209
 Transform:
@@ -4625,6 +4638,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1604703210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1604703205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b759d0d81a6495a4f843e4b4faf18383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCombo:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndCombo:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1771453132
 GameObject:
   m_ObjectHideFlags: 0
@@ -4681,6 +4712,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00780a0389bf6584a88a3204ea403c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnMobDeath:
+    m_PersistentCalls:
+      m_Calls: []
   target: {fileID: 1604703209}
   enableDistance: 13
   destroyDistance: 13

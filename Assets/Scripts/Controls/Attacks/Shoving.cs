@@ -7,9 +7,6 @@ namespace NijiDive.Controls.Attacks
     [Serializable]
     public class Shoving : Attacking
     {
-        [Space]
-        public UnityEvent OnShove;
-
         public override void FixedUpdate()
         {
             TryShove();
@@ -22,7 +19,8 @@ namespace NijiDive.Controls.Attacks
                 var collider = CheckBounds(mob.WallCheckBounds);
                 if (collider && TryDamageCollider(mob.gameObject, collider, damageType, damage, mob.CeilingCheckBounds.center))
                 {
-                    OnShove?.Invoke();
+                    OnDamage?.Invoke();
+                    if (IsDead(collider)) OnKill?.Invoke();
                 }
             }
         }
