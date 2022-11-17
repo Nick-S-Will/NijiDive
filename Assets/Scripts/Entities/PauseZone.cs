@@ -31,15 +31,15 @@ namespace NijiDive.Entities
             timeElapsed += Time.deltaTime;
         }
 
-        public override void SetPaused(bool paused) => enabled = !paused;
+        public override void Pause(bool paused) => enabled = !paused;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var entity = collision.GetComponent<Entity>();
             if (entity == null) return;
 
-            if (entity is PlayerController) PauseManager.SetPauseAll(true);
-            else if (entity is Mob mob) mob.OnDeath?.Invoke(gameObject, DamageType.Environment | DamageType.Void);
+            if (entity is PlayerController) PauseManager.PauseAll();
+            else if (entity is Mob mob) mob.OnDeath?.Invoke(mob, gameObject, DamageType.Environment | DamageType.Void);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
@@ -50,8 +50,8 @@ namespace NijiDive.Entities
             bool isInCenter = MapManager.singleton.PointInCenter(entity.transform.position);
             if (!isInCenter) return;
 
-            if (entity is PlayerController) PauseManager.SetPauseAll(false);
-            else if (PauseManager.IsPaused) entity.SetPaused(true);
+            if (entity is PlayerController) PauseManager.PauseAll(false);
+            else if (PauseManager.IsPaused) entity.Pause(true);
         }
     }
 }

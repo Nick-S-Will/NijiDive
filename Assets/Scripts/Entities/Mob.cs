@@ -12,7 +12,7 @@ namespace NijiDive.Entities
     [RequireComponent(typeof(Collider2D))]
     public abstract class Mob : Entity, IDamageable, IBounceable
     {
-        public UnityEvent<GameObject, DamageType> OnDeath;
+        public UnityEvent<Mob, GameObject, DamageType> OnDeath;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] protected DamageType vulnerableTypes;
         [SerializeField] protected float bounceSpeed = 10f;
@@ -85,7 +85,7 @@ namespace NijiDive.Entities
                 Bounce(bounceSpeed);
                 Bounce(sourceObject, bounceSpeed);
                 Health.LoseHealth(damage);
-                if (Health.IsEmpty) OnDeath?.Invoke(sourceObject, damageType);
+                if (Health.IsEmpty) OnDeath?.Invoke(this, sourceObject, damageType);
             }
 
             return canDamage;
@@ -202,7 +202,7 @@ namespace NijiDive.Entities
         }
         #endregion
 
-        public override void SetPaused(bool paused)
+        public override void Pause(bool paused)
         {
             if (IsPaused == paused) return;
 
@@ -213,7 +213,7 @@ namespace NijiDive.Entities
             IsPaused = paused;
         }
 
-        protected virtual void Death(GameObject sourceObject, DamageType damageType)
+        protected virtual void Death(Mob killedMob, GameObject sourceObject, DamageType damageType)
         {
             Destroy(gameObject);
         }

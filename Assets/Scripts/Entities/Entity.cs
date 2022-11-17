@@ -6,6 +6,6 @@ namespace NijiDive.Entities
     {
         public virtual bool IsPaused { get; protected set; }
 
-        public virtual void SetPaused(bool paused) { }
+        public virtual void Pause(bool paused) { }
     }
 }

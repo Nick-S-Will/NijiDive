@@ -7,6 +7,7 @@ namespace NijiDive.Controls.Enemies
 {
     public class DirectFlyingStompEnemy : Enemy
     {
+        [Header("Path Visualizer")]
         [SerializeField] private Color gizmoColor = Color.white;
         [SerializeField] private bool showPath;
         [Header("Control Types")]

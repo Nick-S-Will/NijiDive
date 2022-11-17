@@ -4,6 +4,6 @@ namespace NijiDive
     {
         public bool IsPaused { get; }
 
-        public void SetPaused(bool paused);
+        public void Pause(bool paused = true);
     }
 }

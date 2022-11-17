@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8047385706471377042}
   - component: {fileID: 6239318654611934682}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,8 +94,8 @@ GameObject:
   - component: {fileID: 8795664252973178529}
   - component: {fileID: 6962167336677240379}
   - component: {fileID: 8714653040702168386}
-  m_Layer: 0
-  m_Name: PauseZone
+  m_Layer: 9
+  m_Name: PauseZoneL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

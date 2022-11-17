@@ -48,6 +48,6 @@ namespace NijiDive.Controls.Player
         }
 
         // Player doesn't get paused
-        public override void SetPaused(bool pause) { }
+        public override void Pause(bool pause) { }
     }
 }

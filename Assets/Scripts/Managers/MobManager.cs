@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,11 +15,26 @@ namespace NijiDive.Managers.Mobs
 
         private List<Transform> disabledMobs = new List<Transform>(), enabledMobs = new List<Transform>();
 
-        private void Start()
+        public Mob[] DisabledMobs => GetMobs(disabledMobs);
+        public Mob[] EnabledMobs => GetMobs(enabledMobs);
+        public Transform Target => target;
+
+        public static MobManager singleton;
+
+        private void Awake()
         {
+            if (singleton == null) singleton = this;
+            else
+            {
+                Debug.LogError($"Multiple {typeof(MobManager)}s exist", this);
+                gameObject.SetActive(false);
+                enabled = false;
+                return;
+            }
+
             if (target == null)
             {
-                Debug.LogError($"No {nameof(target)} assigned");
+                Debug.LogError($"No {nameof(target)} assigned", this);
                 enabled = false;
             }
 
@@ -80,9 +96,16 @@ namespace NijiDive.Managers.Mobs
             }
         }
 
-        private void OnValidate()
+        private Mob[] GetMobs(List<Transform> mobTransforms)
         {
-            if (target) enabled = true;
+            var mobs = new List<Mob>();
+            foreach (var t in mobTransforms)
+            {
+                try { mobs.Add(t.GetComponent<Mob>()); }
+                catch (NullReferenceException) { Debug.LogError($"{t.name} is missing a {typeof(Mob)} component", this); }
+            }
+
+            return mobs.ToArray();
         }
     }
 }
