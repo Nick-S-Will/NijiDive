@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: e41fb1cf4f77806499fb8aac1155ba2b
+guid: 0506c0dad6e82f44098c04700066c691
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6737994362603082879
-    second: Black Square
+      213: 2332593104350097714
+    second: UI Selector
+  - first:
+      213: 1591675177918900086
+    second: UI Onigiri
+  - first:
+      213: 93275403000630002
+    second: UI Sushi
+  - first:
+      213: -8283222066077679320
+    second: UI Soup
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -44,12 +53,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 256
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -130,22 +139,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Black Square
+      name: UI Selector
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 255
-        height: 255
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18b657e93d5dd72a0800000000000000
-      internalID: -6737994362603082879
+      spriteID: 231305ed1190f5020800000000000000
+      internalID: 2332593104350097714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI Onigiri
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 677a9a92424c61610800000000000000
+      internalID: 1591675177918900086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI Sushi
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fa422e1c716b4100800000000000000
+      internalID: 93275403000630002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI Soup
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82143c3da651c0d80800000000000000
+      internalID: -8283222066077679320
       vertices: []
       indices: 
       edges: []

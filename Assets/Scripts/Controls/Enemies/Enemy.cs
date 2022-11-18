@@ -28,8 +28,8 @@ namespace NijiDive.Controls.Enemies
         protected void WarnTargetMissing()
         {
             Debug.LogWarning("Target missing", this);
-            Rb2d.velocity = Vector2.zero;
-            Rb2d.angularVelocity = 0;
+            Body2d.velocity = Vector2.zero;
+            Body2d.angularVelocity = 0;
             enabled = false;
         }
 

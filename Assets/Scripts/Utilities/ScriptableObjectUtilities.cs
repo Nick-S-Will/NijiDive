@@ -6,7 +6,6 @@ using NijiDive.Map.Chunks;
 
 namespace NijiDive.Utilities
 {
-
     public static class ScriptableObjectUtilities
     {
         public static bool SaveChunkAsset(Chunk newChunk, string nameSuffix = "")

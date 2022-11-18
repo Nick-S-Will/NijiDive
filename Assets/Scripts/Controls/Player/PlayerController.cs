@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 using NijiDive.Entities;
@@ -19,16 +20,16 @@ namespace NijiDive.Controls.Player
 
         [Header("Key Mapping")]
         [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+        [SerializeField] private KeyCode altKey = KeyCode.Escape;
 
         public override HealthData Health => health;
-        public KeyCode JumpKey => jumpKey;
 
         private float xInput;
-        private bool jumpDown, jumpDownThisFrame;
+        private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame;
 
         protected override void Awake()
         {
-            controls = new Control[] { walking, jumping, weaponController, stomping, headbutting };
+            controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
 
             base.Awake();
         }
@@ -36,15 +37,20 @@ namespace NijiDive.Controls.Player
         private void Update()
         {
             xInput = Input.GetAxisRaw("Horizontal");
-            jumpDown = Input.GetKey(JumpKey);
+
+            jumpDown = Input.GetKey(jumpKey);
             // Different because FixedUpdate won't always line up and catch the single frame
             if (Input.GetKeyDown(jumpKey)) jumpDownThisFrame = true;
+
+            altDown = Input.GetKey(altKey);
+            if (Input.GetKeyDown(altKey)) altDownThisFrame = true;
         }
 
         private void FixedUpdate()
         {
-            FixedUpdate(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame));
+            FixedUpdate(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame, altDown, altDownThisFrame));
             jumpDownThisFrame = false;
+            altDownThisFrame = false;
         }
 
         // Player doesn't get paused

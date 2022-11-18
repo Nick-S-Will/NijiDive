@@ -1187,8 +1187,8 @@ MonoBehaviour:
   groundMap: {fileID: 71812425}
   platformMap: {fileID: 229163167}
   entityGrid: {fileID: 1351210455}
-  toLoad: {fileID: 11400000, guid: 465f59e7750b17b468c7a8bc9baea660, type: 2}
-  newChunkFileName: Test Left Junction P
+  toLoad: {fileID: 11400000, guid: 82a8e5d4db8f12f448437f8866887c03, type: 2}
+  newChunkFileName: Test Junction Right
 --- !u!4 &964206713
 Transform:
   m_ObjectHideFlags: 0

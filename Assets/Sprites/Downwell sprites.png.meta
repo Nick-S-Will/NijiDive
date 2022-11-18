@@ -23,6 +23,15 @@ TextureImporter:
   - first:
       213: -4497705230236741960
     second: Bat_0
+  - first:
+      213: 6007972847206479736
+    second: Onigiri
+  - first:
+      213: -6654516189515558260
+    second: Sushi
+  - first:
+      213: -3411160391176968068
+    second: Soup
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -332,6 +341,69 @@ TextureImporter:
       bones: []
       spriteID: 8be82574ce0f491c0800000000000000
       internalID: -4497705230236741960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Onigiri
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 204
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8773fe1197b906350800000000000000
+      internalID: 6007972847206479736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sushi
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 424
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c82d6d368c866a3a0800000000000000
+      internalID: -6654516189515558260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Soup
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 293
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c78a30482bf19a0d0800000000000000
+      internalID: -3411160391176968068
       vertices: []
       indices: 
       edges: []

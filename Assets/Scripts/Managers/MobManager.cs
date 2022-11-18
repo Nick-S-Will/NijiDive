@@ -107,5 +107,10 @@ namespace NijiDive.Managers.Mobs
 
             return mobs.ToArray();
         }
+
+        private void OnDestroy()
+        {
+            if (singleton == this) singleton = null;
+        }
     }
 }

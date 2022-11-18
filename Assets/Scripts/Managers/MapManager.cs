@@ -132,11 +132,6 @@ namespace NijiDive.Managers.Map
             return false;
         }
 
-        private void OnDestroy()
-        {
-            if (singleton == this) singleton = null;
-        }
-
         private void OnDrawGizmos()
         {
             Gizmos.color = gizmoColor;
@@ -154,6 +149,11 @@ namespace NijiDive.Managers.Map
         private void OnValidate()
         {
             if (chunkOptions.Length > 0) enabled = true;
+        }
+
+        private void OnDestroy()
+        {
+            if (singleton == this) singleton = null;
         }
     }
 }

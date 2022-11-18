@@ -10,12 +10,12 @@ namespace NijiDive.Managers.Pausing
         public static bool IsPaused { get; private set; }
 
         private static readonly ContactFilter2D pauseZoneFilter = GetPauseContactFilter();
-        private const string pauseZoneLayerName = "Pause";
+        private const string PAUSE_ZONE_LAYER_NAME = "Pause";
 
         private static ContactFilter2D GetPauseContactFilter()
         {
             var filter = new ContactFilter2D();
-            filter.SetLayerMask(LayerMask.GetMask(pauseZoneLayerName));
+            filter.SetLayerMask(LayerMask.GetMask(PAUSE_ZONE_LAYER_NAME));
 
             return filter;
         }

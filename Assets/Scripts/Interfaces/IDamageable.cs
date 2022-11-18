@@ -42,7 +42,6 @@ namespace NijiDive
     {
         public static bool IsVulnerableTo(this DamageType vulnerableTypes, DamageType inflictingTypes)
         {
-            //Debug.Log($"\nvul: {Convert.ToString((int)vulnerableTypes, 2)}\ndam: {Convert.ToString((int)inflictingTypes, 2)}\nand: {Convert.ToString((int)(vulnerableTypes & inflictingTypes), 2)}");
             var count = BitwiseUtilities.BitCount((int)(vulnerableTypes & inflictingTypes));
             return count > 1;
         }

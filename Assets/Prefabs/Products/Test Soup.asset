@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855ab008900dc494f87c0606a9dbc41f, type: 3}
+  m_Name: Test Soup
+  m_EditorClassIdentifier: 
+  shopSprite: {fileID: -3411160391176968068, guid: cdcfbfe0181b89f46bea940cc06f8f9b, type: 3}
+  uiSprite: {fileID: -8283222066077679320, guid: 0506c0dad6e82f44098c04700066c691, type: 3}
+  baseCost: 4
+  type: 0
+  buffAmount: 4

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 using NijiDive.Managers.Mobs;
@@ -9,7 +10,8 @@ namespace NijiDive.Managers.Coins
     public class CoinManager : MonoBehaviour
     {
         [SerializeField] private Coin[] coinSizes;
-        [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f;
+        [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f;
+        // TODO: Add life time limit
 
         private int coinCount;
 
@@ -42,6 +44,16 @@ namespace NijiDive.Managers.Coins
             }
         }
 
+        private IEnumerator DelayCoinEnable(Coin coin)
+        {
+            coin.enabled = false;
+
+            yield return new WaitForSeconds(coinEnableDelay);
+
+            coin.enabled = true;
+        }
+
+        #region Coin Spawning
         private void SpawnCoinsOfSize(Coin coinSizePrefab, Vector3 spawnPoint, int count)
         {
             for (int i = 0; i < count; i++)
@@ -49,6 +61,7 @@ namespace NijiDive.Managers.Coins
                 var coin = Instantiate(coinSizePrefab, spawnPoint, Quaternion.identity, transform);
                 var body = coin.GetComponent<Rigidbody2D>();
                 body.velocity = UnityEngine.Random.Range(coinSpawnSpeedMin, coinSpawnSpeedMax) * UnityEngine.Random.insideUnitCircle;
+                if (coinEnableDelay > 0f) _ = StartCoroutine(DelayCoinEnable(coin));
             }
         }
 
@@ -71,11 +84,17 @@ namespace NijiDive.Managers.Coins
             var coinDropper = killedMob.GetComponent<ICoinDropping>();
             if (coinDropper != null) ParseAndSpawnCoinSizes(killedMob.transform.position, coinDropper.CoinCount);
         }
+        #endregion
 
         public void CollectCoin(CoinValue value)
         {
             coinCount += (int)value;
-            print(coinCount);
+        }
+        public void UseCoins(int amount)
+        {
+            coinCount -= amount;
+
+            if (coinCount < 0) Debug.LogError("Used more coins than available", this);
         }
 
         private void OnValidate()
@@ -85,6 +104,11 @@ namespace NijiDive.Managers.Coins
                 Debug.LogWarning($"{nameof(coinSpawnSpeedMax)} must be superior or equal to {nameof(coinSpawnSpeedMin)}");
                 coinSpawnSpeedMax = coinSpawnSpeedMin;
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (singleton == this) singleton = null;
         }
     }
 }

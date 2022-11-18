@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 using NijiDive.Controls.Movement;
@@ -20,7 +21,7 @@ namespace NijiDive.Controls.Enemies
 
         protected override void Awake()
         {
-            controls = new Control[] { flyingX, flyingY, stomping, shoving };
+            controls = new List<Control>() { flyingX, flyingY, stomping, shoving };
 
             base.Awake();
         }

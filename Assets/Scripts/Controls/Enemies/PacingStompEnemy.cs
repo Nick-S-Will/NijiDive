@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 using NijiDive.Controls.Movement;
@@ -17,7 +18,7 @@ namespace NijiDive.Controls.Enemies
 
         protected override void Awake()
         {
-            controls = new Control[] { walking, stomping, shoving };
+            controls = new List<Control>() { walking, stomping, shoving };
             xInput = startFacingRight ? 1f : -1f;
 
             base.Awake();

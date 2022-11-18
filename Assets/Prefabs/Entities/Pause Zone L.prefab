@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6962167336677240379}
   - component: {fileID: 8714653040702168386}
   m_Layer: 9
-  m_Name: PauseZoneL
+  m_Name: Pause Zone L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

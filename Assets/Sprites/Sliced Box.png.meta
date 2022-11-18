@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e41fb1cf4f77806499fb8aac1155ba2b
+guid: b15eb60bd458cc34ca84932642640df1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6737994362603082879
-    second: Black Square
+      213: 1439849220778586112
+    second: Sliced Box_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -44,9 +44,9 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 256
@@ -130,22 +130,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Black Square
+      name: Sliced Box_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 255
-        height: 255
+        width: 256
+        height: 256
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 32, y: 32, z: 32, w: 32}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18b657e93d5dd72a0800000000000000
-      internalID: -6737994362603082879
+      spriteID: 00071a6dc3f5bf310800000000000000
+      internalID: 1439849220778586112
       vertices: []
       indices: 
       edges: []

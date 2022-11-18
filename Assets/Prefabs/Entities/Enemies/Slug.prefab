@@ -287,9 +287,9 @@ MonoBehaviour:
         m_Calls: []
     damageLayers:
       serializedVersion: 2
-      m_Bits: 0
-    damageType: -2147483648
-    damage: 2147483647
+      m_Bits: 128
+    damageType: -2147483632
+    damage: 1
   startFacingRight: 1
 --- !u!50 &5915131502278509977
 Rigidbody2D:

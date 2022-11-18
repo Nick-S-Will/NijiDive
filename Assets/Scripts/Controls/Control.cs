@@ -9,6 +9,7 @@ namespace NijiDive.Controls
     public abstract class Control
     {
         [HideInInspector] public Mob mob;
+        [HideInInspector] public bool enabled = true;
 
         public virtual void Awake() { }
 

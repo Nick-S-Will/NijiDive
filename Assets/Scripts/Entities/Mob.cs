@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,7 +21,7 @@ namespace NijiDive.Entities
         [SerializeField] private CollisionData collisions;
 
         #region Properties
-        protected Rigidbody2D Rb2d { get; private set; }
+        protected Rigidbody2D Body2d { get; private set; }
         protected Collider2D Hitbox { get; private set; }
         public Collider2D LastGroundCheck { get; private set; }
         public Collider2D LastEdgeCheck { get; private set; }
@@ -32,13 +33,13 @@ namespace NijiDive.Entities
         public Bounds WallCheckBounds => wallCheckBounds;
         public Bounds CeilingCheckBounds => ceilingCheckBounds;
         public InputData LastInputs { get; private set; }
-        public Vector2 velocity { get => Rb2d.velocity; set => Rb2d.velocity = value; }
+        public Vector2 velocity { get => Body2d.velocity; set => Body2d.velocity = value; }
         // Cleaner way to update a single axis of velocity
-        public void SetVelocityX(float x) => Rb2d.velocity = new Vector2(x, Rb2d.velocity.y);
-        public void SetVelocityY(float y) => Rb2d.velocity = new Vector2(Rb2d.velocity.x, y);
+        public void SetVelocityX(float x) => Body2d.velocity = new Vector2(x, Body2d.velocity.y);
+        public void SetVelocityY(float y) => Body2d.velocity = new Vector2(Body2d.velocity.x, y);
         #endregion
 
-        protected Control[] controls;
+        protected List<Control> controls;
         private Bounds groundCheckBounds, edgeCheckBounds, wallCheckBounds, ceilingCheckBounds;
 
         /// <summary>
@@ -53,13 +54,14 @@ namespace NijiDive.Entities
             }
 
             Hitbox = GetComponent<Collider2D>();
-            Rb2d = GetComponent<Rigidbody2D>();
+            Body2d = GetComponent<Rigidbody2D>();
 
             foreach (var control in controls)
             {
                 control.mob = this;
                 control.Awake();
                 control.Start();
+                control.enabled = true;
             }
 
             Health.Reset();
@@ -74,7 +76,7 @@ namespace NijiDive.Entities
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
 
             LastInputs = inputs;
-            foreach (var control in controls) control.FixedUpdate();
+            foreach (var control in controls) if (control.enabled) control.FixedUpdate();
         }
 
         public virtual bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
@@ -99,14 +101,38 @@ namespace NijiDive.Entities
             if (bounceable != null) bounceable.Bounce(velocity);
         }
 
-        public void AddForce(Vector2 force) => Rb2d.AddForce(force);
+        public void AddForce(Vector2 force) => Body2d.AddForce(force);
 
+        #region Controls
         public T GetControlType<T>() where T : Control
         {
             foreach (var type in controls) if (type is T t) return t;
 
-            return default;
+            return null;
         }
+
+        public void AddControlType<T>(T newControl) where T : Control
+        {
+            if (GetControlType<T>() == null) controls.Add(newControl);
+            else
+            {
+                Debug.LogError($"Cannot add duplicate control type {nameof(T)}", this);
+            }
+        }
+        public T RemoveControlType<T>() where T : Control
+        {
+            foreach (var type in controls.ToArray())
+            {
+                if (type is T t)
+                {
+                    controls.Remove(type);
+                    return t;
+                }
+            }
+
+            return null;
+        }
+        #endregion
 
         #region Collision Checks
         private void UpdateCollisions(float localRightInput)
@@ -135,7 +161,7 @@ namespace NijiDive.Entities
         /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private Collider2D GroundCheck()
         {
-            var boxPos = Rb2d.position + (collisions.maxGroundDistance / 2f * -(Vector2)transform.up);
+            var boxPos = Body2d.position + (collisions.maxGroundDistance / 2f * -(Vector2)transform.up);
             var boxSize = new Vector2(collisions.groundCollisionWidthScaler * Hitbox.bounds.size.x, collisions.maxGroundDistance);
             groundCheckBounds = new Bounds(boxPos, boxSize);
 
@@ -159,7 +185,7 @@ namespace NijiDive.Entities
 
             var hitboxSizeX = Hitbox.bounds.size.x;
             var dir = localRightDirection > 0f ? 1f : -1f;
-            var boxPos = Rb2d.position + (dir * ((hitboxSizeX + collisions.maxGroundDistance) / 2f + collisions.edgeCollisionOffset) * (Vector2)transform.right) + (collisions.maxGroundDistance / 2f * -(Vector2)transform.up);
+            var boxPos = Body2d.position + (dir * ((hitboxSizeX + collisions.maxGroundDistance) / 2f + collisions.edgeCollisionOffset) * (Vector2)transform.right) + (collisions.maxGroundDistance / 2f * -(Vector2)transform.up);
             var boxSize = new Vector2(collisions.maxGroundDistance, collisions.maxGroundDistance);
             edgeCheckBounds = new Bounds(boxPos, boxSize);
 
@@ -184,7 +210,7 @@ namespace NijiDive.Entities
 
             var hitboxSize = Hitbox.bounds.size;
             var dir = localRightDirection > 0f ? 1f : -1f;
-            var boxPos = Rb2d.position + (dir * (hitboxSize.x + collisions.maxWallDistance) / 2f * (Vector2)transform.right) + (hitboxSize.y / 2f * (Vector2)transform.up);
+            var boxPos = Body2d.position + (dir * (hitboxSize.x + collisions.maxWallDistance) / 2f * (Vector2)transform.right) + (hitboxSize.y / 2f * (Vector2)transform.up);
             var boxSize = new Vector2(collisions.maxWallDistance, collisions.wallCollisionHeightScaler * hitboxSize.y);
             wallCheckBounds = new Bounds(boxPos, boxSize);
 
@@ -194,7 +220,7 @@ namespace NijiDive.Entities
         private Collider2D CeilingCheck()
         {
             var hitboxSize = Hitbox.bounds.size;
-            var boxPos = Rb2d.position + ((hitboxSize.y + collisions.maxCeilingDistance / 2) * (Vector2)transform.up);
+            var boxPos = Body2d.position + ((hitboxSize.y + collisions.maxCeilingDistance / 2) * (Vector2)transform.up);
             var boxSize = new Vector2(collisions.ceilingCollisionWidthScaler * hitboxSize.x, collisions.maxCeilingDistance);
             ceilingCheckBounds = new Bounds(boxPos, boxSize);
 
@@ -207,7 +233,7 @@ namespace NijiDive.Entities
             if (IsPaused == paused) return;
 
             enabled = !paused;
-            Rb2d.simulated = enabled;
+            Body2d.simulated = enabled;
             var animator = GetComponentInChildren<Animator>();
             if (animator) animator.enabled = enabled;
             IsPaused = paused;
@@ -267,13 +293,15 @@ namespace NijiDive.Entities
         public struct InputData
         {
             public Vector2 lStick;
-            public bool actionDown, actionDownThisFrame;
+            public bool actionDown, actionDownThisFrame, altDown, altDownThisFrame;
 
-            public InputData(Vector2 lStick = default, bool actionDown = false, bool actionDownThisFrame = false)
+            public InputData(Vector2 lStick = default, bool actionDown = false, bool actionDownThisFrame = false, bool altDown = false, bool altDownThisFrame = false)
             {
                 this.lStick = lStick;
                 this.actionDown = actionDown;
                 this.actionDownThisFrame = actionDownThisFrame;
+                this.altDown = altDown;
+                this.altDownThisFrame = altDownThisFrame;
             }
         }
     }
