@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Pausing;
-using NijiDive.Managers.Map;
-using NijiDive.Map.Tiles;
 using NijiDive.Controls.Player;
 using NijiDive.Controls.Attacks;
 
@@ -79,9 +77,6 @@ namespace NijiDive.Managers.Combo
             if (pc.LastGroundCheck && !PauseManager.IsPaused)
             {
                 if (comboEndBuffer == null) comboEndBuffer = StartCoroutine(ComboEndBuffer());
-                // TODO: Find way to end combo without needing access to map and tiles
-                //var tile = MapManager.singleton.GetTile(transform.position);
-                //if (tile && !(tile is BounceableTile)) EndCombo();
             }
         }
 

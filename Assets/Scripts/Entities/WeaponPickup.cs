@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 using NijiDive.Controls.Attacks;
@@ -8,22 +9,34 @@ namespace NijiDive.Entities
     [RequireComponent(typeof(Collider2D))]
     public class WeaponPickup : Entity
     {
+        [SerializeField] private SpriteRenderer pickupBackgroundRenderer;
         [SerializeField] private TextMesh weaponNameText;
+        [Space]
+        [SerializeField] private Sprite healthBackground;
+        [SerializeField] private int healthBuff = 1;
+        [Space]
+        [SerializeField] private Sprite ammoBackground;
+        [SerializeField] private int ammoBuff = 2;
         [Space]
         [SerializeField] private Weapon[] weaponOptions;
 
         private Weapon selectedWeapon;
+        private BuffType buffType;
 
         private void Start()
         {
             if (weaponOptions.Length == 0)
             {
-                Debug.LogError($"{nameof(weaponOptions)} is empty");
+                Debug.LogError($"{nameof(weaponOptions)} is empty", this);
                 return;
             }
 
-            selectedWeapon = weaponOptions[Random.Range(0, weaponOptions.Length)];
+            selectedWeapon = weaponOptions[UnityEngine.Random.Range(0, weaponOptions.Length)];
             weaponNameText.text = selectedWeapon.name.Substring(0, 1);
+
+            var types = Enum.GetValues(typeof(BuffType));
+            buffType = (BuffType)types.GetValue(UnityEngine.Random.Range(0, types.Length));
+            pickupBackgroundRenderer.sprite = buffType == BuffType.Health ? healthBackground : ammoBackground;
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -36,6 +49,16 @@ namespace NijiDive.Entities
                 {
                     weaponController.EquipWeapon(selectedWeapon);
                     Destroy(gameObject);
+                }
+
+                switch (buffType)
+                {
+                    case BuffType.Health:
+                        mob.Health.ReceiveHealth(healthBuff);
+                        break;
+                    case BuffType.Ammo:
+                        if (weaponController != null) weaponController.AddBonusAmmo(ammoBuff);
+                        break;
                 }
             }
         }

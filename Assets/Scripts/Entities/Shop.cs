@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Managers.Coins;
 using NijiDive.Controls.Player;
 using NijiDive.Controls.Movement;
+using NijiDive.Controls.Attacks;
 using NijiDive.Items;
 using NijiDive.Utilities;
 
@@ -22,12 +24,15 @@ namespace NijiDive.Entities
         private Product[] productsForSale = new Product[FOR_SALE_COUNT];
         private bool[] inStock = new bool[FOR_SALE_COUNT];
 
+        public static UnityEvent<Shop> OnShopSpawn = new UnityEvent<Shop>();
         public const int FOR_SALE_COUNT = 3;
 
         private void Start()
         {
             AssignProductsForSale();
             DisplayProductsForSale();
+
+            OnShopSpawn?.Invoke(this);
         }
 
         private void AssignProductsForSale()
@@ -51,8 +56,10 @@ namespace NijiDive.Entities
             }
         }
 
-        private void SetShopControls(PlayerController player, bool enabled)
+        private void SetShopControls(bool enabled)
         {
+            if (player == null) return;
+
             player.GetControlType<Jumping>().enabled = !enabled;
             player.GetControlType<ShopControl>().enabled = enabled;
         }
@@ -105,11 +112,11 @@ namespace NijiDive.Entities
 
                 switch (product.BuffType)
                 {
-                    case ProductType.Health:
+                    case BuffType.Health:
                         player.Health.ReceiveHealth(product.BuffAmount);
                         break;
-                    case ProductType.Ammo:
-                        // TODO: Implement bonus ammo
+                    case BuffType.Ammo:
+                        player.GetControlType<WeaponController>().AddBonusAmmo(product.BuffAmount);
                         break;
                 }
 
@@ -124,14 +131,14 @@ namespace NijiDive.Entities
             if (player) return; 
             
             player = collider.GetComponent<PlayerController>();
-            if (player && collider.IsTouching(purchaseBounds)) SetShopControls(player, true);
+            if (player && collider.IsTouching(purchaseBounds)) SetShopControls(true);
         }
 
         private void OnTriggerExit2D(Collider2D collider)
         {
             if (player == collider.GetComponent<PlayerController>())
             {
-                SetShopControls(player, false);
+                SetShopControls(false);
                 player = null;
             }
         }

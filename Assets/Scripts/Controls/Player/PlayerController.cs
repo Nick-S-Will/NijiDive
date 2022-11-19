@@ -22,10 +22,10 @@ namespace NijiDive.Controls.Player
         [SerializeField] private KeyCode jumpKey = KeyCode.Space;
         [SerializeField] private KeyCode altKey = KeyCode.Escape;
 
-        public override HealthData Health => health;
-
         private float xInput;
         private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame;
+
+        public override HealthData Health => health;
 
         protected override void Awake()
         {

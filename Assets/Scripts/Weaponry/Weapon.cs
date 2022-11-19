@@ -13,6 +13,9 @@ namespace NijiDive.Weaponry
         [SerializeField] [Min(1)] private int projectilesPerVolley = 1, projectilesPerBurst = 1, clipSize = 5;
         [SerializeField] private bool isAutomatic = true;
 
+        [HideInInspector] public int bonusAmmo;
+        private int leftInClip;
+
         public Projectile Projectile => projectile;
         /// <summary>
         /// Accuracy of the weapon which when at 0 allows up to 90 degrees off
@@ -33,11 +36,11 @@ namespace NijiDive.Weaponry
         /// <summary>
         /// Total number of projectiles able to be shot before needing a reload
         /// </summary>
-        public int ClipSize => clipSize;
+        public int ClipSize => clipSize + bonusAmmo;
         /// <summary>
         /// Current number of projectiles able to be shot before reload
         /// </summary>
-        public int LeftInClip { get; private set; }
+        public int LeftInClip => leftInClip + bonusAmmo;
         /// <summary>
         /// Controls if you can hold to shoot or need to press for each shot
         /// </summary>
@@ -49,18 +52,18 @@ namespace NijiDive.Weaponry
         public bool CanShoot() => LeftInClip > 0 && Time.time - lastShotTime >= shotInterval;
 
         /// <summary>
-        /// Updates <see cref="LeftInClip"/>
+        /// Updates <see cref="leftInClip"/>
         /// </summary>
         public void CompleteVolley()
         {
             lastShotTime = Time.time;
-            LeftInClip -= 1;
+            leftInClip--;
         }
 
         public void Reload()
         {
             lastShotTime = 0f;
-            LeftInClip = clipSize;
+            leftInClip = clipSize;
         }
     }
 }

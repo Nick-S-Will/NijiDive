@@ -17,6 +17,7 @@ namespace NijiDive.Controls.Attacks
 
         private Weapon currentWeapon;
         private Coroutine shooting;
+        private int bonusAmmo;
 
         public override void Start()
         {
@@ -57,8 +58,16 @@ namespace NijiDive.Controls.Attacks
             }
 
             currentWeapon = newWeapon;
+            currentWeapon.bonusAmmo = bonusAmmo;
             OnShoot.AddListener(currentWeapon.CompleteVolley);
 
+            OnEquip?.Invoke(currentWeapon);
+        }
+
+        public void AddBonusAmmo(int amount = 1)
+        {
+            bonusAmmo += amount;
+            currentWeapon.bonusAmmo = bonusAmmo;
             OnEquip?.Invoke(currentWeapon);
         }
 

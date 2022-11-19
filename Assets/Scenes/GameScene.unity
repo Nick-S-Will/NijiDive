@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &20840142
 Transform:
   m_ObjectHideFlags: 0
@@ -305,7 +305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &112783670
 Transform:
   m_ObjectHideFlags: 0
@@ -4579,7 +4579,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1260602631
 Transform:
   m_ObjectHideFlags: 0
@@ -5018,7 +5018,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1633079343
 Transform:
   m_ObjectHideFlags: 0
@@ -5146,11 +5146,12 @@ MonoBehaviour:
   OnPurchase:
     m_PersistentCalls:
       m_Calls: []
+  shopPanel: {fileID: 1730741380}
+  productSelectorRenderer: {fileID: 112783671}
   productSpriteRenderers:
   - {fileID: 1633079344}
   - {fileID: 1260602632}
   - {fileID: 20840143}
-  productSelector: {fileID: 112783671}
 --- !u!1 &1730741380
 GameObject:
   m_ObjectHideFlags: 0
@@ -5167,7 +5168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1730741381
 Transform:
   m_ObjectHideFlags: 0

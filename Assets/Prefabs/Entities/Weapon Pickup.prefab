@@ -45,7 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d152b8b28beae41a556e3e01f0a743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupBackgroundRenderer: {fileID: 7453403631024718745}
   weaponNameText: {fileID: 3673569084538658581}
+  healthBackground: {fileID: 8751911885047726426, guid: f42eac055d95db840b68e960fa718c99, type: 3}
+  healthBuff: 1
+  ammoBackground: {fileID: -8978242581009972717, guid: f42eac055d95db840b68e960fa718c99, type: 3}
+  ammoBuff: 2
   weaponOptions:
   - {fileID: 11400000, guid: f4c7a7031ef7f3c42b3440eec57382b2, type: 2}
   - {fileID: 11400000, guid: c4a3dd3967a20414e897ff3adcba24f0, type: 2}
@@ -73,7 +78,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.5}
+  m_Size: {x: 1, y: 1.125}
   m_EdgeRadius: 0
 --- !u!1 &988443856842530330
 GameObject:
@@ -102,7 +107,7 @@ Transform:
   m_GameObject: {fileID: 988443856842530330}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 746098888920561313}
   m_RootOrder: 0
@@ -115,14 +120,14 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988443856842530330}
-  m_Text: S
+  m_Text: 0
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 9
+  m_FontSize: 55
   m_FontStyle: 1
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -244,11 +249,11 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -5
-  m_Sprite: {fileID: -7786658385614507275, guid: 6f47d12ef3a10d54492a86df93c8e735, type: 3}
+  m_Sprite: {fileID: 1439849220778586112, guid: b15eb60bd458cc34ca84932642640df1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 1
+  m_DrawMode: 0
   m_Size: {x: 1, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0

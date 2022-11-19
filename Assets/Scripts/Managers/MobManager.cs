@@ -81,6 +81,8 @@ namespace NijiDive.Managers.Mobs
         {
             foreach (var mob in enabledMobs.ToArray())
             {
+                if (target == null) return;
+
                 if (mob == null)
                 {
                     OnMobDeath?.Invoke();
