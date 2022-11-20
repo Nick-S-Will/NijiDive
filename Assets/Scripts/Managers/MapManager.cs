@@ -47,7 +47,7 @@ namespace NijiDive.Managers.Map
             chunkCount = 0;
 
             if (chunkOptions.Length == 0) Debug.LogError($"{nameof(chunkOptions)} is empty");
-            else if (generateAtStart) for (int i = 0; i < chunksInLevel; i++) AddRow(chunkOptions[Random.Range(0, chunkOptions.Length)]);
+            else if (generateAtStart) for (int i = 0; i < chunksInLevel; i++) AddRow();
         }
 
         private BoundsInt ShiftLeft(BoundsInt bounds)
@@ -69,18 +69,20 @@ namespace NijiDive.Managers.Map
             foreach (var entity in chunk.entities) _ = entity.Spawn(entityGrid.transform, chunkBounds.min);
         }
 
-        private void AddSideChunks(Chunk baseChunk, BoundsInt bounds, bool right)
+        private void AddSideChunks(Chunk baseChunk, BoundsInt bounds)
         {
-            var chunk = right ? baseChunk.rightChunk : baseChunk.leftChunk;
-            while (chunk != null)
+            for (int i = 0; i < 2; i++)
             {
-                bounds = right ? ShiftRight(bounds) : ShiftLeft(bounds);
-                AddChunk(chunk, bounds);
-                chunk = right ? chunk.rightChunk : chunk.leftChunk;
+                var chunk = i == 1 ? baseChunk.rightChunk : baseChunk.leftChunk;
+                while (chunk != null)
+                {
+                    bounds = i == 1 ? ShiftRight(bounds) : ShiftLeft(bounds);
+                    AddChunk(chunk, bounds);
+                    chunk = i == 1 ? chunk.rightChunk : chunk.leftChunk;
+                }
             }
         }
 
-        [ContextMenu("Add New Chunk")]
         public void AddRow(Chunk baseChunk)
         {
             if (!Application.isPlaying)
@@ -91,11 +93,13 @@ namespace NijiDive.Managers.Map
 
             var chunkBounds = NextChunkBounds;
             AddChunk(baseChunk, chunkBounds);
-            AddSideChunks(baseChunk, chunkBounds, false);
-            AddSideChunks(baseChunk, chunkBounds, true);
+            AddSideChunks(baseChunk, chunkBounds);
 
             chunkCount++;
         }
+
+        [ContextMenu("Generate New Row")]
+        public void AddRow() => AddRow(chunkOptions[Random.Range(0, chunkOptions.Length)]);
         #endregion
 
         public bool PointInCenter(Vector3 point)

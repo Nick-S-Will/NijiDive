@@ -15,7 +15,6 @@ namespace NijiDive.Map.Chunks
 
         public static readonly Vector3Int BoundSize = new Vector3Int(GameConstants.CHUNK_SIZE, GameConstants.CHUNK_SIZE, 1);
 
-
         private void OnValidate()
         {
             var fixedArrayLength = GameConstants.CHUNK_SIZE * GameConstants.CHUNK_SIZE;

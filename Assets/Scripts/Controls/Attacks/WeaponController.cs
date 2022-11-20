@@ -13,7 +13,7 @@ namespace NijiDive.Controls.Attacks
         [SerializeField] private Weapon startingWeapon;
         [Space]
         public UnityEvent<Weapon> OnEquip;
-        public UnityEvent OnShoot, OnEmpty;
+        public UnityEvent OnShoot, OnEmpty, OnReload;
 
         private Weapon currentWeapon;
         private Coroutine shooting;
@@ -58,30 +58,37 @@ namespace NijiDive.Controls.Attacks
             }
 
             currentWeapon = newWeapon;
-            currentWeapon.bonusAmmo = bonusAmmo;
+            currentWeapon.Load();
             OnShoot.AddListener(currentWeapon.CompleteVolley);
 
             OnEquip?.Invoke(currentWeapon);
         }
 
+        private void ReloadCurrentWeapon()
+        {
+            currentWeapon.Reload();
+            OnReload?.Invoke();
+        }
         public void AddBonusAmmo(int amount = 1)
         {
             bonusAmmo += amount;
-            currentWeapon.bonusAmmo = bonusAmmo;
-            OnEquip?.Invoke(currentWeapon);
+            ReloadCurrentWeapon();
         }
+
+        public int GetLeftInClip() => currentWeapon.LeftInClip + bonusAmmo;
+        public int GetClipSize() => currentWeapon.ClipSize + bonusAmmo;
 
         #region Shooting
         private void TryShoot()
         {
-            if (shooting == null && currentWeapon.CanShoot()) shooting = mob.StartCoroutine(ShootingRoutine());
+            if (shooting == null && currentWeapon.CanShoot() && GetLeftInClip() > 0) shooting = mob.StartCoroutine(ShootingRoutine());
         }
 
         private IEnumerator ShootingRoutine()
         {
             do
             {
-                for (int burst = 0; burst < Mathf.Min(currentWeapon.LeftInClip, currentWeapon.ProjectilesPerBurst); burst++)
+                for (int burst = 0; burst < Mathf.Min(GetLeftInClip(), currentWeapon.ProjectilesPerBurst); burst++)
                 {
                     for (int volley = 0; volley < currentWeapon.ProjectilesPerVolley; volley++) ShootSingle();
                     OnShoot?.Invoke();
@@ -99,7 +106,7 @@ namespace NijiDive.Controls.Attacks
                     yield return new WaitForSeconds(currentWeapon.ShotInterval);
                     if (!mob.LastInputs.actionDown || mob.LastGroundCheck) break;
                 }
-            } while (currentWeapon.IsAutomatic && currentWeapon.LeftInClip > 0);
+            } while (currentWeapon.IsAutomatic && GetLeftInClip() > 0);
 
         endShooting:
             shooting = null;
@@ -114,7 +121,5 @@ namespace NijiDive.Controls.Attacks
             mob.SetVelocityY(currentWeapon.RecoilSpeed);
         }
         #endregion
-
-        private void ReloadCurrentWeapon() => currentWeapon.Reload();
     }
 }

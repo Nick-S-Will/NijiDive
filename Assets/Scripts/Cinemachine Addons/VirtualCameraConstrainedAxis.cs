@@ -7,7 +7,6 @@ namespace NijiDive.CinemachineAddons
     // Based on LockCameraZ class from https://forum.unity.com/threads/follow-only-along-a-certain-axis.544511/
     [ExecuteInEditMode]
     [SaveDuringPlay]
-    [AddComponentMenu("")] // Hide in menu
     public class VirtualCameraConstrainedAxis : CinemachineExtension
     {
         [SerializeField] private float xOffset;

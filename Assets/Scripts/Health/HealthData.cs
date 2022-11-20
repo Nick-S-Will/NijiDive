@@ -12,6 +12,7 @@ namespace NijiDive.Health
         [SerializeField] [Min(1)] protected int baseMaxHealth = 1;
 
         public int Health { get; protected set; }
+        public virtual int MaxHealth { get => baseMaxHealth; protected set => baseMaxHealth = value; }
         public bool IsEmpty => Health == 0;
 
         public virtual void Reset()

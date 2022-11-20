@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8047385706471377042}
   - component: {fileID: 6239318654611934682}
   m_Layer: 9
-  m_Name: Square
+  m_Name: Graphics
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,11 +72,11 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -6
-  m_Sprite: {fileID: -1788669643577435870, guid: 6f47d12ef3a10d54492a86df93c8e735, type: 3}
+  m_Sprite: {fileID: 4418608438779222463, guid: 8f7af6431e6a2794a99e0217d8e2097f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 1
+  m_DrawMode: 0
   m_Size: {x: 1, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8795664252973178529}
   - component: {fileID: 6962167336677240379}
-  - component: {fileID: 8714653040702168386}
+  - component: {fileID: 3639655743614397031}
   m_Layer: 9
   m_Name: Pause Zone L
   m_TagString: Untagged
@@ -128,10 +128,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40ea6751469740d41a8a5eccf6560cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorOscillationSpeed: 1
+  colorOscillationSpeed: 2.5
   minColorMultiplier: 0.5
---- !u!61 &8714653040702168386
-BoxCollider2D:
+--- !u!58 &3639655743614397031
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -143,16 +143,6 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 2, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 1
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: -0.5, y: 0}
   serializedVersion: 2
-  m_Size: {x: 1, y: 2}
-  m_EdgeRadius: 0
+  m_Radius: 1

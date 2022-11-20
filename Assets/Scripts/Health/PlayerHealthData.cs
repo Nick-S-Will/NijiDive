@@ -10,7 +10,7 @@ namespace NijiDive.Health
         [SerializeField] [Min(1)] private int maxBonusHealth = 4;
         [SerializeField] [Min(0f)] private float hitInterval = 2f;
 
-        public int MaxHealth { get; private set; }
+        public override int MaxHealth { get; protected set; }
         public int MaxBonusHealth => maxBonusHealth;
         public int BonusHealth { get; private set; }
 
