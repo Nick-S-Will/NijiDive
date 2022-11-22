@@ -11,7 +11,7 @@ using NijiDive.Health;
 
 namespace NijiDive.UI
 {
-    public class ShopUI : MonoBehaviour
+    public class ShopUI : BaseUI
     {
         public UnityEvent OnOpen, OnClose, OnNavigate, OnBroke;
         public UnityEvent<int> OnPurchase;
@@ -50,7 +50,36 @@ namespace NijiDive.UI
 
         private void SetShop(Shop shop) => this.shop = shop;
 
-        #region Shop Controls
+        private void UpdateProductSprites()
+        {
+            for (int i = 0; i < productSpriteRenderers.Length; i++)
+            {
+                var product = shop.GetProduct(i);
+                productSpriteRenderers[i].sprite = product ? shop.GetProduct(i).UISprite : null;
+            }
+            productSelectorRenderer.transform.position = productSpriteRenderers[selectedIndex].transform.position;
+        }
+
+        #region BaseUI overrides
+        public override void UpdateShape()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetVisible(bool visible)
+        {
+            if (IsVisible == visible) return;
+
+            if (visible) OnOpen?.Invoke();
+            else OnClose.Invoke();
+
+            shopPanel.SetActive(visible);
+            productSelectorRenderer.gameObject.SetActive(visible);
+            foreach (var sr in productSpriteRenderers) sr.gameObject.SetActive(visible);
+        }
+        #endregion
+
+        #region Setting Shop Controls
         private void GivePlayerShopControl()
         {
             var shopControl = new ShopControl();
@@ -78,28 +107,6 @@ namespace NijiDive.UI
         private void EnablePlayerWalking() => SetPlayerWalking(true);
         private void DisablePlayerWalking() => SetPlayerWalking(false);
         #endregion
-
-        private void UpdateProductSprites()
-        {
-            for (int i = 0; i < productSpriteRenderers.Length; i++)
-            {
-                var product = shop.GetProduct(i);
-                productSpriteRenderers[i].sprite = product ? shop.GetProduct(i).UISprite : null;
-            }
-            productSelectorRenderer.transform.position = productSpriteRenderers[selectedIndex].transform.position;
-        }
-
-        private void SetVisible(bool visible)
-        {
-            if (IsVisible == visible) return;
-
-            if (visible) OnOpen?.Invoke();
-            else OnClose.Invoke();
-
-            shopPanel.SetActive(visible);
-            productSelectorRenderer.gameObject.SetActive(visible);
-            foreach (var sr in productSpriteRenderers) sr.gameObject.SetActive(visible);
-        }
 
         #region UI Control
         public void Select()

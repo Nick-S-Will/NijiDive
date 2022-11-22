@@ -27,12 +27,14 @@ namespace NijiDive.UI
 
             playerHealth = (PlayerHealthData)player.Health;
             playerHealth.OnChangeHealth.AddListener(UpdateHealthBar);
+
+            healthBar.SetBarFill(playerHealth.MaxHealth, playerHealth.MaxHealth);
         }
 
         private void UpdateHealthBar()
         {
-            healthBar.SetBarFill((float)playerHealth.Health / playerHealth.MaxHealth);
-            bonusHealthBar.SetBarFill((float)playerHealth.BonusHealth / playerHealth.MaxBonusHealth);
+            healthBar.SetBarFill(playerHealth.Health, playerHealth.MaxHealth);
+            bonusHealthBar.SetBarFill(playerHealth.BonusHealth, playerHealth.MaxBonusHealth);
         }
     }
 }

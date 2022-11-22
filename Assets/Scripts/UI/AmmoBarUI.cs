@@ -8,7 +8,7 @@ namespace NijiDive.UI
 {
     public class AmmoBarUI : MonoBehaviour
     {
-        [SerializeField] private BarUI ammo;
+        [SerializeField] private BarUI ammoBar;
 
         private WeaponController playerWeaponController;
 
@@ -20,9 +20,9 @@ namespace NijiDive.UI
                 Debug.LogError($"No {nameof(PlayerController)} found in scene", this);
                 return;
             }
-            if (ammo == null)
+            if (ammoBar == null)
             {
-                Debug.LogError($"{nameof(ammo)} must be assigned", this);
+                Debug.LogError($"{nameof(ammoBar)} must be assigned", this);
                 return;
             }
 
@@ -30,12 +30,14 @@ namespace NijiDive.UI
             playerWeaponController.OnEquip.AddListener(UpdateAmmoBar);
             playerWeaponController.OnShoot.AddListener(UpdateAmmoBar);
             playerWeaponController.OnReload.AddListener(UpdateAmmoBar);
+
+            UpdateAmmoBar();
         }
 
         private void UpdateAmmoBar(Weapon _) => UpdateAmmoBar();
         private void UpdateAmmoBar()
         {
-            ammo.SetBarFill((float)playerWeaponController.GetLeftInClip() / playerWeaponController.GetClipSize());
+            ammoBar.SetBarFill(playerWeaponController.GetLeftInClip(), playerWeaponController.GetClipSize());
         }
     }
 }

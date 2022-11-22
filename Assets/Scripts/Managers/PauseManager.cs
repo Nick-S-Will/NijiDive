@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Managers.Map;
 
@@ -7,6 +8,7 @@ namespace NijiDive.Managers.Pausing
 {
     public static class PauseManager
     {
+        public static UnityEvent OnSetPause = new UnityEvent();
         public static bool IsPaused { get; private set; }
 
         private static readonly ContactFilter2D pauseZoneFilter = GetPauseContactFilter();
@@ -36,6 +38,8 @@ namespace NijiDive.Managers.Pausing
                 }
             }
             IsPaused = paused;
+
+            OnSetPause?.Invoke();
         }
     }
 }

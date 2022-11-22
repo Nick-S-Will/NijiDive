@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Managers.Mobs;
 using NijiDive.Entities;
@@ -9,6 +10,8 @@ namespace NijiDive.Managers.Coins
 {
     public class CoinManager : MonoBehaviour
     {
+        public UnityEvent OnCoinChange;
+        [Space]
         [SerializeField] private Coin[] coinSizes;
         [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f;
         // TODO: Add life time limit
@@ -89,10 +92,12 @@ namespace NijiDive.Managers.Coins
         public void CollectCoin(CoinValue value)
         {
             coinCount += (int)value;
+            OnCoinChange?.Invoke();
         }
         public void UseCoins(int amount)
         {
             coinCount -= amount;
+            OnCoinChange?.Invoke();
 
             if (coinCount < 0) Debug.LogError("Used more coins than available", this);
         }

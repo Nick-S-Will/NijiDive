@@ -10,7 +10,7 @@ namespace NijiDive.Entities
     public class WeaponPickup : Entity
     {
         [SerializeField] private SpriteRenderer pickupBackgroundRenderer;
-        [SerializeField] private TextMesh weaponNameText;
+        [SerializeField] private TextMesh weaponNameTextMesh;
         [Space]
         [SerializeField] private Sprite healthBackground;
         [SerializeField] private int healthBuff = 1;
@@ -32,7 +32,7 @@ namespace NijiDive.Entities
             }
 
             selectedWeapon = weaponOptions[UnityEngine.Random.Range(0, weaponOptions.Length)];
-            weaponNameText.text = selectedWeapon.name.Substring(0, 1);
+            weaponNameTextMesh.text = selectedWeapon.name.Substring(0, 1);
 
             var types = Enum.GetValues(typeof(BuffType));
             buffType = (BuffType)types.GetValue(UnityEngine.Random.Range(0, types.Length));

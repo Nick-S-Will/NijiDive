@@ -3,20 +3,33 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 namespace NijiDive.UI
 {
-    public class BarUI : MonoBehaviour // TODO: Create abstract parent class for UIs with a visibility toggle method
+    public class BarUI : TextUI
     {
-        // TODO: Add number on bar
-        [SerializeField] private SpriteRenderer backRenderer, foreRenderer;
+        [Space]
+        [SerializeField] private SpriteRenderer backRenderer;
+        [SerializeField] private SpriteRenderer foreRenderer;
         [SerializeField] [Min(0f)] private float barWidth = 1f, barHeight = 5f;
         [SerializeField] [Range(0f, 1f)] private float startBarFill = 1f;
         [Space]
         [SerializeField] private Light2D barLight;
 
-        private void Start() => SetBarFill(startBarFill);
+        public float GetBarFill => foreRenderer.transform.parent.localScale.y;
+        public void SetBarFill(int amount, int max)
+        {
+            var percent = (float)amount / max;
+            if (percent < 0f || percent > 1f) Debug.LogWarning("Bar fill set outside expected [0, 1] range", this);
+
+            textMesh.text = amount.ToString();
+            var scale = foreRenderer.transform.parent.localScale;
+            scale.y = percent;
+            foreRenderer.transform.parent.localScale = scale;
+        }
         
         [ContextMenu("Update Shape")]
-        public void UpdateShape()
+        public override void UpdateShape()
         {
+            base.UpdateShape();
+
             if (backRenderer == null || foreRenderer == null || barLight == null)
             {
                 Debug.LogWarning($"{nameof(backRenderer)}, {nameof(foreRenderer)}, and {nameof(barLight)} must be assigned to update shape");
@@ -33,14 +46,15 @@ namespace NijiDive.UI
             barLight.transform.localScale = size;
         }
 
-        public float GetBarFill => foreRenderer.transform.parent.localScale.y;
-        public void SetBarFill(float percent)
+        public override void SetVisible(bool visible)
         {
-            if (percent < 0f || percent > 1f) Debug.LogWarning("Bar fill set outside expected [0, 1] range", this);
+            if (visibilityIsLocked) return;
 
-            var scale = foreRenderer.transform.parent.localScale;
-            scale.y = percent;
-            foreRenderer.transform.parent.localScale = scale;
+            base.SetVisible(visible);
+
+            backRenderer.enabled = visible;
+            foreRenderer.enabled = visible;
+            barLight.enabled = visible;
         }
     }
 }
