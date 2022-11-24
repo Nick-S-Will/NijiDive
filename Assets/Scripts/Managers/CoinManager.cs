@@ -13,8 +13,7 @@ namespace NijiDive.Managers.Coins
         public UnityEvent OnCoinChange;
         [Space]
         [SerializeField] private Coin[] coinSizes;
-        [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f;
-        // TODO: Add life time limit
+        [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f, coinLifeTime = 5f;
 
         private int coinCount;
 
@@ -62,6 +61,8 @@ namespace NijiDive.Managers.Coins
             for (int i = 0; i < count; i++)
             {
                 var coin = Instantiate(coinSizePrefab, spawnPoint, Quaternion.identity, transform);
+                if (coinLifeTime > 0f) Destroy(coin, coinLifeTime);
+
                 var body = coin.GetComponent<Rigidbody2D>();
                 body.velocity = UnityEngine.Random.Range(coinSpawnSpeedMin, coinSpawnSpeedMax) * UnityEngine.Random.insideUnitCircle;
                 if (coinEnableDelay > 0f) _ = StartCoroutine(DelayCoinEnable(coin));

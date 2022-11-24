@@ -9,7 +9,6 @@ namespace NijiDive.UI
         [SerializeField] private SpriteRenderer backRenderer;
         [SerializeField] private SpriteRenderer foreRenderer;
         [SerializeField] [Min(0f)] private float barWidth = 1f, barHeight = 5f;
-        [SerializeField] [Range(0f, 1f)] private float startBarFill = 1f;
         [Space]
         [SerializeField] private Light2D barLight;
 

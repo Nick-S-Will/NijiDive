@@ -33,7 +33,7 @@ namespace NijiDive.Entities
 
         public override void Pause(bool paused) => enabled = !paused;
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
             var entity = collision.GetComponent<Entity>();
             if (entity == null) return;
@@ -42,7 +42,7 @@ namespace NijiDive.Entities
             else if (entity is Mob mob) mob.OnDeath?.Invoke(mob, gameObject, DamageType.Environment | DamageType.Void);
         }
 
-        private void OnTriggerExit2D(Collider2D collision)
+        protected virtual void OnTriggerExit2D(Collider2D collision)
         {
             var entity = collision.GetComponent<Entity>();
             if (entity == null) return;
