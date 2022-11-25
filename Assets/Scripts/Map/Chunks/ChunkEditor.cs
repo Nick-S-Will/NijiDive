@@ -18,7 +18,7 @@ namespace NijiDive.Map.Chunks
         [Space]
         [SerializeField] private string newChunkFileName = "New Chunk";
 
-        private static readonly BoundsInt EditorBounds = new BoundsInt(new Vector3Int(0, 1 - GameConstants.CHUNK_SIZE, 0), Chunk.BoundSize);
+        private static readonly BoundsInt EditorBounds = new BoundsInt(new Vector3Int(0, 1 - Constants.CHUNK_SIZE, 0), Chunk.BoundSize);
 
         public void LoadChunk()
         {
@@ -57,14 +57,14 @@ namespace NijiDive.Map.Chunks
             ClearEntities();
         }
 
-        private EntityPosition[] GetEntityPositions()
+        private Chunk.EntityPosition[] GetEntityPositions()
         {
-            var entities = new List<EntityPosition>();
+            var entities = new List<Chunk.EntityPosition>();
             foreach (Transform child in entityGrid.transform)
             {
                 var entityPrefab = PrefabUtility.GetCorrespondingObjectFromSource(child.gameObject);
                 if (entityPrefab == null) continue;
-                entities.Add(new EntityPosition(entityPrefab, child.position - EditorBounds.min));
+                entities.Add(new Chunk.EntityPosition(entityPrefab, child.position - EditorBounds.min));
             }
 
             return entities.ToArray();

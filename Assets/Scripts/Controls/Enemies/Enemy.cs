@@ -14,14 +14,9 @@ namespace NijiDive.Controls.Enemies
         public override HealthData Health => health;
         public int CoinCount => coinsToDrop;
 
-        protected static Transform target;
+        protected static Transform Target => MobManager.singleton.Target;
 
         protected override void Awake() => base.Awake();
-
-        private void Start()
-        {
-            if (target == null) target = MobManager.singleton.Target;
-        }
 
         protected abstract void CalculateInput();
 
@@ -31,11 +26,6 @@ namespace NijiDive.Controls.Enemies
             Body2d.velocity = Vector2.zero;
             Body2d.angularVelocity = 0;
             enabled = false;
-        }
-
-        private void OnApplicationQuit()
-        {
-            target = null;
         }
     }
 }

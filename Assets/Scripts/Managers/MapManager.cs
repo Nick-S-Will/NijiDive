@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+using NijiDive.Managers.Levels;
 using NijiDive.Map.Chunks;
+using NijiDive.Map;
 
 namespace NijiDive.Managers.Map
 {
@@ -12,24 +14,23 @@ namespace NijiDive.Managers.Map
         [SerializeField] private LayerMask groundMask;
 
         [Space]
-        [SerializeField] private Chunk[] chunkOptions;
-        [SerializeField] private int chunksInLevel = 15;
         [SerializeField] private bool generateAtStart = true;
 
         [Header("Visualizers")]
         [SerializeField] private Color gizmoColor = Color.red;
         [SerializeField] private bool showLastDamagePoint, showNextChunkBounds;
 
+        private Level currentLevel;
         private Tilemap[] maps;
         private Vector3 damagePoint;
         private int chunkCount;
+        private bool safeChunkGenerated;
 
         /// <summary>
         /// <see cref="LayerMask"/> used for terrain collisions
         /// </summary>
         public LayerMask GroundMask => groundMask;
-        private BoundsInt NextChunkBounds => new BoundsInt(GameConstants.CHUNK_SIZE / 2 * Vector3Int.left + chunkCount * GameConstants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);
-
+        
         public static MapManager singleton;
 
         private void Awake()
@@ -37,7 +38,7 @@ namespace NijiDive.Managers.Map
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {typeof(MapManager)}s exist", this);
+                Debug.LogError($"Multiple {typeof(MapManager)}s found in scene", this);
                 gameObject.SetActive(false);
                 return;
             }
@@ -45,19 +46,23 @@ namespace NijiDive.Managers.Map
             maps = new Tilemap[] { groundMap, platformMap };
             damagePoint = float.MaxValue * Vector3.up;
             chunkCount = 0;
-
-            if (chunkOptions.Length == 0) Debug.LogError($"{nameof(chunkOptions)} is empty");
-            else if (generateAtStart) for (int i = 0; i < chunksInLevel; i++) AddRow();
         }
 
+        private void Start()
+        {
+            currentLevel = LevelManager.singleton.GetCurrentLevel();
+            if (generateAtStart) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
+        }
+
+        private BoundsInt NextChunkBounds() => new BoundsInt(Constants.CHUNK_SIZE / 2 * Vector3Int.left + chunkCount * Constants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);
         private BoundsInt ShiftLeft(BoundsInt bounds)
         {
-            bounds.position += GameConstants.CHUNK_SIZE * Vector3Int.left;
+            bounds.position += Constants.CHUNK_SIZE * Vector3Int.left;
             return bounds;
         }
         private BoundsInt ShiftRight(BoundsInt bounds)
         {
-            bounds.position += GameConstants.CHUNK_SIZE * Vector3Int.right;
+            bounds.position += Constants.CHUNK_SIZE * Vector3Int.right;
             return bounds;
         }
 
@@ -69,29 +74,25 @@ namespace NijiDive.Managers.Map
             foreach (var entity in chunk.entities) _ = entity.Spawn(entityGrid.transform, chunkBounds.min);
         }
 
-        private void AddSideChunks(Chunk baseChunk, BoundsInt bounds)
+        private void AddSideChunks(Chunk baseChunk, BoundsInt baseBounds)
         {
             for (int i = 0; i < 2; i++)
             {
-                var chunk = i == 1 ? baseChunk.rightChunk : baseChunk.leftChunk;
+                var rightSide = i == 1;
+                var chunk = rightSide ? baseChunk.rightChunk : baseChunk.leftChunk;
+                var bounds = baseBounds;
                 while (chunk != null)
                 {
-                    bounds = i == 1 ? ShiftRight(bounds) : ShiftLeft(bounds);
+                    bounds = rightSide ? ShiftRight(bounds) : ShiftLeft(bounds);
                     AddChunk(chunk, bounds);
-                    chunk = i == 1 ? chunk.rightChunk : chunk.leftChunk;
+                    chunk = rightSide ? chunk.rightChunk : chunk.leftChunk;
                 }
             }
         }
 
         public void AddRow(Chunk baseChunk)
         {
-            if (!Application.isPlaying)
-            {
-                Debug.LogWarning("\"Add New Chunk\" must be used in play mode.");
-                return;
-            }
-
-            var chunkBounds = NextChunkBounds;
+            var chunkBounds = NextChunkBounds();
             AddChunk(baseChunk, chunkBounds);
             AddSideChunks(baseChunk, chunkBounds);
 
@@ -99,12 +100,38 @@ namespace NijiDive.Managers.Map
         }
 
         [ContextMenu("Generate New Row")]
-        public void AddRow() => AddRow(chunkOptions[Random.Range(0, chunkOptions.Length)]);
+        public void AddRow()
+        {
+            if (!Application.isPlaying)
+            {
+                Debug.LogWarning("\"Add New Chunk\" must be used in play mode.");
+                return;
+            }
+
+            if (chunkCount < currentLevel.startChunks.Length) AddRow(currentLevel.startChunks[chunkCount]);
+            else if (chunkCount < currentLevel.chunkCount - 1)
+            {
+                Chunk toSpawn;
+                if (safeChunkGenerated) toSpawn = currentLevel.RandomMainChunk();
+                else
+                {
+                    var safeThreshold = Mathf.Lerp(currentLevel.safeZoneChanceAtStart, currentLevel.safeZoneChanceAtEnd, (float)chunkCount / currentLevel.chunkCount);
+                    if (Random.Range(0f, 100f) > safeThreshold) 
+                    {
+                        toSpawn = currentLevel.RandomSafeChunk();
+                        safeChunkGenerated = true;
+                    }
+                    else toSpawn = currentLevel.RandomMainChunk();
+                }
+                AddRow(toSpawn);
+            }
+            else AddRow(currentLevel.endChunk);
+        }
         #endregion
 
         public bool PointInCenter(Vector3 point)
         {
-            return Mathf.Abs(point.x - entityGrid.transform.position.x) < GameConstants.CHUNK_SIZE / 2f;
+            return Mathf.Abs(point.x - entityGrid.transform.position.x) < Constants.CHUNK_SIZE / 2f;
         }
 
         public TileBase GetTile(Vector2 point)
@@ -145,14 +172,9 @@ namespace NijiDive.Managers.Map
             }
             if (showNextChunkBounds)
             {
-                var bounds = NextChunkBounds;
+                var bounds = NextChunkBounds();
                 Gizmos.DrawCube(transform.position + bounds.center, bounds.size);
             }
-        }
-
-        private void OnValidate()
-        {
-            if (chunkOptions.Length > 0) enabled = true;
         }
 
         private void OnDestroy()

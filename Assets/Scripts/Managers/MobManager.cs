@@ -10,8 +10,9 @@ namespace NijiDive.Managers.Mobs
     public class MobManager : MonoBehaviour
     {
         public UnityEvent OnMobDeath;
+        [Tooltip("Gets set to first found object of tag \"Player\" if not assigned")]
         [SerializeField] private Transform target;
-        [SerializeField] private float enableDistance = GameConstants.CHUNK_SIZE, destroyDistance = GameConstants.CHUNK_SIZE;
+        [SerializeField] private float enableDistance = Constants.CHUNK_SIZE, destroyDistance = Constants.CHUNK_SIZE;
 
         private List<Transform> disabledMobs = new List<Transform>(), enabledMobs = new List<Transform>();
 
@@ -26,18 +27,14 @@ namespace NijiDive.Managers.Mobs
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {typeof(MobManager)}s exist", this);
+                Debug.LogError($"Multiple {typeof(MobManager)}s found in scene", this);
                 gameObject.SetActive(false);
                 enabled = false;
                 return;
             }
 
-            if (target == null)
-            {
-                Debug.LogError($"No {nameof(target)} assigned", this);
-                enabled = false;
-            }
-
+            if (target == null) target = GameObject.FindGameObjectWithTag("Player").transform;
+            
             foreach (Transform t in transform)
             {
                 if (t.GetComponent<Mob>() != null)

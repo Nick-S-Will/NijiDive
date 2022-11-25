@@ -39,7 +39,7 @@ namespace NijiDive.Controls.Enemies
 
         protected override void CalculateInput()
         {
-            var targetDelta = target.position - transform.position;
+            var targetDelta = Target.position - transform.position;
             input = targetDelta.normalized;
         }
 
@@ -47,10 +47,10 @@ namespace NijiDive.Controls.Enemies
         {
             base.OnDrawGizmos();
 
-            if (showPath && target)
+            if (showPath && Target)
             {
                 Gizmos.color = gizmoColor;
-                Gizmos.DrawLine(transform.position, target.position);
+                Gizmos.DrawLine(transform.position, Target.position);
             }
         }
     }

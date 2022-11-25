@@ -1,6 +1,6 @@
 namespace NijiDive
 {
-    public static class GameConstants
+    public static class Constants
     {
         /// <summary>
         /// Width and height of chunks in NijiDive
