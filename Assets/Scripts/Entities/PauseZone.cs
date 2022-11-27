@@ -13,22 +13,20 @@ namespace NijiDive.Entities
 
         private SpriteRenderer sr;
         private Color startColor;
-        private float timeElapsed;
 
         public override bool IsPaused => !enabled;
 
-        private void Start()
+        protected virtual void Start()
         {
             sr = GetComponentInChildren<SpriteRenderer>();
             startColor = sr.color;
         }
 
         // Placeholder effect
-        private void Update()
+        protected virtual void Update()
         {
-            var colorMultiplier = 1f - Mathf.PingPong(colorOscillationSpeed * timeElapsed, 1f - minColorMultiplier);
+            var colorMultiplier = 1f - Mathf.PingPong(colorOscillationSpeed * Time.time, 1f - minColorMultiplier);
             sr.color = colorMultiplier * startColor;
-            timeElapsed += Time.deltaTime;
         }
 
         public override void Pause(bool paused) => enabled = !paused;

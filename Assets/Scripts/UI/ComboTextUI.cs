@@ -26,7 +26,6 @@ namespace NijiDive.UI
 
         private void ResetComboText(int finalCombo)
         {
-            print(finalCombo);
             comboText.SetText("");
             comboText.SetVisible(false);
         }

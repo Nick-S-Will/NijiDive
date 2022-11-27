@@ -12,11 +12,8 @@ namespace NijiDive.Managers.Combo
     public class ComboManager : MonoBehaviour
     {
         public UnityEvent<int> OnCombo, OnEndCombo;
-        [Tooltip("Number of physics updates before confirming combo's end")]
-        [SerializeField] [Min(0)] private int comboEndBufferUpdates = 2;
 
         private PlayerController pc;
-        private Coroutine comboEndBuffer;
         private int currentCombo;
 
         public int CurrentCombo => currentCombo;
@@ -56,28 +53,11 @@ namespace NijiDive.Managers.Combo
             currentCombo = 0;
         }
 
-        private IEnumerator ComboEndBuffer()
-        {
-            if (comboEndBufferUpdates == 0)
-            {
-                EndCombo();
-                yield break;
-            }
-
-            yield return new WaitForSeconds(comboEndBufferUpdates * Time.fixedDeltaTime);
-            if (pc.LastGroundCheck && !PauseManager.IsPaused) EndCombo();
-
-            comboEndBuffer = null;
-        }
-
-        private void OnCollisionStay2D(Collision2D _)
+        private void OnCollisionEnter2D(Collision2D _)
         {
             if (currentCombo == 0) return;
 
-            if (pc.LastGroundCheck && !PauseManager.IsPaused)
-            {
-                if (comboEndBuffer == null) comboEndBuffer = StartCoroutine(ComboEndBuffer());
-            }
+            if (pc.LastGroundCheck && !PauseManager.IsPaused) EndCombo();
         }
 
         private void OnDestroy()

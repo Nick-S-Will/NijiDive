@@ -268,11 +268,6 @@ namespace NijiDive.Entities
             }
         }
 
-        private void OnValidate()
-        {
-            if (spriteRenderer) enabled = true;
-        }
-
         [Serializable]
         private class CollisionData
         {

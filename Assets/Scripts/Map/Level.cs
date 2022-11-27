@@ -9,6 +9,7 @@ namespace NijiDive.Map
     {
         public Chunk[] startChunks, safeZoneChunks, mainChunks;
         public Chunk endChunk;
+        [Tooltip("Number of chunks generated in level. Set to 1 for start screen level")]
         public int chunkCount = 15;
         [Space]
         [Range(0f, 1f)] public float safeZoneChanceAtStart = 0.05f;
@@ -19,6 +20,8 @@ namespace NijiDive.Map
 
         private void OnValidate()
         {
+            if (chunkCount == 1) return;
+
             var minChunks = startChunks.Length + 1;
             if (chunkCount < minChunks)
             {

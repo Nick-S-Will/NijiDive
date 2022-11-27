@@ -7,10 +7,10 @@ namespace NijiDive.Map.Tiles
     [CreateAssetMenu(menuName = "NijiDive/Tiles/BreakableTile")]
     public class BreakableTile : Tile, IDamageable
     {
-        [SerializeField] private DamageType vulnerableTypes = DamageType.Player | DamageType.Projectile;
-        [Space]
         ///<see cref="GameObject"/> is the source object which broke this tile
         public UnityEvent<GameObject> OnBreak;
+        [Space]
+        [SerializeField] private DamageType vulnerableTypes = DamageType.Player | DamageType.Projectile;
 
         public DamageType VulnerableTypes => vulnerableTypes;
 

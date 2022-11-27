@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using NijiDive.Entities;
+using NijiDive.Managers.Levels;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.Attacks;
+using NijiDive.Entities;
 using NijiDive.Health;
 
 namespace NijiDive.Controls.Player
@@ -29,9 +30,14 @@ namespace NijiDive.Controls.Player
 
         protected override void Awake()
         {
-            controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
-
+            if (controls == null) controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
+            
             base.Awake();
+        }
+
+        protected virtual void Start()
+        {
+            transform.position = LevelManager.singleton.GetCurrentWorldPlayerStart();
         }
 
         private void Update()

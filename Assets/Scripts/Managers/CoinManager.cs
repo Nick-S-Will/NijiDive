@@ -40,7 +40,7 @@ namespace NijiDive.Managers.Coins
                 return;
             }
 
-            foreach (var m in MobManager.singleton.DisabledMobs)
+            foreach (var m in MobManager.singleton.Mobs)
             {
                 if (m is ICoinDropping) m.OnDeath.AddListener(SpawnCoins);
             }
@@ -61,7 +61,7 @@ namespace NijiDive.Managers.Coins
             for (int i = 0; i < count; i++)
             {
                 var coin = Instantiate(coinSizePrefab, spawnPoint, Quaternion.identity, transform);
-                if (coinLifeTime > 0f) Destroy(coin, coinLifeTime);
+                if (coinLifeTime > 0f) Destroy(coin.gameObject, coinLifeTime);
 
                 var body = coin.GetComponent<Rigidbody2D>();
                 body.velocity = UnityEngine.Random.Range(coinSpawnSpeedMin, coinSpawnSpeedMax) * UnityEngine.Random.insideUnitCircle;
@@ -82,6 +82,7 @@ namespace NijiDive.Managers.Coins
 
             for (int i = 0; i < sizeCount.Length; i++) SpawnCoinsOfSize(coinSizes[i], spawnPoint, sizeCount[i]);
         }
+
         /// Has this signature to fit <see cref="Mob.OnDeath"/>
         private void SpawnCoins(MonoBehaviour killedMob, GameObject mobKiller, DamageType damageType)
         {

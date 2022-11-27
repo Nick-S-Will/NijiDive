@@ -41,6 +41,12 @@ namespace NijiDive.Map.Chunks
 
         public void SaveChunk()
         {
+            if (newChunkFileName == string.Empty)
+            {
+                Debug.LogError($"{nameof(newChunkFileName)} must be assigned to save chunk", this);
+                return;
+            }
+
             var newChunk = ScriptableObject.CreateInstance<Chunk>();
             newChunk.name = newChunkFileName;
             newChunk.groundTiles = groundMap.GetTilesBlock(EditorBounds);

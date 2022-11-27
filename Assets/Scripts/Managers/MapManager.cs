@@ -12,9 +12,7 @@ namespace NijiDive.Managers.Map
         [SerializeField] private Tilemap groundMap, platformMap;
         [SerializeField] private Grid entityGrid;
         [SerializeField] private LayerMask groundMask;
-
-        [Space]
-        [SerializeField] private bool generateAtStart = true;
+        [SerializeField] private bool generateAtAwake = true;
 
         [Header("Visualizers")]
         [SerializeField] private Color gizmoColor = Color.red;
@@ -30,7 +28,7 @@ namespace NijiDive.Managers.Map
         /// <see cref="LayerMask"/> used for terrain collisions
         /// </summary>
         public LayerMask GroundMask => groundMask;
-        
+
         public static MapManager singleton;
 
         private void Awake()
@@ -43,7 +41,6 @@ namespace NijiDive.Managers.Map
                 return;
             }
 
-            maps = new Tilemap[] { groundMap, platformMap };
             damagePoint = float.MaxValue * Vector3.up;
             chunkCount = 0;
         }
@@ -51,9 +48,10 @@ namespace NijiDive.Managers.Map
         private void Start()
         {
             currentLevel = LevelManager.singleton.GetCurrentLevel();
-            if (generateAtStart) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
+            if (currentLevel && generateAtAwake) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
         }
 
+        #region Chunk Bounds
         private BoundsInt NextChunkBounds() => new BoundsInt(Constants.CHUNK_SIZE / 2 * Vector3Int.left + chunkCount * Constants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);
         private BoundsInt ShiftLeft(BoundsInt bounds)
         {
@@ -65,6 +63,7 @@ namespace NijiDive.Managers.Map
             bounds.position += Constants.CHUNK_SIZE * Vector3Int.right;
             return bounds;
         }
+        #endregion
 
         #region Level Generation
         private void AddChunk(Chunk chunk, BoundsInt chunkBounds)
@@ -116,7 +115,7 @@ namespace NijiDive.Managers.Map
                 else
                 {
                     var safeThreshold = Mathf.Lerp(currentLevel.safeZoneChanceAtStart, currentLevel.safeZoneChanceAtEnd, (float)chunkCount / currentLevel.chunkCount);
-                    if (Random.Range(0f, 100f) > safeThreshold) 
+                    if (Random.Range(0f, 100f) > safeThreshold)
                     {
                         toSpawn = currentLevel.RandomSafeChunk();
                         safeChunkGenerated = true;
@@ -151,13 +150,10 @@ namespace NijiDive.Managers.Map
         {
             damagePoint = point;
 
-            foreach (var groundMap in maps)
+            var tileCell = groundMap.WorldToCell(point);
+            if (groundMap.GetTile(tileCell) is IDamageable damageable && damageable.TryDamage(sourceObject, damage, damageType, point))
             {
-                var tileCell = groundMap.WorldToCell(point);
-                if (groundMap.GetTile(tileCell) is IDamageable damageable && damageable.TryDamage(sourceObject, damage, damageType, point))
-                {
-                    groundMap.SetTile(tileCell, null);
-                }
+                groundMap.SetTile(tileCell, null);
             }
 
             return false;

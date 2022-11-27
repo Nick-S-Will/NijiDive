@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
+using NijiDive.Managers.Persistence;
+using NijiDive.Controls.Player;
+
 namespace NijiDive.CinemachineAddons
 {
     // Based on LockCameraZ class from https://forum.unity.com/threads/follow-only-along-a-certain-axis.544511/
@@ -14,7 +17,12 @@ namespace NijiDive.CinemachineAddons
         protected override void Awake()
         {
             base.Awake();
-            GetComponent<CinemachineVirtualCamera>().Follow = GameObject.FindGameObjectWithTag("Player").transform;
+            PersistenceManager.OnLoaded.AddListener(SetCamFollow);
+        }
+
+        private void SetCamFollow()
+        {
+            GetComponent<CinemachineVirtualCamera>().Follow = PersistenceManager.FindPersistentObjectOfType<PlayerController>().transform;
         }
 
         protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)

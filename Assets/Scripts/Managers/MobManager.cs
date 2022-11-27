@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+using NijiDive.Managers.Persistence;
+using NijiDive.Controls.Player;
 using NijiDive.Entities;
 
 namespace NijiDive.Managers.Mobs
@@ -10,14 +13,14 @@ namespace NijiDive.Managers.Mobs
     public class MobManager : MonoBehaviour
     {
         public UnityEvent OnMobDeath;
-        [Tooltip("Gets set to first found object of tag \"Player\" if not assigned")]
-        [SerializeField] private Transform target;
         [SerializeField] private float enableDistance = Constants.CHUNK_SIZE, destroyDistance = Constants.CHUNK_SIZE;
 
         private List<Transform> disabledMobs = new List<Transform>(), enabledMobs = new List<Transform>();
+        private Transform target;
 
-        public Mob[] DisabledMobs => GetMobs(disabledMobs);
         public Mob[] EnabledMobs => GetMobs(enabledMobs);
+        public Mob[] DisabledMobs => GetMobs(disabledMobs);
+        public Mob[] Mobs => EnabledMobs.Concat(DisabledMobs).ToArray();
         public Transform Target => target;
 
         public static MobManager singleton;
@@ -33,8 +36,11 @@ namespace NijiDive.Managers.Mobs
                 return;
             }
 
-            if (target == null) target = GameObject.FindGameObjectWithTag("Player").transform;
-            
+            PersistenceManager.OnLoaded.AddListener(SetTarget);
+        }
+
+        private void Start()
+        {
             foreach (Transform t in transform)
             {
                 if (t.GetComponent<Mob>() != null)
@@ -51,6 +57,11 @@ namespace NijiDive.Managers.Mobs
 
             EnableMobs();
             DestroyMobs();
+        }
+
+        private void SetTarget()
+        {
+            target = PersistenceManager.FindPersistentObjectOfType<PlayerController>().transform;
         }
 
         /// <summary>

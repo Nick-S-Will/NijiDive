@@ -24,6 +24,7 @@ namespace NijiDive.UI
 
         private void UpdateTextVisible()
         {
+            coinText.visibilityIsLocked = false;
             coinText.SetVisible(PauseManager.IsPaused);
             coinText.visibilityIsLocked = PauseManager.IsPaused;
         }

@@ -5,7 +5,7 @@ namespace NijiDive.Map.Tiles
     [CreateAssetMenu(menuName = "NijiDive/Tiles/BounceableTile")]
     public class BounceableTile : BreakableTile
     {
-        [SerializeField] private float bounceSpeed = 2;
+        [SerializeField] private float bounceSpeed = 5f;
 
         public float BounceSpeed => bounceSpeed;
 

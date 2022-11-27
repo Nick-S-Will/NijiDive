@@ -8,7 +8,7 @@ namespace NijiDive.Map.Chunks
     public class Chunk : ScriptableObject
     {
         public TileBase[] groundTiles = new TileBase[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE], platformTiles = new TileBase[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE];
-        public EntityPosition[] entities;
+        public EntityPosition[] entities = new EntityPosition[0];
         [Space]
         public Chunk leftChunk;
         public Chunk rightChunk;
