@@ -23,21 +23,21 @@ namespace NijiDive.Controls.Player
         [SerializeField] private KeyCode jumpKey = KeyCode.Space;
         [SerializeField] private KeyCode altKey = KeyCode.Escape;
 
-        private float xInput;
+        private float xInput, initialGravityScale;
         private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame;
 
         public override HealthData Health => health;
 
         protected override void Awake()
         {
-            if (controls == null) controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
+            controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
             
             base.Awake();
-        }
 
-        protected virtual void Start()
-        {
-            transform.position = LevelManager.singleton.GetCurrentWorldPlayerStart();
+            LevelManager.singleton.OnLoadLevel.AddListener(MoveToWorldStartPosition);
+            LevelManager.singleton.OnLoadLevel.AddListener(Enable);
+            LevelManager.singleton.OnLoadUpgrading.AddListener(Disable);
+            initialGravityScale = Body2d.gravityScale;
         }
 
         private void Update()
@@ -59,7 +59,22 @@ namespace NijiDive.Controls.Player
             altDownThisFrame = false;
         }
 
-        // Player doesn't get paused
+        private void MoveToWorldStartPosition()
+        {
+            transform.position = LevelManager.singleton.GetCurrentWorldPlayerStart();
+        }
+
+        private void SetEnabled(bool enabled)
+        {
+            for (int i = 0; i < 5; i++) controls[i].enabled = enabled; // 5 for the base controls assign in awake
+
+            Body2d.velocity = Vector2.zero;
+            Body2d.gravityScale = enabled ? initialGravityScale : 0f;
+        }
+        private void Enable() => SetEnabled(true);
+        private void Disable() => SetEnabled(false);
+
+        // TODO: Add pause menu and only make player pause when it's open
         public override void Pause(bool pause) { }
     }
 }

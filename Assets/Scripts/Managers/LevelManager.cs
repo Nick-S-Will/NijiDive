@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 using NijiDive.Map;
@@ -8,16 +9,16 @@ namespace NijiDive.Managers.Levels
 {
     public class LevelManager : MonoBehaviour
     {
-        [SerializeField] private string gameSceneName = "GameScene";
+        [SerializeField] private string gameSceneName = "GameScene", upgradeSceneName = "UpgradeScene";
         [Space]
         [SerializeField] private World[] worlds;
-
-        private static int worldIndex, levelIndex;
+        [Space]
+        public UnityEvent OnLoadLevel, OnLoadUpgrading;
 
         public static LevelManager singleton;
 
-        public static int WorldIndex => worldIndex;
-        public static int LevelIndex => levelIndex;
+        public int WorldIndex { get; private set; }
+        public int LevelIndex { get; private set; }
 
         private void Awake()
         {
@@ -29,9 +30,14 @@ namespace NijiDive.Managers.Levels
             }
         }
 
+        private void Start()
+        {
+            OnLoadLevel?.Invoke();
+        }
+
         public Level GetCurrentLevel()
         {
-            if (worldIndex < worlds.Length) return worlds[worldIndex].levels[levelIndex];
+            if (WorldIndex < worlds.Length) return worlds[WorldIndex].levels[LevelIndex];
             else
             {
                 Debug.LogError(worlds.Length == 0 ? "No levels assigned to level manager" : "Last level exceeded", this);
@@ -41,20 +47,26 @@ namespace NijiDive.Managers.Levels
 
         public void CompleteLevel()
         {
-            levelIndex++;
-            if (levelIndex >= worlds[worldIndex].levels.Length)
+            SceneManager.LoadScene(upgradeSceneName);
+            OnLoadUpgrading?.Invoke();
+        }
+
+        public void CompleteUpgrade()
+        {
+            LevelIndex++;
+            if (LevelIndex >= worlds[WorldIndex].levels.Length)
             {
-                worldIndex++;
-                levelIndex = 0;
+                WorldIndex++;
+                LevelIndex = 0;
             }
 
-            // TODO: Implement upgrade scene
             SceneManager.LoadScene(gameSceneName);
+            OnLoadLevel?.Invoke();
         }
 
         public Vector3 GetCurrentWorldPlayerStart()
         {
-            if (worldIndex < worlds.Length) return worlds[worldIndex].playerStartPos;
+            if (WorldIndex < worlds.Length) return worlds[WorldIndex].playerStartPos;
             else
             {
                 Debug.LogError("World index out out bounds, couldn't get player start position", this);

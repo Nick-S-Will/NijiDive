@@ -16,7 +16,7 @@ namespace NijiDive.Entities
     public class Shop : Entity
     {
         [SerializeField] private List<Product> productOptions;
-        [SerializeField] private SpriteRenderer[] slots = new SpriteRenderer[FOR_SALE_COUNT];
+        [SerializeField] private SpriteRenderer[] productSlotRenderers = new SpriteRenderer[FOR_SALE_COUNT];
         [Space]
         [SerializeField] private BoxCollider2D purchaseBounds;
 
@@ -52,7 +52,7 @@ namespace NijiDive.Entities
             for (int i = 0; i < productsForSale.Length; i++)
             {
                 var sprite = inStock[i] ? productsForSale[i].ShopSprite : null;
-                slots[i].sprite = sprite;
+                productSlotRenderers[i].sprite = sprite;
             }
         }
 
@@ -93,7 +93,7 @@ namespace NijiDive.Entities
 
             if (inStock[selectedIndex])
             {
-                slots[selectedIndex].sprite = null;
+                productSlotRenderers[selectedIndex].sprite = null;
                 inStock[selectedIndex] = false;
                 return productsForSale[selectedIndex];
             }
@@ -145,10 +145,10 @@ namespace NijiDive.Entities
 
         private void OnValidate()
         {
-            if (slots.Length != FOR_SALE_COUNT)
+            if (productSlotRenderers.Length != FOR_SALE_COUNT)
             {
-                Debug.LogWarning($"The length of {nameof(slots)} must be the same as {nameof(FOR_SALE_COUNT)}");
-                Array.Resize(ref slots, FOR_SALE_COUNT);
+                Debug.LogWarning($"The length of {nameof(productSlotRenderers)} must be the same as {nameof(FOR_SALE_COUNT)}");
+                Array.Resize(ref productSlotRenderers, FOR_SALE_COUNT);
             }
         }
     }

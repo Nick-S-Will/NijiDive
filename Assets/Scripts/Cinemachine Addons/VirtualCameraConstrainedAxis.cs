@@ -13,6 +13,10 @@ namespace NijiDive.CinemachineAddons
     public class VirtualCameraConstrainedAxis : CinemachineExtension
     {
         [SerializeField] private float xOffset;
+        [Tooltip("Set to 0 for snap transition")]
+        [SerializeField] [Min(0f)] private float transitionSpeed = Constants.CHUNK_SIZE;
+
+        private Vector3 prevPos;
 
         protected override void Awake()
         {
@@ -22,19 +26,28 @@ namespace NijiDive.CinemachineAddons
 
         private void SetCamFollow()
         {
-            GetComponent<CinemachineVirtualCamera>().Follow = PersistenceManager.FindPersistentObjectOfType<PlayerController>().transform;
+            var playerTransform = PersistenceManager.FindPersistentObjectOfType<PlayerController>().transform;
+            GetComponent<CinemachineVirtualCamera>().Follow = playerTransform;
         }
 
         protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
         {
             if (stage == CinemachineCore.Stage.Body)
             {
-                var mapWidth = Constants.CHUNK_SIZE;
-                var pos = state.RawPosition;
-                var xShifts = (int)Math.Round((pos.x - xOffset) / mapWidth, MidpointRounding.AwayFromZero);
-                pos.x = xShifts * mapWidth + xOffset;
+                var targetPosition = state.RawPosition;
+                var xShifts = (int)Math.Round((targetPosition.x - xOffset) / Constants.CHUNK_SIZE, MidpointRounding.AwayFromZero);
+                targetPosition.x = xShifts * Constants.CHUNK_SIZE + xOffset;
 
-                state.RawPosition = pos;
+                if (transitionSpeed == 0f || Time.time < Time.deltaTime)
+                {
+                    state.RawPosition = targetPosition;
+                    prevPos = targetPosition;
+                }
+                else
+                {
+                    state.RawPosition = Vector3.MoveTowards(prevPos, targetPosition, transitionSpeed * Time.deltaTime);
+                    prevPos = state.RawPosition;
+                }
             }
         }
     }

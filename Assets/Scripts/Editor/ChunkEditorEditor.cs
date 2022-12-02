@@ -11,7 +11,7 @@ namespace NijiDive.Editors
         public override void OnInspectorGUI()
         {
             var chunkEditor = (ChunkEditor)target;
-            var exclude = new string[] { "newChunkFileName" };
+            var exclude = new string[] { nameof(chunkEditor.newChunkFileName) };
 
             serializedObject.Update();
             DrawPropertiesExcluding(serializedObject, exclude);

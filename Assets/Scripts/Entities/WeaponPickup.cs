@@ -3,6 +3,7 @@ using UnityEngine;
 
 using NijiDive.Controls.Attacks;
 using NijiDive.Weaponry;
+using NijiDive.Items;
 
 namespace NijiDive.Entities
 {

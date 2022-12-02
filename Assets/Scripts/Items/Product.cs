@@ -18,6 +18,5 @@ namespace NijiDive.Items
         public int BuffAmount => buffAmount;
     }
 
+    public enum BuffType { Health = 0, Ammo = 1 }
 }
-
-public enum BuffType { Health = 0, Ammo = 1 }

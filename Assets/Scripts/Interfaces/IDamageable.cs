@@ -23,7 +23,6 @@ namespace NijiDive
     [Flags]
     public enum DamageType
     {
-        // Binary of enum makes up the damage type
         // Damage sources
         Enemy = 1 << 31,
         Player = 1 << 30,
@@ -42,7 +41,7 @@ namespace NijiDive
     {
         public static bool IsVulnerableTo(this DamageType vulnerableTypes, DamageType inflictingTypes)
         {
-            var count = BitwiseUtilities.BitCount((int)(vulnerableTypes & inflictingTypes));
+            var count = ((int)(vulnerableTypes & inflictingTypes)).GetBitCount();
             return count > 1;
         }
     }

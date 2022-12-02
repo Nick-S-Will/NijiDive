@@ -25,7 +25,7 @@ namespace NijiDive.Managers.Combo
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {typeof(ComboManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(ComboManager)}s found in scene", this);
                 gameObject.SetActive(false);
                 return;
             }

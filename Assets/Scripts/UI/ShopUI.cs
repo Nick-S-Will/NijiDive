@@ -2,12 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.Coins;
 using NijiDive.Controls.Player;
 using NijiDive.Controls.Movement;
 using NijiDive.Entities;
-using NijiDive.Items;
-using NijiDive.Health;
 
 namespace NijiDive.UI
 {
@@ -55,7 +52,7 @@ namespace NijiDive.UI
             for (int i = 0; i < productSpriteRenderers.Length; i++)
             {
                 var product = shop.GetProduct(i);
-                productSpriteRenderers[i].sprite = product ? shop.GetProduct(i).UISprite : null;
+                productSpriteRenderers[i].sprite = product ? product.UISprite : null;
             }
             productSelectorRenderer.transform.position = productSpriteRenderers[selectedIndex].transform.position;
         }

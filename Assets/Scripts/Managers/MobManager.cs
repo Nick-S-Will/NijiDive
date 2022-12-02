@@ -30,7 +30,7 @@ namespace NijiDive.Managers.Mobs
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {typeof(MobManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(MobManager)}s found in scene", this);
                 gameObject.SetActive(false);
                 enabled = false;
                 return;
@@ -112,7 +112,7 @@ namespace NijiDive.Managers.Mobs
             foreach (var t in mobTransforms)
             {
                 try { mobs.Add(t.GetComponent<Mob>()); }
-                catch (NullReferenceException) { Debug.LogError($"{t.name} is missing a {typeof(Mob)} component", this); }
+                catch (NullReferenceException) { Debug.LogError($"{t.name} is missing a {nameof(Mob)} component", this); }
             }
 
             return mobs.ToArray();

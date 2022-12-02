@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 
-using NijiDive.Utilities;
+using System.IO;
 
 namespace NijiDive.Map.Chunks
 {
@@ -16,7 +16,7 @@ namespace NijiDive.Map.Chunks
         [Space]
         [SerializeField] private Chunk toLoad;
         [Space]
-        [SerializeField] private string newChunkFileName = "New Chunk";
+        public string newChunkFileName = "New Chunk";
 
         private static readonly BoundsInt EditorBounds = new BoundsInt(new Vector3Int(0, 1 - Constants.CHUNK_SIZE, 0), Chunk.BoundSize);
 
@@ -39,6 +39,27 @@ namespace NijiDive.Map.Chunks
             }
         }
 
+        public static bool SaveChunkAsset(Chunk newChunk, string nameSuffix = "")
+        {
+            var path = $"Assets/Prefabs/Chunks/{newChunk.name + nameSuffix}.asset";
+
+            if (File.Exists(path)) return false;
+
+            AssetDatabase.CreateAsset(newChunk, path);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            return true;
+        }
+
+        public static void ForceSaveChunkAsset(Chunk newChunk)
+        {
+            if (SaveChunkAsset(newChunk)) return;
+
+            var count = 1;
+            while (!SaveChunkAsset(newChunk, nameSuffix: $" ({count})")) count++;
+        }
+
         public void SaveChunk()
         {
             if (newChunkFileName == string.Empty)
@@ -53,7 +74,7 @@ namespace NijiDive.Map.Chunks
             newChunk.platformTiles = platformMap.GetTilesBlock(EditorBounds);
             newChunk.entities = GetEntityPositions();
 
-            ScriptableObjectUtilities.ForceSaveChunkAsset(newChunk);
+            ForceSaveChunkAsset(newChunk);
         }
 
         public void ClearEditor()

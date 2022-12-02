@@ -1,8 +1,6 @@
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
-using NijiDive.Utilities;
-
 #if UNITY_EDITOR
 namespace NijiDive.Map.Brushes
 {
@@ -12,11 +10,29 @@ namespace NijiDive.Map.Brushes
     {
         public override void Erase(GridLayout gridLayout, GameObject brushTarget, Vector3Int position)
         {
-            var erased = TilemapUtilities.GetObjectInCell(gridLayout, brushTarget.transform, position);
+            var erased = GetObjectInCell(gridLayout, brushTarget.transform, position);
             if (erased)
             {
                 UnityEditor.Undo.DestroyObjectImmediate(erased.gameObject);
             }
+        }
+
+        /// <summary>
+        /// Finds prefab placed in <paramref name="cell"/> relative to <paramref name="grid"/>
+        /// </summary>
+        /// <returns>Object at given cell if one is found else null</returns>
+        public static Transform GetObjectInCell(GridLayout grid, Transform parent, Vector3Int cell)
+        {
+            var min = grid.LocalToWorld(grid.CellToLocalInterpolated(cell));
+            var max = grid.LocalToWorld(grid.CellToLocalInterpolated(cell + Vector3Int.one));
+            var bounds = new Bounds((min + max) / 2f, max - min);
+
+            foreach (Transform child in parent)
+            {
+                if (bounds.Contains(child.position)) return child;
+            }
+
+            return null;
         }
     }
 }

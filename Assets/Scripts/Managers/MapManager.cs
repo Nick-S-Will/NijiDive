@@ -36,11 +36,12 @@ namespace NijiDive.Managers.Map
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {typeof(MapManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(MapManager)}s found in scene", this);
                 gameObject.SetActive(false);
                 return;
             }
 
+            maps = new Tilemap[] { groundMap, platformMap };
             damagePoint = float.MaxValue * Vector3.up;
             chunkCount = 0;
         }

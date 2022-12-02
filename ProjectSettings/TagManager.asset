@@ -40,9 +40,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Back Panel
+    uniqueID: 435548803
+    locked: 0
+  - name: Combo Text
+    uniqueID: 3672423363
+    locked: 0
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Text Mesh
-    uniqueID: 4100757399
     locked: 0

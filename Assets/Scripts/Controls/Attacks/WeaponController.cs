@@ -24,14 +24,14 @@ namespace NijiDive.Controls.Attacks
             var jumping = mob.GetControlType<Jumping>();
             if (jumping == default)
             {
-                Debug.LogError($"{mob.name} is missing {typeof(Jumping)}. {typeof(WeaponController)} requires it", mob);
+                Debug.LogError($"{mob.name} is missing {nameof(Jumping)}. {nameof(WeaponController)} requires it", mob);
                 mob.enabled = false;
             }
             else jumping.OnLand.AddListener(ReloadCurrentWeapon);
             var stomping = mob.GetControlType<Stomping>();
             if (stomping == default)
             {
-                Debug.LogError($"{mob.name} is missing {typeof(Stomping)}. {typeof(WeaponController)} requires it", mob);
+                Debug.LogError($"{mob.name} is missing {nameof(Stomping)}. {nameof(WeaponController)} requires it", mob);
                 mob.enabled = false;
             }
             else stomping.OnDamage.AddListener(ReloadCurrentWeapon);

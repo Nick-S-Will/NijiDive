@@ -13,7 +13,7 @@ namespace NijiDive.Managers.UI
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {typeof(UIManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(UIManager)}s found in scene", this);
                 gameObject.SetActive(false);
                 return;
             }
@@ -21,7 +21,7 @@ namespace NijiDive.Managers.UI
 
         private void Start()
         {
-            if (LevelManager.WorldIndex == 0) gameObject.SetActive(false);
+            if (LevelManager.singleton.WorldIndex == 0) gameObject.SetActive(false);
         }
 
         private void OnDestroy()

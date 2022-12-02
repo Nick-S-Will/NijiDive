@@ -49,7 +49,7 @@ namespace NijiDive.Entities
         {
             if (spriteRenderer == null)
             {
-                Debug.LogError($"No {typeof(SpriteRenderer)} assigned", this);
+                Debug.LogError($"No {nameof(SpriteRenderer)} assigned", this);
                 enabled = false;
             }
 

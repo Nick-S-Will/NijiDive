@@ -5,10 +5,11 @@ namespace NijiDive.UI
 {
     public class TextUI : BaseUI
     {
-        [SerializeField] protected TextMesh textMesh;
         [SerializeField] private SpriteRenderer textPanel;
+        [SerializeField] protected TextMesh textMesh;
         [SerializeField] private float panelBoarderSize = 0.25f;
 
+        public TextMesh TextMesh => textMesh;
         public string GetText()
         {
             return textMesh.text;
@@ -29,8 +30,8 @@ namespace NijiDive.UI
         {
             if (visibilityIsLocked) return;
 
-            textMesh.gameObject.SetActive(visible);
             if (textPanel) textPanel.gameObject.SetActive(visible);
+            textMesh.gameObject.SetActive(visible);
         }
     }
 }

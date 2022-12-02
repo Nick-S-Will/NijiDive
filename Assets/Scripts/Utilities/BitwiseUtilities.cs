@@ -1,10 +1,8 @@
-using UnityEngine;
-
 namespace NijiDive.Utilities
 {
     public static class BitwiseUtilities
     {
-        public static int BitCount(int n)
+        public static int GetBitCount(this int n)
         {
             var count = 0;
             while (n != 0)
