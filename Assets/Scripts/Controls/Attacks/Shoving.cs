@@ -7,7 +7,7 @@ namespace NijiDive.Controls.Attacks
     [Serializable]
     public class Shoving : Attacking
     {
-        public override void FixedUpdate()
+        public override void Use()
         {
             TryShove();
         }

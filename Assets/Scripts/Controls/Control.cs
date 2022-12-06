@@ -15,6 +15,6 @@ namespace NijiDive.Controls
 
         public virtual void Start() { }
 
-        public abstract void FixedUpdate();
+        public abstract void Use();
     }
 }

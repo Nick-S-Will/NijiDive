@@ -2,14 +2,10 @@ using UnityEngine;
 
 namespace NijiDive.Items
 {
-    public abstract class Upgrade : ScriptableObject
+    public abstract class Upgrade : Item
     {
-        [SerializeField] private Sprite menuSprite, uiSprite;
-        [SerializeField] private string description;
-
-        public Sprite MenuSprite => menuSprite;
+        public Sprite MenuSprite => sprite;
         public Sprite UISprite => uiSprite;
-        public string Description => description;
 
         public virtual void Equip()
         {

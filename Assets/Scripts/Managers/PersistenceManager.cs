@@ -107,6 +107,9 @@ namespace NijiDive.Managers.Persistence
         {
             public GameObject gameObject;
             [Min(0)] public int transformIndex;
+            /// <summary>
+            /// Determines if this <see cref="PersistentObject"/> is spawned during testing
+            /// </summary>
             public bool enabled = true;
         }
     }

@@ -68,7 +68,7 @@ namespace NijiDive.Entities
             OnDeath.AddListener(Death);
         }
 
-        protected void FixedUpdate(InputData inputs)
+        protected void UseControls(InputData inputs)
         {
             UpdateCollisions(inputs.lStick.x);
 
@@ -76,7 +76,7 @@ namespace NijiDive.Entities
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
 
             LastInputs = inputs;
-            foreach (var control in controls) if (control.enabled) control.FixedUpdate();
+            foreach (var control in controls) if (control.enabled) control.Use();
         }
 
         public virtual bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)

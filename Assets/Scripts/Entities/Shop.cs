@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 using NijiDive.Managers.Coins;
 using NijiDive.Controls.Player;
-using NijiDive.Controls.Movement;
 using NijiDive.Controls.Attacks;
 using NijiDive.Items;
 using NijiDive.Utilities;
@@ -15,6 +14,8 @@ namespace NijiDive.Entities
     [RequireComponent(typeof(Collider2D))]
     public class Shop : Entity
     {
+        public UnityEvent<bool> OnPlayerContact;
+
         [SerializeField] private List<Product> productOptions;
         [SerializeField] private SpriteRenderer[] productSlotRenderers = new SpriteRenderer[FOR_SALE_COUNT];
         [Space]
@@ -56,14 +57,6 @@ namespace NijiDive.Entities
             }
         }
 
-        private void SetShopControls(bool enabled)
-        {
-            if (player == null) return;
-
-            player.GetControlType<Jumping>().enabled = !enabled;
-            player.GetControlType<ShopControl>().enabled = enabled;
-        }
-
         private bool IndexIsInRange(int index)
         {
             if (index < 0 || index >= FOR_SALE_COUNT)
@@ -75,8 +68,9 @@ namespace NijiDive.Entities
             return true;
         }
 
+        #region Product Access
         /// <summary>
-        /// Gets you access to <see cref="Product"/> at <paramref name="selectedIndex"/> if in range and in stock
+        /// Gets access to <see cref="Product"/> at <paramref name="selectedIndex"/> if in range and in stock
         /// </summary>
         public Product GetProduct(int selectedIndex)
         {
@@ -100,7 +94,7 @@ namespace NijiDive.Entities
             else return null;
         }
 
-        public int TryPurchaseSelection(int index)
+        public int TryPurchase(int index)
         {
             var product = GetProduct(index);
             if (product == null) return 0;
@@ -125,20 +119,29 @@ namespace NijiDive.Entities
 
             return 0;
         }
+        #endregion
+
+
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (player) return; 
-            
+            if (player) return;
+
             player = collider.GetComponent<PlayerController>();
-            if (player && collider.IsTouching(purchaseBounds)) SetShopControls(true);
+            if (player)
+            {
+                if (collider.IsTouching(purchaseBounds)) OnPlayerContact?.Invoke(true);
+                else player = null;
+            }
         }
 
         private void OnTriggerExit2D(Collider2D collider)
         {
+            if (player == null) return;
+
             if (player == collider.GetComponent<PlayerController>())
             {
-                SetShopControls(false);
+                OnPlayerContact?.Invoke(false);
                 player = null;
             }
         }

@@ -31,7 +31,7 @@ namespace NijiDive.Controls.Enemies
 
         private void FixedUpdate()
         {
-            FixedUpdate(new InputData(new Vector2(xInput, 0)));
+            UseControls(new InputData(new Vector2(xInput, 0)));
         }
 
         protected override void CalculateInput()

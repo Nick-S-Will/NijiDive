@@ -2,27 +2,20 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Controls.Player;
-using NijiDive.Controls.Movement;
+using NijiDive.Managers.UI;
 using NijiDive.Entities;
+using NijiDive.Controls.Movement;
+using NijiDive.Controls.UI;
 
 namespace NijiDive.UI
 {
-    public class ShopUI : BaseUI
+    public class ShopUI : UIMenu
     {
-        public UnityEvent OnOpen, OnClose, OnNavigate, OnBroke;
-        public UnityEvent<int> OnPurchase;
         [Space]
-        [SerializeField] private GameObject shopPanel;
-        [SerializeField] private SpriteRenderer productSelectorRenderer;
-        [SerializeField] private SpriteRenderer[] productSpriteRenderers = new SpriteRenderer[Shop.FOR_SALE_COUNT];
+        public UnityEvent<int> OnPurchase;
+        public UnityEvent OnBroke;
 
-        private PlayerController player;
         private Shop shop;
-        private int selectedIndex;
-
-        public int SelectedIndex => selectedIndex;
-        public bool IsVisible => shopPanel.activeSelf;
 
         private void Awake()
         {
@@ -31,36 +24,35 @@ namespace NijiDive.UI
 
         private void Start()
         {
-            player = FindObjectOfType<PlayerController>();
-            if (player == null)
-            {
-                Debug.LogError($"No {nameof(PlayerController)} found in scene", this);
-                return;
-            }
-
             OnOpen.AddListener(UpdateProductSprites);
             OnOpen.AddListener(DisablePlayerWalking);
             OnClose.AddListener(EnablePlayerWalking);
-
-            GivePlayerShopControl();
         }
 
-        private void SetShop(Shop shop) => this.shop = shop;
+        private void SetShop(Shop shop)
+        {
+            if (shop) shop.OnPlayerContact.RemoveListener(SetMenuControls);
+            this.shop = shop;
+            shop.OnPlayerContact.AddListener(SetMenuControls);
+        }
+
+        private void UpdateSelectedGraphicsAndText()
+        {
+            UpdateSelectedGraphics();
+            var product = shop.GetProduct(SelectedIndex);
+            itemNameText.text = product ? product.name : string.Empty;
+            itemDescriptionText.text = product ? product.Description : string.Empty;
+        }
 
         private void UpdateProductSprites()
         {
-            for (int i = 0; i < productSpriteRenderers.Length; i++)
+            for (int i = 0; i < itemSpriteRenderers.Length; i++)
             {
                 var product = shop.GetProduct(i);
-                productSpriteRenderers[i].sprite = product ? product.UISprite : null;
+                itemSpriteRenderers[i].sprite = product ? product.UISprite : null;
             }
-            productSelectorRenderer.transform.position = productSpriteRenderers[selectedIndex].transform.position;
-        }
 
-        #region BaseUI overrides
-        public override void UpdateShape()
-        {
-            throw new NotImplementedException();
+            UpdateSelectedGraphicsAndText();
         }
 
         public override void SetVisible(bool visible)
@@ -70,43 +62,32 @@ namespace NijiDive.UI
             if (visible) OnOpen?.Invoke();
             else OnClose.Invoke();
 
-            shopPanel.SetActive(visible);
-            productSelectorRenderer.gameObject.SetActive(visible);
-            foreach (var sr in productSpriteRenderers) sr.gameObject.SetActive(visible);
+            base.SetVisible(visible);
         }
-        #endregion
 
         #region Setting Shop Controls
-        private void GivePlayerShopControl()
-        {
-            var shopControl = new ShopControl();
-            shopControl.OnSelect.AddListener(Select);
-            shopControl.OnCancel.AddListener(Exit);
-            shopControl.OnLeft.AddListener(NavigateLeft);
-            shopControl.OnRight.AddListener(NavigateRight);
-            shopControl.mob = player;
-            shopControl.enabled = false;
-
-            player.AddControlType(shopControl);
-        }
-        private void RemovePlayerShopControl()
-        {
-            if (player == null) return; // No error since player may have been destroyed
-
-            var shopControl = player.RemoveControlType<ShopControl>();
-            shopControl.OnSelect.RemoveListener(Select);
-            shopControl.OnCancel.RemoveListener(Exit);
-            shopControl.OnLeft.RemoveListener(NavigateLeft);
-            shopControl.OnRight.RemoveListener(NavigateRight);
-        }
-
-        private void SetPlayerWalking(bool enabled) => player.GetControlType<LocalRightAnalogMoving>().enabled = enabled;
+        private void SetPlayerWalking(bool enabled) => UIManager.singleton.Player.GetControlType<LocalRightAnalogMoving>().enabled = enabled;
         private void EnablePlayerWalking() => SetPlayerWalking(true);
         private void DisablePlayerWalking() => SetPlayerWalking(false);
+
+        protected override void SetMenuControls(bool enabled)
+        {
+            if (UIManager.singleton.Player == null) return;
+
+            UIManager.singleton.Player.GetControlType<Jumping>().enabled = !enabled;
+
+            var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
+            uiControl.enabled = enabled;
+
+            SetEventListeners(
+                new UnityEvent[] { uiControl.OnSelect, uiControl.OnCancel, uiControl.OnLeft, uiControl.OnRight },
+                new UnityAction[] { Select, Exit, NavigateLeft, NavigateRight },
+                enabled);
+        }
         #endregion
 
         #region UI Control
-        public void Select()
+        public override void Select()
         {
             if (!IsVisible)
             {
@@ -114,10 +95,10 @@ namespace NijiDive.UI
                 return;
             }
 
-            int cost = shop.TryPurchaseSelection(selectedIndex);
+            int cost = shop.TryPurchase(SelectedIndex);
             if (cost > 0)
             {
-                productSpriteRenderers[selectedIndex].sprite = null;
+                itemSpriteRenderers[SelectedIndex].sprite = null;
                 OnPurchase?.Invoke(cost);
             }
             else OnBroke?.Invoke();
@@ -130,27 +111,24 @@ namespace NijiDive.UI
 
         private void Navigate(int indexDirection)
         {
-            selectedIndex = (selectedIndex + indexDirection + Shop.FOR_SALE_COUNT) % Shop.FOR_SALE_COUNT;
-            productSelectorRenderer.transform.position = productSpriteRenderers[selectedIndex].transform.position;
+            SelectedIndex = (SelectedIndex + indexDirection + Shop.FOR_SALE_COUNT) % Shop.FOR_SALE_COUNT;
+            UpdateSelectedGraphicsAndText();
 
             OnNavigate?.Invoke();
         }
-        public void NavigateLeft() => Navigate(-1);
-        public void NavigateRight() => Navigate(1);
+        public override void NavigateLeft() => Navigate(-1);
+        public override void NavigateRight() => Navigate(1);
         #endregion
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
-            if (productSpriteRenderers.Length != Shop.FOR_SALE_COUNT)
+            if (itemSpriteRenderers.Length != Shop.FOR_SALE_COUNT)
             {
-                Debug.LogWarning($"The length of {nameof(productSpriteRenderers)} must be the same as {nameof(Shop.FOR_SALE_COUNT)}");
-                Array.Resize(ref productSpriteRenderers, Shop.FOR_SALE_COUNT);
+                Debug.LogWarning($"The length of {nameof(itemSpriteRenderers)} must be the same as {nameof(Shop.FOR_SALE_COUNT)}");
+                Array.Resize(ref itemSpriteRenderers, Shop.FOR_SALE_COUNT);
             }
-        }
 
-        private void OnDestroy()
-        {
-            RemovePlayerShopControl();
+            base.OnValidate();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace NijiDive.Controls.Movement
     {
         protected override Vector2 MoveAxis => Vector2.right;
 
-        public override void FixedUpdate()
+        public override void Use()
         {
             Move(mob.LastInputs.lStick.x);
         }

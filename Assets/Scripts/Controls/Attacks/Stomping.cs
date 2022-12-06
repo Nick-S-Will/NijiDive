@@ -8,7 +8,7 @@ namespace NijiDive.Controls.Attacks
     public class Stomping : Attacking
     {
 
-        public override void FixedUpdate()
+        public override void Use()
         {
             TryStomp();
         }

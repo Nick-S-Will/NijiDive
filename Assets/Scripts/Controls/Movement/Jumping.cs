@@ -26,7 +26,7 @@ namespace NijiDive.Controls.Movement
 
         private Coroutine jumpBuffering;
 
-        public override void FixedUpdate()
+        public override void Use()
         {
             if (mob.LastGroundCheck)
             {

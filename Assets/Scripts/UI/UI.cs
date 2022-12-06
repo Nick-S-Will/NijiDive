@@ -3,14 +3,15 @@ using UnityEngine;
 
 namespace NijiDive.UI
 {
-    public abstract class BaseUI : MonoBehaviour
+    public abstract class UI : MonoBehaviour
     {
         private Coroutine visibleRoutine;
 
         [HideInInspector] public bool visibilityIsLocked;
 
-        public abstract void UpdateShape();
+        public virtual void UpdateShape() { }
 
+        public abstract bool IsVisible { get; }
         public abstract void SetVisible(bool visible);
 
         private IEnumerator SetVisibleRoutine(float duration)

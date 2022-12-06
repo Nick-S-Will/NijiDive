@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
-using NijiDive.Managers.Persistence;
+// using NijiDive.Managers.Persistence;
 using NijiDive.Controls.Player;
 
 namespace NijiDive.CinemachineAddons
@@ -21,12 +21,14 @@ namespace NijiDive.CinemachineAddons
         protected override void Awake()
         {
             base.Awake();
-            PersistenceManager.OnLoaded.AddListener(SetCamFollow);
+            // PersistenceManager.OnLoaded.AddListener(SetCamFollow);
+            SetCamFollow();
         }
 
         private void SetCamFollow()
         {
-            var playerTransform = PersistenceManager.FindPersistentObjectOfType<PlayerController>().transform;
+            // var playerTransform = PersistenceManager.FindPersistentObjectOfType<PlayerController>().transform;
+            var playerTransform = FindObjectOfType<PlayerController>().transform;
             GetComponent<CinemachineVirtualCamera>().Follow = playerTransform;
         }
 

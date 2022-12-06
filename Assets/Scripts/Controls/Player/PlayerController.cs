@@ -24,6 +24,7 @@ namespace NijiDive.Controls.Player
         [SerializeField] private KeyCode altKey = KeyCode.Escape;
 
         private float xInput, initialGravityScale;
+        private int controlCountAtAwake;
         private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame;
 
         public override HealthData Health => health;
@@ -31,6 +32,7 @@ namespace NijiDive.Controls.Player
         protected override void Awake()
         {
             controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
+            controlCountAtAwake = controls.Count;
             
             base.Awake();
 
@@ -54,7 +56,7 @@ namespace NijiDive.Controls.Player
 
         private void FixedUpdate()
         {
-            FixedUpdate(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame, altDown, altDownThisFrame));
+            UseControls(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame, altDown, altDownThisFrame));
             jumpDownThisFrame = false;
             altDownThisFrame = false;
         }
@@ -66,7 +68,7 @@ namespace NijiDive.Controls.Player
 
         private void SetEnabled(bool enabled)
         {
-            for (int i = 0; i < 5; i++) controls[i].enabled = enabled; // 5 for the base controls assign in awake
+            for (int i = 0; i < controlCountAtAwake; i++) controls[i].enabled = enabled;
 
             Body2d.velocity = Vector2.zero;
             Body2d.gravityScale = enabled ? initialGravityScale : 0f;

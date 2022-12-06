@@ -7,7 +7,7 @@ namespace NijiDive.Controls.Attacks
     [Serializable]
     public class Headbutting : Attacking
     {
-        public override void FixedUpdate()
+        public override void Use()
         {
             TryHeadbutt();
         }

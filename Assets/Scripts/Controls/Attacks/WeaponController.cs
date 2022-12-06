@@ -45,7 +45,7 @@ namespace NijiDive.Controls.Attacks
             else EquipWeapon(startingWeapon);
         }
 
-        public override void FixedUpdate()
+        public override void Use()
         {
             if (!mob.LastGroundCheck && mob.LastInputs.actionDownThisFrame) TryShoot();
         }
