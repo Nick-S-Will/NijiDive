@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 855ab008900dc494f87c0606a9dbc41f, type: 3}
-  m_Name: Test Onigiri
+  m_Name: Test Soup
   m_EditorClassIdentifier: 
-  shopSprite: {fileID: 6007972847206479736, guid: cdcfbfe0181b89f46bea940cc06f8f9b, type: 3}
-  uiSprite: {fileID: 1591675177918900086, guid: 0506c0dad6e82f44098c04700066c691, type: 3}
-  baseCost: 1
+  sprite: {fileID: -3411160391176968068, guid: cdcfbfe0181b89f46bea940cc06f8f9b, type: 3}
+  uiSprite: {fileID: -8283222066077679320, guid: 0506c0dad6e82f44098c04700066c691, type: 3}
+  description: Heals 4 Health
+  baseCost: 4
   type: 0
-  buffAmount: 1
+  buffAmount: 4

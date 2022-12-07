@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 using NijiDive.Managers.Levels;
 using NijiDive.Controls.UI;
@@ -26,8 +25,9 @@ namespace NijiDive.Managers.UI
 
         private void Start()
         {
-            if (LevelManager.singleton.WorldIndex == 0) gameObject.SetActive(false);
+            SetAllVisibleUI(false);
 
+            Player = FindObjectOfType<PlayerController>();
             GivePlayerUIControl();
         }
 
@@ -46,12 +46,22 @@ namespace NijiDive.Managers.UI
             _ = Player.RemoveControlType<UIControl>();
         }
 
+        public void SetAllVisibleUI(bool visible)
+        {
+            foreach (var ui in GetComponentsInChildren<NijiDive.UI.UI>(true)) ui.SetVisible(visible);
+        }
+        [ContextMenu("Show All UI")]
+        public void ShowAllUI() => SetAllVisibleUI(true);
+        [ContextMenu("Hide All UI")]
+        public void HideAllUI() => SetAllVisibleUI(false);
+
+
         private void OnDestroy()
         {
             if (singleton != this) return;
                 
-            singleton = null;
             RemovePlayerUIControl();
+            singleton = null;
         }
     }
 }

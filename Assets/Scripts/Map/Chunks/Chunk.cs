@@ -33,18 +33,18 @@ namespace NijiDive.Map.Chunks
         [Serializable]
         public class EntityPosition
         {
-            public GameObject entity;
+            public GameObject entityPrefab;
             public Vector3 position;
 
             public EntityPosition(GameObject entity, Vector3 position)
             {
-                this.entity = entity;
+                entityPrefab = entity;
                 this.position = position;
             }
 
             public Transform Spawn(Transform parent, Vector3 positionOffset = default)
             {
-                return Instantiate(entity, position + positionOffset, Quaternion.identity, parent).transform;
+                return Instantiate(entityPrefab, position + positionOffset, Quaternion.identity, parent).transform;
             }
         }
     }

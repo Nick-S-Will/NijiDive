@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using NijiDive.Managers.Coins;
 using NijiDive.Controls.Player;
 using NijiDive.Controls.Attacks;
-using NijiDive.Items;
+using NijiDive.MenuItems;
 using NijiDive.Utilities;
 
 namespace NijiDive.Entities

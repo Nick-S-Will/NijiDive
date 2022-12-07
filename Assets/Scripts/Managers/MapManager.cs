@@ -12,7 +12,7 @@ namespace NijiDive.Managers.Map
         [SerializeField] private Tilemap groundMap, platformMap;
         [SerializeField] private Grid entityGrid;
         [SerializeField] private LayerMask groundMask;
-        [SerializeField] private bool generateAtAwake = true;
+        [SerializeField] private bool generateAtStart = true;
 
         [Header("Visualizers")]
         [SerializeField] private Color gizmoColor = Color.red;
@@ -49,7 +49,7 @@ namespace NijiDive.Managers.Map
         private void Start()
         {
             currentLevel = LevelManager.singleton.GetCurrentLevel();
-            if (currentLevel && generateAtAwake) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
+            if (currentLevel && generateAtStart) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
         }
 
         #region Chunk Bounds
@@ -71,7 +71,11 @@ namespace NijiDive.Managers.Map
         {
             groundMap.SetTilesBlock(chunkBounds, chunk.groundTiles);
             platformMap.SetTilesBlock(chunkBounds, chunk.platformTiles);
-            foreach (var entity in chunk.entities) _ = entity.Spawn(entityGrid.transform, chunkBounds.min);
+            foreach (var entity in chunk.entities)
+            {
+                try { _ = entity.Spawn(entityGrid.transform, chunkBounds.min); } 
+                catch (System.NullReferenceException) { Debug.LogError($"Chunk \"{chunk.name}\" has a null entity."); }
+            }
         }
 
         private void AddSideChunks(Chunk baseChunk, BoundsInt baseBounds)

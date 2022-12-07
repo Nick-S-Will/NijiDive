@@ -24,7 +24,6 @@ namespace NijiDive.UI
             foreRenderer.transform.parent.localScale = scale;
         }
         
-        [ContextMenu("Update Shape")]
         public override void UpdateShape()
         {
             base.UpdateShape();

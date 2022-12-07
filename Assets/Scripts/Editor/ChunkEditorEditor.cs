@@ -16,9 +16,10 @@ namespace NijiDive.Editors
             serializedObject.Update();
             DrawPropertiesExcluding(serializedObject, exclude);
             if (GUILayout.Button("Load Chunk")) chunkEditor.LoadChunk();
+            if (GUILayout.Button($"Overwrite {nameof(chunkEditor.ToLoad)}")) chunkEditor.OverwriteChunk();
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty(exclude[0]));
-            if (GUILayout.Button("Save Chunk")) chunkEditor.SaveChunk();
+            if (GUILayout.Button("Save New Chunk")) chunkEditor.SaveChunk();
 
             GUILayout.Space(10f);
             if (GUILayout.Button("Clear Editor")) chunkEditor.ClearEditor();

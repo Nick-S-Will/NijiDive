@@ -1,11 +1,12 @@
 using UnityEngine;
 
-namespace NijiDive.Items
+namespace NijiDive.MenuItems
 {
-    public abstract class Upgrade : Item
+    [CreateAssetMenu(menuName = "NijiDive/Menu Items/Upgrade")]
+    public class Upgrade : MenuItem
     {
         public Sprite MenuSprite => sprite;
-        public Sprite UISprite => uiSprite;
+        public Sprite HUDSprite => uiSprite;
 
         public virtual void Equip()
         {

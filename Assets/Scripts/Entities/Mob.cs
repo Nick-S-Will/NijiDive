@@ -68,9 +68,9 @@ namespace NijiDive.Entities
             OnDeath.AddListener(Death);
         }
 
-        protected void UseControls(InputData inputs)
+        protected void UseControls(InputData inputs, bool performCollisionChecks = true)
         {
-            UpdateCollisions(inputs.lStick.x);
+            if (performCollisionChecks) UpdateCollisionChecks(inputs.lStick.x);
 
             var dot = Vector2.Dot(transform.right, velocity.normalized);
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
@@ -116,7 +116,7 @@ namespace NijiDive.Entities
             if (GetControlType<T>() == null) controls.Add(newControl);
             else
             {
-                Debug.LogError($"Cannot add duplicate control type {nameof(T)}", this);
+                Debug.LogError($"Cannot add duplicate control type {newControl.GetType()}", this);
             }
         }
         public T RemoveControlType<T>() where T : Control
@@ -135,7 +135,7 @@ namespace NijiDive.Entities
         #endregion
 
         #region Collision Checks
-        private void UpdateCollisions(float localRightInput)
+        private void UpdateCollisionChecks(float localRightInput)
         {
             LastGroundCheck = GroundCheck();
             LastEdgeCheck = EdgeCheck(localRightInput);

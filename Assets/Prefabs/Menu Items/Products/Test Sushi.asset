@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 855ab008900dc494f87c0606a9dbc41f, type: 3}
   m_Name: Test Sushi
   m_EditorClassIdentifier: 
-  shopSprite: {fileID: -6654516189515558260, guid: cdcfbfe0181b89f46bea940cc06f8f9b, type: 3}
+  sprite: {fileID: -6654516189515558260, guid: cdcfbfe0181b89f46bea940cc06f8f9b, type: 3}
   uiSprite: {fileID: 93275403000630002, guid: 0506c0dad6e82f44098c04700066c691, type: 3}
+  description: Heals 2 Health
   baseCost: 2
   type: 0
   buffAmount: 2

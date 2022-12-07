@@ -353,7 +353,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   entities:
-  - entity: {fileID: 6332574470993927560, guid: 3c540ca543bde904ba136c2912ec2b3b, type: 3}
+  - entityPrefab: {fileID: 6332574470993927560, guid: 3c540ca543bde904ba136c2912ec2b3b, type: 3}
     position: {x: 7.5, y: 5.5, z: 0}
   leftChunk: {fileID: 0}
   rightChunk: {fileID: 0}

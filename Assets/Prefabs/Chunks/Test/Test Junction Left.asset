@@ -353,17 +353,17 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   entities:
-  - entity: {fileID: 5915131502278509979, guid: e96c373740ec5c74186524305fd62ef0, type: 3}
-    position: {x: 6.5, y: 2, z: 0}
-  - entity: {fileID: 2957843517561446908, guid: 35cdb47f7ada51e44835d0f3d97c1385, type: 3}
-    position: {x: 9.5, y: 7.5, z: 0}
-  - entity: {fileID: 8439716142641332695, guid: 5c376e431ae6d0042837573ed571c112, type: 3}
+  - entityPrefab: {fileID: 8439716142641332695, guid: 5c376e431ae6d0042837573ed571c112, type: 3}
     position: {x: 0.5, y: 6, z: 0}
-  - entity: {fileID: 5573888039873527181, guid: a983edc10755f174caeb6c1bdf6feb81, type: 3}
+  - entityPrefab: {fileID: 5573888039873527181, guid: a983edc10755f174caeb6c1bdf6feb81, type: 3}
     position: {x: 2.5, y: 10, z: 0}
-  - entity: {fileID: 5573888039873527181, guid: a983edc10755f174caeb6c1bdf6feb81, type: 3}
+  - entityPrefab: {fileID: 5573888039873527181, guid: a983edc10755f174caeb6c1bdf6feb81, type: 3}
     position: {x: 10.5, y: 6, z: 0}
-  - entity: {fileID: 5573888039873527181, guid: a983edc10755f174caeb6c1bdf6feb81, type: 3}
+  - entityPrefab: {fileID: 5573888039873527181, guid: a983edc10755f174caeb6c1bdf6feb81, type: 3}
     position: {x: 11.5, y: 0, z: 0}
+  - entityPrefab: {fileID: 5915131502278509979, guid: e96c373740ec5c74186524305fd62ef0, type: 3}
+    position: {x: 6.5, y: 2, z: 0}
+  - entityPrefab: {fileID: 2957843517561446908, guid: 35cdb47f7ada51e44835d0f3d97c1385, type: 3}
+    position: {x: 9.5, y: 7.5, z: 0}
   leftChunk: {fileID: 11400000, guid: 399c64ebde7548d468151f639b1360c7, type: 2}
   rightChunk: {fileID: 0}

@@ -132,11 +132,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7e9f39f6ed77d43ae791c18ae98e4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnPlayerContact:
+    m_PersistentCalls:
+      m_Calls: []
   productOptions:
   - {fileID: 11400000, guid: fcb4bce9a3fda6d46adb2bcefa1aa678, type: 2}
   - {fileID: 11400000, guid: cac38f44effec3b41abd6a32163f19a2, type: 2}
   - {fileID: 11400000, guid: 041c4518ee7368640bc9da3d80f5b2c6, type: 2}
-  slots:
+  productSlotRenderers:
   - {fileID: 6332574470807821155}
   - {fileID: 6332574471281153669}
   - {fileID: 6332574471936994984}

@@ -25,21 +25,23 @@ namespace NijiDive.Controls.Player
 
         private float xInput, initialGravityScale;
         private int controlCountAtAwake;
-        private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame;
+        private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame, performCollisionChecks;
 
         public override HealthData Health => health;
 
         protected override void Awake()
         {
             controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
-            controlCountAtAwake = controls.Count;
-            
+
             base.Awake();
+
+            initialGravityScale = Body2d.gravityScale;
+            controlCountAtAwake = controls.Count;
+            performCollisionChecks = true;
 
             LevelManager.singleton.OnLoadLevel.AddListener(MoveToWorldStartPosition);
             LevelManager.singleton.OnLoadLevel.AddListener(Enable);
             LevelManager.singleton.OnLoadUpgrading.AddListener(Disable);
-            initialGravityScale = Body2d.gravityScale;
         }
 
         private void Update()
@@ -56,7 +58,7 @@ namespace NijiDive.Controls.Player
 
         private void FixedUpdate()
         {
-            UseControls(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame, altDown, altDownThisFrame));
+            UseControls(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame, altDown, altDownThisFrame), performCollisionChecks);
             jumpDownThisFrame = false;
             altDownThisFrame = false;
         }
@@ -72,6 +74,7 @@ namespace NijiDive.Controls.Player
 
             Body2d.velocity = Vector2.zero;
             Body2d.gravityScale = enabled ? initialGravityScale : 0f;
+            performCollisionChecks = enabled;
         }
         private void Enable() => SetEnabled(true);
         private void Disable() => SetEnabled(false);

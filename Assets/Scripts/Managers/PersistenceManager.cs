@@ -80,14 +80,22 @@ namespace NijiDive.Managers.Persistence
 
         public void HideObjects()
         {
-            if (persistentObjectInstances == null)
+            if (!IsShowingPersistentObjects)
             {
                 Debug.LogWarning("No persistent objects to hide");
                 return;
             }
 
-            foreach (var gameObject in persistentObjectInstances) DestroyImmediate(gameObject);
-            persistentObjectInstances = null;
+            if (Application.isPlaying)
+            {
+                Debug.LogError("Persistent objects can't be showing in play mode");
+                Application.Quit();
+            }
+            else
+            {
+                foreach (var gameObject in persistentObjectInstances) DestroyImmediate(gameObject);
+                persistentObjectInstances = null;
+            }
         }
 #endif
 

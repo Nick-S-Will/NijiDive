@@ -9,10 +9,15 @@ namespace NijiDive.UI
 
         [HideInInspector] public bool visibilityIsLocked;
 
+        [ContextMenu("Update Shape")]
         public virtual void UpdateShape() { }
 
         public abstract bool IsVisible { get; }
         public abstract void SetVisible(bool visible);
+        [ContextMenu("Show UI")]
+        public void ShowUI() => SetVisible(true);
+        [ContextMenu("Hide UI")]
+        public void HideUI() => SetVisible(false);
 
         private IEnumerator SetVisibleRoutine(float duration)
         {

@@ -18,7 +18,7 @@ namespace NijiDive.UI
 
         public override bool IsVisible => menuPanel.activeSelf;
 
-        public void UpdateSlotPositions()
+        protected void UpdateSlotPositions()
         {
             for (int i = 0; i < itemSpriteRenderers.Length; i++)
             {
@@ -26,7 +26,7 @@ namespace NijiDive.UI
                 itemSpriteRenderers[i].transform.localPosition = xPosition * Vector2.right;
             }
 
-            itemSelectorRenderer.transform.position = itemSpriteRenderers[0].transform.position;
+            UpdateSelectedGraphics();
         }
 
         protected void UpdateSelectedGraphics()
@@ -39,6 +39,8 @@ namespace NijiDive.UI
             menuPanel.SetActive(visible);
             itemSelectorRenderer.gameObject.SetActive(visible);
             foreach (var sr in itemSpriteRenderers) sr.gameObject.SetActive(visible);
+            itemNameText.gameObject.SetActive(visible);
+            itemDescriptionText.gameObject.SetActive(visible);
         }
 
         protected void SetEventListeners(UnityEvent[] events, UnityAction[] actions, bool add)

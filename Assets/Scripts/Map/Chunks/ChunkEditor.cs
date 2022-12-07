@@ -18,7 +18,9 @@ namespace NijiDive.Map.Chunks
         [Space]
         public string newChunkFileName = "New Chunk";
 
-        private static readonly BoundsInt EditorBounds = new BoundsInt(new Vector3Int(0, 1 - Constants.CHUNK_SIZE, 0), Chunk.BoundSize);
+        private static readonly BoundsInt EditorBounds = new BoundsInt(Vector3Int.zero, Chunk.BoundSize);
+
+        public Chunk ToLoad => toLoad;
 
         public void LoadChunk()
         {
@@ -30,13 +32,25 @@ namespace NijiDive.Map.Chunks
 
             ClearEntities();
 
+            Undo.RecordObjects(new Object[] { groundMap, platformMap }, "Chunk Editor Tile Clear");
             groundMap.SetTilesBlock(EditorBounds, toLoad.groundTiles);
             platformMap.SetTilesBlock(EditorBounds, toLoad.platformTiles);
-            foreach (var entityPosition in toLoad.entities)
+            CreateEntities();
+        }
+
+        public void OverwriteChunk()
+        {
+            if (toLoad == null)
             {
-                var entity = (GameObject)PrefabUtility.InstantiatePrefab(entityPosition.entity, entityGrid.transform);
-                entity.transform.position = entityPosition.position + EditorBounds.min;
+                Debug.LogError($"{nameof(ToLoad)} must be assigned to overwrite", this);
+                return;
             }
+
+            Undo.RecordObject(toLoad, "Chunk Editor Overwrite");
+            toLoad.groundTiles = groundMap.GetTilesBlock(EditorBounds);
+            toLoad.platformTiles = platformMap.GetTilesBlock(EditorBounds);
+            toLoad.entities = GetEntityPositions();
+            AssetDatabase.SaveAssets();
         }
 
         public static bool SaveChunkAsset(Chunk newChunk, string nameSuffix = "")
@@ -52,7 +66,7 @@ namespace NijiDive.Map.Chunks
             return true;
         }
 
-        public static void ForceSaveChunkAsset(Chunk newChunk)
+        public static void SaveChunkAssetSafe(Chunk newChunk)
         {
             if (SaveChunkAsset(newChunk)) return;
 
@@ -74,11 +88,43 @@ namespace NijiDive.Map.Chunks
             newChunk.platformTiles = platformMap.GetTilesBlock(EditorBounds);
             newChunk.entities = GetEntityPositions();
 
-            ForceSaveChunkAsset(newChunk);
+            SaveChunkAssetSafe(newChunk);
+        }
+
+        // Based on code from https://answers.unity.com/questions/1587818/how-to-undo-a-lot-of-created-objects-at-once-2.html
+        private void CreateEntities()
+        {
+            int undoID = Undo.GetCurrentGroup();
+
+            foreach (var entityPosition in toLoad.entities)
+            {
+                if (entityPosition.entityPrefab == null)
+                {
+                    Debug.LogWarning($"Chunk \"{toLoad.name}\" has a null entity.");
+                    continue;
+                }
+
+                var entity = (GameObject)PrefabUtility.InstantiatePrefab(entityPosition.entityPrefab, entityGrid.transform);
+                entity.transform.position = entityPosition.position + EditorBounds.min;
+                Undo.RegisterCreatedObjectUndo(entity, "Entity Spawn");
+                Undo.CollapseUndoOperations(undoID);
+            }
+        }
+        private void ClearEntities()
+        {
+            int undoID = Undo.GetCurrentGroup();
+
+            foreach (Transform child in entityGrid.transform.Cast<Transform>().ToList())
+            {
+                Undo.DestroyObjectImmediate(child.gameObject);
+                Undo.CollapseUndoOperations(undoID);
+            }
         }
 
         public void ClearEditor()
         {
+            Undo.RecordObjects(new Object[] { groundMap, platformMap }, "Chunk Editor Tile Clear");
+
             groundMap.ClearAllTiles();
             platformMap.ClearAllTiles();
             ClearEntities();
@@ -95,11 +141,6 @@ namespace NijiDive.Map.Chunks
             }
 
             return entities.ToArray();
-        }
-
-        private void ClearEntities()
-        {
-            foreach (Transform child in entityGrid.transform.Cast<Transform>().ToList()) DestroyImmediate(child.gameObject);
         }
     }
 }

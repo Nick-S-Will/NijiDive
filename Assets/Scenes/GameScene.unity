@@ -793,7 +793,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 264
-  generateAtAwake: 1
+  generateAtStart: 1
   gizmoColor: {r: 1, g: 0, b: 0, a: 0.5019608}
   showLastDamagePoint: 0
   showNextChunkBounds: 0

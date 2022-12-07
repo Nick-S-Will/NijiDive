@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using NijiDive.Managers.Levels;
 using NijiDive.Managers.UI;
 using NijiDive.Controls.UI;
-using NijiDive.Items;
+using NijiDive.MenuItems;
 using NijiDive.Utilities;
 
 namespace NijiDive.UI
@@ -15,6 +15,7 @@ namespace NijiDive.UI
     {
         [Space]
         public UnityEvent OnSelect;
+        [SerializeField] private Character[] characters;
         [SerializeField] private List<Upgrade> upgradeOptions;
 
         private Upgrade[] upgradesToPickFrom = new Upgrade[BASE_UPGRADE_COUNT];
@@ -30,9 +31,15 @@ namespace NijiDive.UI
             SetMenuControls(true);
         }
 
-        #region Update Graphics
         private void AssignUpgradesToPickFrom()
         {
+            if (LevelManager.singleton.WorldIndex == 0)
+            {
+                upgradesToPickFrom = characters;
+                return;
+            }
+
+            upgradesToPickFrom = new Upgrade[BASE_UPGRADE_COUNT];
             var shuffledUpgrades = upgradeOptions.ToArray();
             shuffledUpgrades.Shuffle();
 
@@ -64,7 +71,6 @@ namespace NijiDive.UI
 
             UpdateSelectedGraphicsAndText();
         }
-        #endregion
 
         protected override void SetMenuControls(bool enabled)
         {
@@ -114,7 +120,7 @@ namespace NijiDive.UI
 
         private void OnDestroy()
         {
-            SetMenuControls(false);
+            if (UIManager.singleton) SetMenuControls(false);
         }
     }
 }

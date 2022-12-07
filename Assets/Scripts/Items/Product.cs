@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace NijiDive.Items
+namespace NijiDive.MenuItems
 {
-    [CreateAssetMenu(menuName = "NijiDive/Items/Product")]
-    public class Product : Item
+    [CreateAssetMenu(menuName = "NijiDive/Menu Items/Product")]
+    public class Product : MenuItem
     {
         [SerializeField] [Min(1)] private int baseCost = 100;
         [Space]

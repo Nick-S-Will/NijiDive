@@ -209,7 +209,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5915131502278509979}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5915131502125494342}
@@ -256,6 +256,7 @@ MonoBehaviour:
   coinsToDrop: 4
   walking:
     mob: {fileID: 0}
+    enabled: 0
     OnStartMove:
       m_PersistentCalls:
         m_Calls: []
@@ -266,6 +267,7 @@ MonoBehaviour:
     minVelocity: 0.1
   stomping:
     mob: {fileID: 0}
+    enabled: 0
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -279,6 +281,7 @@ MonoBehaviour:
     damage: 1
   shoving:
     mob: {fileID: 0}
+    enabled: 0
     OnDamage:
       m_PersistentCalls:
         m_Calls: []

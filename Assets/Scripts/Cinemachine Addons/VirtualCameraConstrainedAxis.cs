@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
-// using NijiDive.Managers.Persistence;
 using NijiDive.Controls.Player;
+using NijiDive.Managers.Levels;
 
 namespace NijiDive.CinemachineAddons
 {
@@ -21,15 +21,24 @@ namespace NijiDive.CinemachineAddons
         protected override void Awake()
         {
             base.Awake();
-            // PersistenceManager.OnLoaded.AddListener(SetCamFollow);
+
+            if (!Application.isPlaying) return;
+            
             SetCamFollow();
+            LevelManager.singleton.OnLoadUpgrading.AddListener(MoveCamFollowToMinusOffset2D);
         }
 
         private void SetCamFollow()
         {
-            // var playerTransform = PersistenceManager.FindPersistentObjectOfType<PlayerController>().transform;
             var playerTransform = FindObjectOfType<PlayerController>().transform;
             GetComponent<CinemachineVirtualCamera>().Follow = playerTransform;
+        }
+
+        // Places camera at [0, 0]
+        private void MoveCamFollowToMinusOffset2D()
+        {
+            var offset2D = (Vector2)GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+            GetComponent<CinemachineVirtualCamera>().Follow.position = -offset2D;
         }
 
         protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
