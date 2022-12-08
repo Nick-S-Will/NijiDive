@@ -9,12 +9,8 @@ using NijiDive.Controls.UI;
 
 namespace NijiDive.UI
 {
-    public class ShopUI : UIMenu
+    public class ShopUI : UIMenuItemStore
     {
-        [Space]
-        public UnityEvent<int> OnPurchase;
-        public UnityEvent OnBroke;
-
         private Shop shop;
 
         private void Awake()
@@ -22,11 +18,10 @@ namespace NijiDive.UI
             Shop.OnShopSpawn.AddListener(SetShop);
         }
 
-        private void Start()
+        protected override void Start()
         {
-            OnOpen.AddListener(UpdateProductSprites);
-            OnOpen.AddListener(DisablePlayerWalking);
-            OnClose.AddListener(EnablePlayerWalking);
+            base.Start();
+            OnOpen.AddListener(() => UpdateMenuItemSprites(shop.GetProducts()));
         }
 
         private void SetShop(Shop shop)
@@ -35,40 +30,6 @@ namespace NijiDive.UI
             this.shop = shop;
             shop.OnPlayerContact.AddListener(SetMenuControls);
         }
-
-        private void UpdateSelectedGraphicsAndText()
-        {
-            UpdateSelectedGraphics();
-            var product = shop.GetProduct(SelectedIndex);
-            itemNameText.text = product ? product.name : string.Empty;
-            itemDescriptionText.text = product ? product.Description : string.Empty;
-        }
-
-        private void UpdateProductSprites()
-        {
-            for (int i = 0; i < itemSpriteRenderers.Length; i++)
-            {
-                var product = shop.GetProduct(i);
-                itemSpriteRenderers[i].sprite = product ? product.UISprite : null;
-            }
-
-            UpdateSelectedGraphicsAndText();
-        }
-
-        public override void SetVisible(bool visible)
-        {
-            if (IsVisible == visible) return;
-
-            if (visible) OnOpen?.Invoke();
-            else OnClose.Invoke();
-
-            base.SetVisible(visible);
-        }
-
-        #region Setting Shop Controls
-        private void SetPlayerWalking(bool enabled) => UIManager.singleton.Player.GetControlType<LocalRightAnalogMoving>().enabled = enabled;
-        private void EnablePlayerWalking() => SetPlayerWalking(true);
-        private void DisablePlayerWalking() => SetPlayerWalking(false);
 
         protected override void SetMenuControls(bool enabled)
         {
@@ -84,8 +45,7 @@ namespace NijiDive.UI
                 new UnityAction[] { Select, Exit, NavigateLeft, NavigateRight },
                 enabled);
         }
-        #endregion
-
+        
         #region UI Control
         public override void Select()
         {
@@ -112,7 +72,7 @@ namespace NijiDive.UI
         private void Navigate(int indexDirection)
         {
             SelectedIndex = (SelectedIndex + indexDirection + Shop.FOR_SALE_COUNT) % Shop.FOR_SALE_COUNT;
-            UpdateSelectedGraphicsAndText();
+            UpdateSelectedGraphicsAndText(shop.GetProduct(SelectedIndex));
 
             OnNavigate?.Invoke();
         }

@@ -40,8 +40,6 @@ namespace NijiDive.Controls.Player
             performCollisionChecks = true;
 
             LevelManager.singleton.OnLoadLevel.AddListener(MoveToWorldStartPosition);
-            LevelManager.singleton.OnLoadLevel.AddListener(Enable);
-            LevelManager.singleton.OnLoadUpgrading.AddListener(Disable);
         }
 
         private void Update()
@@ -72,14 +70,13 @@ namespace NijiDive.Controls.Player
         {
             for (int i = 0; i < controlCountAtAwake; i++) controls[i].enabled = enabled;
 
-            Body2d.velocity = Vector2.zero;
             Body2d.gravityScale = enabled ? initialGravityScale : 0f;
+            if (!enabled) Body2d.velocity = Vector2.zero;
             performCollisionChecks = enabled;
         }
-        private void Enable() => SetEnabled(true);
-        private void Disable() => SetEnabled(false);
+        public void Enable() => SetEnabled(true);
+        public void Disable() => SetEnabled(false);
 
-        // TODO: Add pause menu and only make player pause when it's open
         public override void Pause(bool pause) { }
     }
 }

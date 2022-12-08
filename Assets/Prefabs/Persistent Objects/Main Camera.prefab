@@ -487,6 +487,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6599d249fa3f55b4eb7efead99695b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visibleOnLevelLoad:
+  - {fileID: 5658170065271444511}
+  - {fileID: 8156900298081158023}
+  - {fileID: 8156900299065559287}
 --- !u!1 &5658170065368630674
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,6 +551,12 @@ MonoBehaviour:
       m_Calls: []
   menuPanel: {fileID: 5658170065415217058}
   itemSelectorRenderer: {fileID: 5658170065925925393}
+  OnPurchase:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBroke:
+    m_PersistentCalls:
+      m_Calls: []
   itemSpriteRenderers:
   - {fileID: 5658170065446325014}
   - {fileID: 5658170064811646510}
@@ -554,12 +564,6 @@ MonoBehaviour:
   itemNameText: {fileID: 6205844040895917604}
   itemDescriptionText: {fileID: 5630612953243278548}
   slotSpacing: 2.75
-  OnPurchase:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBroke:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &5658170065415217058
 GameObject:
   m_ObjectHideFlags: 0

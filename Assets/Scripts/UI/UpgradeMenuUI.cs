@@ -11,10 +11,8 @@ using NijiDive.Utilities;
 
 namespace NijiDive.UI
 {
-    public class UpgradeMenuUI : UIMenu
+    public class UpgradeMenuUI : UIMenuItemStore
     {
-        [Space]
-        public UnityEvent OnSelect;
         [SerializeField] private Character[] characters;
         [SerializeField] private List<Upgrade> upgradeOptions;
 
@@ -23,12 +21,14 @@ namespace NijiDive.UI
         private static HashSet<Upgrade> equippedUpgrades = new HashSet<Upgrade>();
         private const int BASE_UPGRADE_COUNT = 3;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             AssignUpgradesToPickFrom();
-            DisplayUpgradeSprites();
+            UpdateMenuItemSprites(upgradesToPickFrom);
 
             SetMenuControls(true);
+            OnOpen?.Invoke();
         }
 
         private void AssignUpgradesToPickFrom()
@@ -54,24 +54,6 @@ namespace NijiDive.UI
             }
         }
 
-        private void UpdateSelectedGraphicsAndText()
-        {
-            UpdateSelectedGraphics();
-            itemNameText.text = upgradesToPickFrom[SelectedIndex].name;
-            itemDescriptionText.text = upgradesToPickFrom[SelectedIndex].Description;
-        }
-
-        private void DisplayUpgradeSprites()
-        {
-            for (int i = 0; i < itemSpriteRenderers.Length; i++)
-            {
-                var upgrade = upgradesToPickFrom[i];
-                itemSpriteRenderers[i].sprite = upgrade.MenuSprite;
-            }
-
-            UpdateSelectedGraphicsAndText();
-        }
-
         protected override void SetMenuControls(bool enabled)
         {
             if (UIManager.singleton.Player == null) return;
@@ -93,13 +75,13 @@ namespace NijiDive.UI
             equippedUpgrades.Add(upgrade);
             LevelManager.singleton.CompleteUpgrade();
 
-            OnSelect?.Invoke();
+            OnPurchase?.Invoke(0);
         }
 
         private void Navigate(int indexDirection)
         {
             SelectedIndex = (SelectedIndex + indexDirection + BASE_UPGRADE_COUNT) % BASE_UPGRADE_COUNT;
-            UpdateSelectedGraphicsAndText();
+            UpdateSelectedGraphicsAndText(upgradesToPickFrom[SelectedIndex]);
 
             OnNavigate?.Invoke();
         }
@@ -121,6 +103,7 @@ namespace NijiDive.UI
         private void OnDestroy()
         {
             if (UIManager.singleton) SetMenuControls(false);
+            OnClose?.Invoke();
         }
     }
 }

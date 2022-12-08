@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NijiDive.UI
 {
-    public class TextUI : UI
+    public class TextUI : UIBase
     {
         [SerializeField] private SpriteRenderer textPanel;
         [SerializeField] protected TextMesh textMesh;
@@ -23,7 +23,7 @@ namespace NijiDive.UI
 
         public override void UpdateShape()
         {
-            textPanel.transform.localScale = (Vector2)textMesh.GetComponent<MeshRenderer>().bounds.size + (2f * panelBoarderSize * Vector2.one);
+            if (textPanel) textPanel.transform.localScale = (Vector2)textMesh.GetComponent<MeshRenderer>().bounds.size + (2f * panelBoarderSize * Vector2.one);
         }
 
         public override bool IsVisible => textMesh.gameObject.activeSelf;

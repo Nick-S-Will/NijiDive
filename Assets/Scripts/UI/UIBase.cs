@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NijiDive.UI
 {
-    public abstract class UI : MonoBehaviour
+    public abstract class UIBase : MonoBehaviour
     {
         private Coroutine visibleRoutine;
 

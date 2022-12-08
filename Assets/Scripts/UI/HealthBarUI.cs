@@ -28,7 +28,7 @@ namespace NijiDive.UI
             playerHealth = (PlayerHealthData)player.Health;
             playerHealth.OnChangeHealth.AddListener(UpdateHealthBar);
 
-            healthBar.SetBarFill(playerHealth.MaxHealth, playerHealth.MaxHealth);
+            UpdateHealthBar();
         }
 
         private void UpdateHealthBar()

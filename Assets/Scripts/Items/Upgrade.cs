@@ -5,8 +5,9 @@ namespace NijiDive.MenuItems
     [CreateAssetMenu(menuName = "NijiDive/Menu Items/Upgrade")]
     public class Upgrade : MenuItem
     {
-        public Sprite MenuSprite => sprite;
-        public Sprite HUDSprite => uiSprite;
+        [SerializeField] private Sprite hudSprite;
+
+        public Sprite HUDSprite => hudSprite;
 
         public virtual void Equip()
         {

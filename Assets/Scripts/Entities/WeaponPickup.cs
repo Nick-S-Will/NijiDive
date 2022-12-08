@@ -35,8 +35,8 @@ namespace NijiDive.Entities
             selectedWeapon = weaponOptions[UnityEngine.Random.Range(0, weaponOptions.Length)];
             weaponNameTextMesh.text = selectedWeapon.name.Substring(0, 1);
 
-            var types = Enum.GetValues(typeof(BuffType));
-            buffType = (BuffType)types.GetValue(UnityEngine.Random.Range(0, types.Length));
+            var buffTypes = new BuffType[] { BuffType.Health, BuffType.Ammo };
+            buffType = buffTypes[UnityEngine.Random.Range(0, buffTypes.Length)];
             pickupBackgroundRenderer.sprite = buffType == BuffType.Health ? healthBackground : ammoBackground;
         }
 

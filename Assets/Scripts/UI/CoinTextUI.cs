@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using NijiDive.Managers.Levels;
 using NijiDive.Managers.Coins;
 using NijiDive.Managers.Pausing;
 
@@ -10,9 +11,13 @@ namespace NijiDive.UI
         [SerializeField] private TextUI coinText;
         [SerializeField] [Min(0f)] private float visibleDuration = 1f;
 
+        private void Awake()
+        {
+            LevelManager.singleton.OnLoadLevelPostStart.AddListener(() => CoinManager.singleton.OnCoinChange.AddListener(UpdateCoinText));
+        }
+
         private void Start()
         {
-            CoinManager.singleton.OnCoinChange.AddListener(UpdateCoinText);
             PauseManager.OnSetPause.AddListener(UpdateTextVisible);
         }
 

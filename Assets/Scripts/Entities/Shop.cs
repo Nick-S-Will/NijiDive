@@ -5,7 +5,6 @@ using UnityEngine.Events;
 
 using NijiDive.Managers.Coins;
 using NijiDive.Controls.Player;
-using NijiDive.Controls.Attacks;
 using NijiDive.MenuItems;
 using NijiDive.Utilities;
 
@@ -52,7 +51,7 @@ namespace NijiDive.Entities
         {
             for (int i = 0; i < productsForSale.Length; i++)
             {
-                var sprite = inStock[i] ? productsForSale[i].ShopSprite : null;
+                var sprite = inStock[i] ? productsForSale[i].WorldSprite : null;
                 productSlotRenderers[i].sprite = sprite;
             }
         }
@@ -78,6 +77,15 @@ namespace NijiDive.Entities
 
             return inStock[selectedIndex] ? productsForSale[selectedIndex] : null;
         }
+
+        public Product[] GetProducts()
+        {
+            var products = new Product[productsForSale.Length];
+
+            for (int i = 0; i < productsForSale.Length; i++) products[i] = GetProduct(i);
+            return products;
+        }
+
         /// <summary>
         /// Purchases <see cref="Product"/> at <paramref name="selectedIndex"/> and removes it from stock if in range and in stock
         /// </summary>
@@ -104,15 +112,7 @@ namespace NijiDive.Entities
                 CoinManager.singleton.UseCoins(product.Cost);
                 _ = TakeProduct(index);
 
-                switch (product.BuffType)
-                {
-                    case BuffType.Health:
-                        player.Health.ReceiveHealth(product.BuffAmount);
-                        break;
-                    case BuffType.Ammo:
-                        player.GetControlType<WeaponController>().AddBonusAmmo(product.BuffAmount);
-                        break;
-                }
+                product.UseOn(player);
 
                 return product.Cost;
             }
@@ -120,8 +120,6 @@ namespace NijiDive.Entities
             return 0;
         }
         #endregion
-
-
 
         private void OnTriggerEnter2D(Collider2D collider)
         {

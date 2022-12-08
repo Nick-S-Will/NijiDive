@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -13,7 +14,7 @@ namespace NijiDive.Managers.Levels
         [Space]
         [SerializeField] private World[] worlds;
         [Space]
-        public UnityEvent OnLoadLevel, OnLoadUpgrading;
+        public UnityEvent OnLoadLevel, OnLoadLevelPostStart, OnLoadUpgrading;
 
         public static LevelManager singleton;
 
@@ -28,6 +29,8 @@ namespace NijiDive.Managers.Levels
                 Debug.LogError($"Multiple {nameof(LevelManager)}s found in scene.", this);
                 return;
             }
+
+            OnLoadLevel.AddListener(InvokeOnLoadLevelPostStart);
         }
 
         private void Start()
@@ -44,6 +47,14 @@ namespace NijiDive.Managers.Levels
                 return null;
             }
         }
+
+        private IEnumerator DelayEventOneFrameRoutine(UnityEvent unityEvent)
+        {
+            yield return null;
+
+            unityEvent?.Invoke();
+        }
+        private void InvokeOnLoadLevelPostStart() => _ = StartCoroutine(DelayEventOneFrameRoutine(OnLoadLevelPostStart));
 
         public void CompleteLevel()
         {

@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using NijiDive.Managers.Levels;
+using NijiDive.UI;
 using NijiDive.Controls.UI;
 using NijiDive.Controls.Player;
 
@@ -8,6 +9,8 @@ namespace NijiDive.Managers.UI
 {
     public class UIManager : MonoBehaviour
     {
+        public UIBase[] visibleOnLevelLoad;
+
         public PlayerController Player { get; private set; }
 
         public static UIManager singleton;
@@ -21,12 +24,13 @@ namespace NijiDive.Managers.UI
                 gameObject.SetActive(false);
                 return;
             }
+
+            HideAllUI();
+            LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
         }
 
         private void Start()
         {
-            SetAllVisibleUI(false);
-
             Player = FindObjectOfType<PlayerController>();
             GivePlayerUIControl();
         }
@@ -46,15 +50,29 @@ namespace NijiDive.Managers.UI
             _ = Player.RemoveControlType<UIControl>();
         }
 
-        public void SetAllVisibleUI(bool visible)
+        public void SetAllUIVisible(bool visible)
         {
-            foreach (var ui in GetComponentsInChildren<NijiDive.UI.UI>(true)) ui.SetVisible(visible);
+            foreach (var ui in GetComponentsInChildren<UIBase>(true)) ui.SetVisible(visible);
         }
         [ContextMenu("Show All UI")]
-        public void ShowAllUI() => SetAllVisibleUI(true);
+        public void ShowAllUI() => SetAllUIVisible(true);
         [ContextMenu("Hide All UI")]
-        public void HideAllUI() => SetAllVisibleUI(false);
+        public void HideAllUI() => SetAllUIVisible(false);
 
+        private void SetGameUIVisible(bool visible)
+        {
+            foreach (var ui in visibleOnLevelLoad) ui.SetVisible(visible);
+        }
+        private void ShowGameUI() => SetGameUIVisible(true);
+        private void HideGameUI() => SetGameUIVisible(false);
+
+        private void ShowGameUIAfterWorld0()
+        {
+            if (LevelManager.singleton.WorldIndex == 0) return;
+
+            LevelManager.singleton.OnLoadLevel.RemoveListener(ShowGameUIAfterWorld0);
+            ShowGameUI();
+        }
 
         private void OnDestroy()
         {

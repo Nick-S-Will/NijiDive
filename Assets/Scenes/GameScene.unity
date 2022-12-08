@@ -966,7 +966,7 @@ MonoBehaviour:
   - {fileID: 1027900992748412421, guid: 72631a668be73d34183d09404b6f1bc0, type: 3}
   coinSpawnSpeedMin: 4
   coinSpawnSpeedMax: 8
-  coinEnableDelay: 0.5
+  coinEnableDelay: 0.2
   coinLifeTime: 5
 --- !u!4 &2114206611
 Transform:

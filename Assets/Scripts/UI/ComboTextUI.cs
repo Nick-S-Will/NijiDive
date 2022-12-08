@@ -1,7 +1,6 @@
 using UnityEngine;
 
 using NijiDive.Managers.Combo;
-using NijiDive.Managers.Pausing;
 
 namespace NijiDive.UI
 {

@@ -64,7 +64,7 @@ namespace NijiDive.Controls.Attacks
             OnEquip?.Invoke(currentWeapon);
         }
 
-        private void ReloadCurrentWeapon()
+        public void ReloadCurrentWeapon()
         {
             currentWeapon.Reload();
             OnReload?.Invoke();
