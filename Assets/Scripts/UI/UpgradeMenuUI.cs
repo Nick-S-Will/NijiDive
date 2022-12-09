@@ -24,6 +24,7 @@ namespace NijiDive.UI
         protected override void Start()
         {
             base.Start();
+
             AssignUpgradesToPickFrom();
             UpdateMenuItemSprites(upgradesToPickFrom);
 
@@ -59,7 +60,6 @@ namespace NijiDive.UI
             if (UIManager.singleton.Player == null) return;
 
             var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
-            uiControl.enabled = enabled;
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnSelect, uiControl.OnLeft, uiControl.OnRight },
@@ -73,9 +73,9 @@ namespace NijiDive.UI
             var upgrade = upgradesToPickFrom[SelectedIndex];
             upgrade.Equip();
             equippedUpgrades.Add(upgrade);
-            LevelManager.singleton.CompleteUpgrade();
-
             OnPurchase?.Invoke(0);
+
+            LevelManager.singleton.StartNextLevel();
         }
 
         private void Navigate(int indexDirection)
@@ -91,10 +91,10 @@ namespace NijiDive.UI
 
         protected override void OnValidate()
         {
-            if (itemSpriteRenderers.Length != BASE_UPGRADE_COUNT)
+            var optionTransforms = GetOptionsTransforms();
+            if (optionTransforms.Length != BASE_UPGRADE_COUNT)
             {
-                Debug.LogWarning($"The length of {nameof(itemSpriteRenderers)} must be the same as {nameof(BASE_UPGRADE_COUNT)}");
-                Array.Resize(ref itemSpriteRenderers, BASE_UPGRADE_COUNT);
+                Debug.LogWarning($"The length of {nameof(optionTransforms)} must be the same as {nameof(BASE_UPGRADE_COUNT)}");
             }
 
             base.OnValidate();

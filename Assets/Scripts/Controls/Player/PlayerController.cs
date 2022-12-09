@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,10 +21,10 @@ namespace NijiDive.Controls.Player
         [SerializeField] private Headbutting headbutting;
 
         [Header("Key Mapping")]
-        [SerializeField] private KeyCode jumpKey = KeyCode.Space;
-        [SerializeField] private KeyCode altKey = KeyCode.Escape;
+        [SerializeField] private KeyCode[] jumpKeys = new KeyCode[] { KeyCode.Space };
+        [SerializeField] private KeyCode[] altKeys = new KeyCode[] { KeyCode.Escape };
 
-        private float xInput, initialGravityScale;
+        private Vector2 lStick;
         private int controlCountAtAwake;
         private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame, performCollisionChecks;
 
@@ -35,7 +36,6 @@ namespace NijiDive.Controls.Player
 
             base.Awake();
 
-            initialGravityScale = Body2d.gravityScale;
             controlCountAtAwake = controls.Count;
             performCollisionChecks = true;
 
@@ -44,19 +44,19 @@ namespace NijiDive.Controls.Player
 
         private void Update()
         {
-            xInput = Input.GetAxisRaw("Horizontal");
+            lStick = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-            jumpDown = Input.GetKey(jumpKey);
+            jumpDown = jumpKeys.Any(key => Input.GetKey(key));
             // Different because FixedUpdate won't always line up and catch the single frame
-            if (Input.GetKeyDown(jumpKey)) jumpDownThisFrame = true;
+            if (jumpKeys.Any(key => Input.GetKeyDown(key))) jumpDownThisFrame = true;
 
-            altDown = Input.GetKey(altKey);
-            if (Input.GetKeyDown(altKey)) altDownThisFrame = true;
+            altDown = altKeys.Any(key => Input.GetKey(key));
+            if (altKeys.Any(key => Input.GetKeyDown(key))) altDownThisFrame = true;
         }
 
         private void FixedUpdate()
         {
-            UseControls(new InputData(new Vector2(xInput, 0), jumpDown, jumpDownThisFrame, altDown, altDownThisFrame), performCollisionChecks);
+            UseControls(new InputData(lStick, jumpDown, jumpDownThisFrame, altDown, altDownThisFrame), performCollisionChecks);
             jumpDownThisFrame = false;
             altDownThisFrame = false;
         }
@@ -66,16 +66,20 @@ namespace NijiDive.Controls.Player
             transform.position = LevelManager.singleton.GetCurrentWorldPlayerStart();
         }
 
-        private void SetEnabled(bool enabled)
+        public bool HasBaseFeaturesEnabled() => performCollisionChecks;
+        public void SetBaseFeatures(bool enabled)
         {
             for (int i = 0; i < controlCountAtAwake; i++) controls[i].enabled = enabled;
 
-            Body2d.gravityScale = enabled ? initialGravityScale : 0f;
-            if (!enabled) Body2d.velocity = Vector2.zero;
+            if (enabled) Body2d.velocity = Vector2.zero;
+            Body2d.simulated = enabled;
             performCollisionChecks = enabled;
+
+            var animator = GetComponentInChildren<Animator>();
+            if (animator) animator.enabled = enabled;
         }
-        public void Enable() => SetEnabled(true);
-        public void Disable() => SetEnabled(false);
+        public void EnableBaseFeatures() => SetBaseFeatures(true);
+        public void DisableBaseFeatures() => SetBaseFeatures(false);
 
         public override void Pause(bool pause) { }
     }

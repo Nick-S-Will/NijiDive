@@ -44,12 +44,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSceneName: GameScene
+  upgradeSceneName: UpgradeScene
   worlds:
-  - levels:
+  - name: Surface
+    levels:
     - {fileID: 11400000, guid: 1dd31666f87c3dd41ba37bc7bbdd933b, type: 2}
     playerStartPos: {x: -15.5, y: 11, z: 0}
     color: {r: 1, g: 1, b: 1, a: 1}
-  - levels:
+  - name: "\u306B"
+    levels:
     - {fileID: 11400000, guid: be33d33ac3e7fc94388cd8da009b08b6, type: 2}
     playerStartPos: {x: 0, y: 0.5, z: 0}
     color: {r: 0.5019608, g: 0, b: 1, a: 1}
+  OnLoadLevel:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadLevelPostStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoadUpgrading:
+    m_PersistentCalls:
+      m_Calls: []

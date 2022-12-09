@@ -287,8 +287,8 @@ MonoBehaviour:
       m_Bits: 8
     damageType: 1073741828
     damage: 2147483647
-  jumpKey: 32
-  altKey: 27
+  jumpKeys: 200000004a010000
+  altKeys: 1b0000005001000051010000
 --- !u!114 &7649105879380685375
 MonoBehaviour:
   m_ObjectHideFlags: 0

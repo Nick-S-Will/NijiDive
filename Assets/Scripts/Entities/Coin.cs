@@ -40,7 +40,7 @@ namespace NijiDive.Entities
 
         public override void Pause(bool paused)
         {
-            if (IsPaused == paused) return;
+            if (IsPaused == paused || this == null) return;
 
             enabled = !paused;
             body2D.simulated = enabled;

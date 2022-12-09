@@ -382,7 +382,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4591131922772883436}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4591131922460366509}
@@ -404,8 +404,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visibilityIsLocked: 0
-  textMesh: {fileID: 4031043984806107965}
   textPanel: {fileID: 0}
+  textMesh: {fileID: 4031043984806107965}
   panelBoarderSize: 0.25
   backRenderer: {fileID: 4591131922460366508}
   foreRenderer: {fileID: 4591131922451564324}

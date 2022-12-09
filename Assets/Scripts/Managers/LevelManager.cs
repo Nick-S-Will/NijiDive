@@ -48,6 +48,11 @@ namespace NijiDive.Managers.Levels
             }
         }
 
+        public string GetLevelName()
+        {
+            return $"{worlds[WorldIndex].name} - {LevelIndex + 1}";
+        }
+
         private IEnumerator DelayEventOneFrameRoutine(UnityEvent unityEvent)
         {
             yield return null;
@@ -62,10 +67,9 @@ namespace NijiDive.Managers.Levels
             OnLoadUpgrading?.Invoke();
         }
 
-        public void CompleteUpgrade()
+        public void StartNextLevel()
         {
-            LevelIndex++;
-            if (LevelIndex >= worlds[WorldIndex].levels.Length)
+            if (++LevelIndex >= worlds[WorldIndex].levels.Length)
             {
                 WorldIndex++;
                 LevelIndex = 0;
@@ -73,6 +77,13 @@ namespace NijiDive.Managers.Levels
 
             SceneManager.LoadScene(gameSceneName);
             OnLoadLevel?.Invoke();
+        }
+
+        public void Restart()
+        {
+            WorldIndex = 0;
+
+            StartNextLevel();
         }
 
         public Vector3 GetCurrentWorldPlayerStart()
@@ -93,6 +104,7 @@ namespace NijiDive.Managers.Levels
         [Serializable]
         private class World
         {
+            public string name;
             public Level[] levels;
             public Vector3 playerStartPos;
             public Color color = Color.white;

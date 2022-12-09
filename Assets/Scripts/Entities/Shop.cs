@@ -135,7 +135,7 @@ namespace NijiDive.Entities
 
         private void OnTriggerExit2D(Collider2D collider)
         {
-            if (player == null) return;
+            if (player == null || !player.HasBaseFeaturesEnabled()) return;
 
             if (player == collider.GetComponent<PlayerController>())
             {

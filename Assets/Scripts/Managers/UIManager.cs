@@ -25,21 +25,18 @@ namespace NijiDive.Managers.UI
                 return;
             }
 
-            HideAllUI();
-            LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
-        }
-
-        private void Start()
-        {
             Player = FindObjectOfType<PlayerController>();
             GivePlayerUIControl();
+
+            HideAllUI();
+            LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
         }
 
         private void GivePlayerUIControl()
         {
             var uiControl = new UIControl();
             uiControl.mob = Player;
-            uiControl.enabled = false;
+            uiControl.enabled = true;
 
             Player.AddControlType(uiControl);
         }

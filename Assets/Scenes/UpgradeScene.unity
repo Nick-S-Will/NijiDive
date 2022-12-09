@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144233594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: -0, z: 0}
+  m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2128717336}
@@ -1514,17 +1514,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   menuPanel: {fileID: 164258643}
-  itemSelectorRenderer: {fileID: 378744442}
-  itemSpriteRenderers:
-  - {fileID: 144233596}
-  - {fileID: 1949560786}
-  - {fileID: 2031747560}
-  itemNameText: {fileID: 665881917}
-  itemDescriptionText: {fileID: 576278211}
-  slotSpacing: 3
-  OnSelect:
+  optionSelector: {fileID: 378744442}
+  optionsParent: {fileID: 2128717336}
+  optionSpacing: {x: 3, y: 0}
+  OnPurchase:
     m_PersistentCalls:
       m_Calls: []
+  OnBroke:
+    m_PersistentCalls:
+      m_Calls: []
+  itemNameText: {fileID: 665881917}
+  itemDescriptionText: {fileID: 576278211}
   characters:
   - {fileID: 11400000, guid: 6534bcc9f7cdc2e4088b25a177fc5a10, type: 2}
   - {fileID: 11400000, guid: f76d5957bd1ea0c46954a80d7ca2ee59, type: 2}

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,9 +25,9 @@ namespace NijiDive.UI
 
         private void SetShop(Shop shop)
         {
-            if (shop) shop.OnPlayerContact.RemoveListener(SetMenuControls);
+            if (this.shop) this.shop.OnPlayerContact.RemoveListener(SetMenuControls);
             this.shop = shop;
-            shop.OnPlayerContact.AddListener(SetMenuControls);
+            this.shop.OnPlayerContact.AddListener(SetMenuControls);
         }
 
         protected override void SetMenuControls(bool enabled)
@@ -38,7 +37,6 @@ namespace NijiDive.UI
             UIManager.singleton.Player.GetControlType<Jumping>().enabled = !enabled;
 
             var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
-            uiControl.enabled = enabled;
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnSelect, uiControl.OnCancel, uiControl.OnLeft, uiControl.OnRight },
@@ -58,7 +56,7 @@ namespace NijiDive.UI
             int cost = shop.TryPurchase(SelectedIndex);
             if (cost > 0)
             {
-                itemSpriteRenderers[SelectedIndex].sprite = null;
+                GetOption<SpriteRenderer>(SelectedIndex).sprite = null;
                 OnPurchase?.Invoke(cost);
             }
             else OnBroke?.Invoke();
@@ -82,10 +80,10 @@ namespace NijiDive.UI
 
         protected override void OnValidate()
         {
-            if (itemSpriteRenderers.Length != Shop.FOR_SALE_COUNT)
+            var optionTransforms = GetOptionsTransforms();
+            if (optionTransforms.Length != Shop.FOR_SALE_COUNT)
             {
-                Debug.LogWarning($"The length of {nameof(itemSpriteRenderers)} must be the same as {nameof(Shop.FOR_SALE_COUNT)}");
-                Array.Resize(ref itemSpriteRenderers, Shop.FOR_SALE_COUNT);
+                Debug.LogWarning($"The length of {nameof(optionTransforms)} must be the same as {nameof(Shop.FOR_SALE_COUNT)}");
             }
 
             base.OnValidate();

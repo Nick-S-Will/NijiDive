@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,27 +11,83 @@ namespace NijiDive.UI
         public UnityEvent OnOpen, OnClose, OnNavigate;
         [Space]
         [SerializeField] private GameObject menuPanel;
-        [SerializeField] private SpriteRenderer itemSelectorRenderer;
+        [SerializeField] private SpriteRenderer optionSelector;
+        [SerializeField] private Transform optionsParent;
+        [Space]
+        [SerializeField] private Vector2 optionSpacing;
+
+        protected float OptionSpacingX => optionSpacing.x;
+        protected float OptionSpacingY => optionSpacing.y;
 
         public int SelectedIndex { get; protected set; }
 
         protected virtual void Start()
         {
-            OnOpen.AddListener(UIManager.singleton.Player.Disable);
-            OnClose.AddListener(UIManager.singleton.Player.Enable);
+            OnOpen.AddListener(UIManager.singleton.Player.DisableBaseFeatures);
+            OnOpen.AddListener(UpdateSelectedGraphics);
+            OnClose.AddListener(UIManager.singleton.Player.EnableBaseFeatures);
         }
 
-        protected abstract Vector3 GetSelectedPosition();
+        protected int GetOptionCount() => optionsParent.childCount;
+
+        protected T GetOption<T>(int index) where T : Component
+        {
+            if (optionsParent == null) return default;
+
+            var child = optionsParent.GetChild(index);
+            return child.GetComponent<T>();
+        }
+
+        protected T[] GetOptions<T>() where T : Component
+        {
+            if (optionsParent == null) return new T[0];
+
+            return optionsParent.GetComponentsInChildren<T>();
+        }
+
+        /// <summary>
+        /// Gets all of <see cref="optionsParent"/>'s children. Used since <see cref="GetOptions{T}"/> would include the parent transform
+        /// </summary>
+        protected Transform[] GetOptionsTransforms()
+        {
+            if (optionsParent == null) return new Transform[0];
+
+            return optionsParent.Cast<Transform>().ToArray();
+        }
+
+        protected virtual (Vector2, Vector2) GetSelectedPositionAndSize(Transform selectedTransform)
+        {
+            return (selectedTransform.position, Vector2.one);
+        }
+
         protected void UpdateSelectedGraphics()
         {
-            itemSelectorRenderer.transform.position = GetSelectedPosition();
+            if (optionsParent == null || SelectedIndex >= optionsParent.childCount) return;
+
+            var positionSize = GetSelectedPositionAndSize(optionsParent.GetChild(SelectedIndex));
+            optionSelector.transform.position = positionSize.Item1;
+            optionSelector.size = positionSize.Item2;
+        }
+
+        protected void UpdateOptionPositions()
+        {
+            var optionTransforms = GetOptionsTransforms();
+            for (int i = 0; i < optionTransforms.Length; i++)
+            {
+                var xPosition = (i * OptionSpacingX) - ((optionTransforms.Length - 1) / 2f * OptionSpacingX);
+                var yPosition = (i * OptionSpacingY) - ((optionTransforms.Length - 1) / 2f * OptionSpacingY);
+                optionTransforms[i].localPosition = new Vector2(xPosition, yPosition);
+            }
+
+            UpdateSelectedGraphics();
         }
 
         public override bool IsVisible => menuPanel.activeSelf;
         public override void SetVisible(bool visible)
         {
             menuPanel.SetActive(visible);
-            itemSelectorRenderer.gameObject.SetActive(visible);
+            optionSelector.gameObject.SetActive(visible);
+            optionsParent.gameObject.SetActive(visible);
 
             if (!Application.isPlaying) return;
 
@@ -38,6 +95,9 @@ namespace NijiDive.UI
             else OnClose.Invoke();
         }
 
+        /// <summary>
+        /// Adds <paramref name="actions"/> as listeners to <paramref name="events"/> or removes them based on <paramref name="add"/>. Arrays must be the same length
+        /// </summary>
         protected void SetEventListeners(UnityEvent[] events, UnityAction[] actions, bool add)
         {
             if (events.Length != actions.Length)
@@ -56,5 +116,10 @@ namespace NijiDive.UI
         public virtual void NavigateRight() { }
         public virtual void NavigateDown() { }
         public virtual void NavigateUp() { }
+
+        protected virtual void OnValidate()
+        {
+            UpdateOptionPositions();
+        }
     }
 }
