@@ -8,17 +8,17 @@ namespace NijiDive.Map.Tiles
     public class BreakableTile : Tile, IDamageable
     {
         ///<see cref="GameObject"/> is the source object which broke this tile
-        public UnityEvent<GameObject> OnBreak;
+        public UnityEvent<MonoBehaviour> OnBreak;
         [Space]
         [SerializeField] private DamageType vulnerableTypes = DamageType.Player | DamageType.Projectile;
 
         public DamageType VulnerableTypes => vulnerableTypes;
 
-        public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
+        public bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
         {
             if (vulnerableTypes.IsVulnerableTo(damageType))
             {
-                OnBreak?.Invoke(sourceObject);
+                OnBreak?.Invoke(sourceBehaviour);
                 return true;
             }
 

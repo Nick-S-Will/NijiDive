@@ -10,6 +10,8 @@ namespace NijiDive.Entities
     [RequireComponent(typeof(Collider2D))]
     public class WeaponPickup : Entity
     {
+        [SerializeField] private float flashInterval = 1f;
+        [Space]
         [SerializeField] private SpriteRenderer pickupBackgroundRenderer;
         [SerializeField] private TextMesh weaponNameTextMesh;
         [Space]
@@ -38,6 +40,8 @@ namespace NijiDive.Entities
             var buffTypes = new BuffType[] { BuffType.Health, BuffType.Ammo };
             buffType = buffTypes[UnityEngine.Random.Range(0, buffTypes.Length)];
             pickupBackgroundRenderer.sprite = buffType == BuffType.Health ? healthBackground : ammoBackground;
+
+            PeriodicFlashing(pickupBackgroundRenderer, flashInterval);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

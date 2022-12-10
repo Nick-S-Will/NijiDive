@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40ea6751469740d41a8a5eccf6560cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 0}
+  flashDuration: 0
   colorOscillationSpeed: 2.5
   minColorMultiplier: 0.5
 --- !u!58 &6536627058970588843

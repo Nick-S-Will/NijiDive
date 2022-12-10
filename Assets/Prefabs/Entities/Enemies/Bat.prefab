@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b0e4f717de94645adf797bfc7308c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: 08f1d4e5cb911a64294b215c7de000ec, type: 2}
+  flashDuration: 0.1
   OnDeath:
     m_PersistentCalls:
       m_Calls: []

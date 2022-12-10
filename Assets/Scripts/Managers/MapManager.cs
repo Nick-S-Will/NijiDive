@@ -151,12 +151,12 @@ namespace NijiDive.Managers.Map
             return null;
         }
 
-        public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
+        public bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
         {
             damagePoint = point;
 
             var tileCell = groundMap.WorldToCell(point);
-            if (groundMap.GetTile(tileCell) is IDamageable damageable && damageable.TryDamage(sourceObject, damage, damageType, point))
+            if (groundMap.GetTile(tileCell) is IDamageable damageable && damageable.TryDamage(sourceBehaviour, damage, damageType, point))
             {
                 groundMap.SetTile(tileCell, null);
             }

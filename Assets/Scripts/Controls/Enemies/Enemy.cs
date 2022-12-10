@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Managers.Mobs;
+using NijiDive.Managers.Entities;
 using NijiDive.Entities;
 using NijiDive.Health;
 
@@ -14,7 +14,7 @@ namespace NijiDive.Controls.Enemies
         public override HealthData Health => health;
         public int CoinCount => coinsToDrop;
 
-        protected static Transform Target => MobManager.singleton.Target;
+        protected static Transform Target => EntityManager.singleton.Target;
 
         protected override void Awake() => base.Awake();
 

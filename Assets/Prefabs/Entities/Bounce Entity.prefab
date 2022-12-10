@@ -128,6 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fb70e686dc10134ca68b2376738d956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 0}
+  flashDuration: 0
+  vulnerableTypes: 1073741825
   bounceSpeed: 7
   minVelocity: 0.1
 --- !u!60 &5573888039873527180

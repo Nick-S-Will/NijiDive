@@ -16,7 +16,7 @@ namespace NijiDive.Controls.Attacks
         private void TryStomp()
         {
             var collider = CheckBounds(mob.GroundCheckBounds);
-            if (collider && TryDamageCollider(mob.gameObject, collider, damageType, damage, mob.transform.position))
+            if (collider && TryDamageCollider(mob, collider, damageType, damage, mob.transform.position))
             {
                 OnDamage?.Invoke();
                 if (IsDead(collider)) OnKill?.Invoke();

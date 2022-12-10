@@ -13,6 +13,7 @@ namespace NijiDive.Entities
     [RequireComponent(typeof(Collider2D))]
     public class Shop : Entity
     {
+        [Space]
         public UnityEvent<bool> OnPlayerContact;
 
         [SerializeField] private List<Product> productOptions;

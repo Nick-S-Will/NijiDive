@@ -4,9 +4,11 @@ namespace NijiDive.Entities
 {
     public class BounceEntity : Entity, IDamageable
     {
+        [Space]
         [SerializeField] private DamageType vulnerableTypes = DamageType.Player | DamageType.Projectile;
         [Space]
-        [SerializeField] [Min(0f)] private float bounceSpeed = 2f, minVelocity = 0.1f;
+        [SerializeField] [Min(0f)] private float bounceSpeed = 2f;
+        [SerializeField] [Min(0f)] private float minVelocity = 0.1f;
 
         public float BounceSpeed => bounceSpeed;
 
@@ -20,7 +22,7 @@ namespace NijiDive.Entities
             }
         }
 
-        public bool TryDamage(GameObject sourceObject, int damage, DamageType damageType, Vector2 point)
+        public bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
         {
             if (vulnerableTypes.IsVulnerableTo(damageType))
             {

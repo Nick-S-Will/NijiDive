@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.Mobs;
+using NijiDive.Managers.Entities;
 using NijiDive.Managers.Coins;
 
 namespace NijiDive.Entities
@@ -22,8 +22,7 @@ namespace NijiDive.Entities
         {
             body2D = GetComponent<Rigidbody2D>();
             coinCollider = GetComponent<Collider2D>();
-            target = MobManager.singleton.Target;
-            Physics2D.IgnoreCollision(coinCollider, target.GetComponent<Collider2D>());
+            target = EntityManager.singleton.Target;
 
             OnCollect.AddListener(SelfDestruct);
         }
@@ -31,6 +30,7 @@ namespace NijiDive.Entities
         private void FixedUpdate()
         {
             var maxCollectDistance = body2D.velocity.magnitude * Time.fixedDeltaTime + coinCollider.bounds.extents.magnitude;
+            // Done this was so that coins are like triggers to the player but like colliders with other objects
             if (Vector3.Distance(transform.position, target.position) < maxCollectDistance)
             {
                 CoinManager.singleton.CollectCoin(value);

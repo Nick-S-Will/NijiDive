@@ -14,7 +14,6 @@ namespace NijiDive.Managers.Persistence
         private GameObject[] persistentObjectInstances;
 
         public static UnityEvent OnLoaded = new UnityEvent();
-        private static Scene persistentScene;
         private static bool loaded;
 
         // Added second condition because loading script causes null array to be set to 0 length
@@ -26,9 +25,7 @@ namespace NijiDive.Managers.Persistence
             {
                 if (IsShowingPersistentObjects) HideObjects();
 
-                var gameObjects = SpawnPersistentObjects();
-                foreach (var gameObject in gameObjects) DontDestroyOnLoad(gameObject);
-                if (gameObjects.Length > 0) persistentScene = gameObjects[0].scene;
+                _ = SpawnPersistentObjects();
 
                 loaded = true;
             }
@@ -52,7 +49,13 @@ namespace NijiDive.Managers.Persistence
             return instances.ToArray();
         }
 
-        private GameObject[] SpawnPersistentObjects() => SpawnPersistentObjects(Instantiate);
+        private GameObject[] SpawnPersistentObjects()
+        {
+            var gameObjects = SpawnPersistentObjects(Instantiate);
+            foreach (var gameObject in gameObjects) DontDestroyOnLoad(gameObject);
+
+            return gameObjects;
+        }
 
 #if UNITY_EDITOR
         private GameObject[] SpawnPersistentObjectsAsPrefabs() => SpawnPersistentObjects(PrefabUtility.InstantiatePrefab);
@@ -98,17 +101,6 @@ namespace NijiDive.Managers.Persistence
             }
         }
 #endif
-
-        public static T FindPersistentObjectOfType<T>()
-        {
-            foreach (var gameObject in persistentScene.GetRootGameObjects())
-            {
-                T obj = gameObject.GetComponentInChildren<T>();
-                if (obj != null) return obj;
-            }
-
-            return default;
-        }
 
         [Serializable]
         private class PersistentObject

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.Mobs;
+using NijiDive.Managers.Entities;
 using NijiDive.Entities;
 
 namespace NijiDive.Managers.Coins
@@ -40,7 +40,7 @@ namespace NijiDive.Managers.Coins
                 return;
             }
 
-            foreach (var m in MobManager.singleton.Mobs)
+            foreach (var m in EntityManager.singleton.Mobs)
             {
                 if (m is ICoinDropping) m.OnDeath.AddListener(SpawnCoins);
             }
@@ -69,7 +69,7 @@ namespace NijiDive.Managers.Coins
             }
         }
 
-        private void ParseAndSpawnCoinSizes(Vector3 spawnPoint, int coins)
+        public void ParseAndSpawnCoinSizes(Vector3 spawnPoint, int coins)
         {
             var coinValues = Enum.GetValues(typeof(CoinValue));
             var sizeCount = new int[coinValues.Length];
@@ -84,7 +84,7 @@ namespace NijiDive.Managers.Coins
         }
 
         /// Has this signature to fit <see cref="Mob.OnDeath"/>
-        private void SpawnCoins(MonoBehaviour killedMob, GameObject mobKiller, DamageType damageType)
+        private void SpawnCoins(MonoBehaviour killedMob, MonoBehaviour mobKiller, DamageType damageType)
         {
             var coinDropper = killedMob.GetComponent<ICoinDropping>();
             if (coinDropper != null) ParseAndSpawnCoinSizes(killedMob.transform.position, coinDropper.CoinCount);

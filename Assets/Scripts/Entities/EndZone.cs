@@ -30,7 +30,7 @@ namespace NijiDive.Entities
                 OnEnd?.Invoke();
                 player.GetControlType<WeaponController>().ReloadCurrentWeapon();
             }
-            else if (entity is Mob mob) mob.OnDeath?.Invoke(mob, gameObject, DamageType.Environment | DamageType.Void);
+            else if (entity is Mob mob) mob.OnDeath?.Invoke(mob, this, DamageType.Environment | DamageType.Void);
         }
     }
 }

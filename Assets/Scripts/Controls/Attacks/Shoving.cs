@@ -17,7 +17,7 @@ namespace NijiDive.Controls.Attacks
             if (!mob.LastWallCheck)
             {
                 var collider = CheckBounds(mob.WallCheckBounds);
-                if (collider && TryDamageCollider(mob.gameObject, collider, damageType, damage, mob.CeilingCheckBounds.center))
+                if (collider && TryDamageCollider(mob, collider, damageType, damage, mob.CeilingCheckBounds.center))
                 {
                     OnDamage?.Invoke();
                     if (IsDead(collider)) OnKill?.Invoke();

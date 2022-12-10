@@ -8,6 +8,7 @@ namespace NijiDive.Entities
 {
     public class PauseZone : Entity
     {
+        [Space]
         [SerializeField] [Min(0f)] private float colorOscillationSpeed = 1f;
         [SerializeField] [Range(0f, 1f)] private float minColorMultiplier = 0.5f;
 
@@ -37,7 +38,7 @@ namespace NijiDive.Entities
             if (entity == null) return;
 
             if (entity is PlayerController) PauseManager.PauseAll();
-            else if (entity is Mob mob) mob.OnDeath?.Invoke(mob, gameObject, DamageType.Environment | DamageType.Void);
+            else if (entity is Mob mob) mob.OnDeath?.Invoke(mob, this, DamageType.Environment | DamageType.Void);
         }
 
         protected virtual void OnTriggerExit2D(Collider2D collision)

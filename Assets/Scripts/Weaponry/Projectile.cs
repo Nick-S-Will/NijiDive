@@ -41,7 +41,7 @@ namespace NijiDive.Weaponry
         // Switched to trigger instead of raycast because raycast doesn't work with composite collider
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (Time.time - startTime > Time.fixedDeltaTime && Attacking.TryDamageCollider(gameObject, collision, damageType, damage, collision.ClosestPoint(transform.position)))
+            if (Time.time - startTime > Time.fixedDeltaTime && Attacking.TryDamageCollider(this, collision, damageType, damage, collision.ClosestPoint(transform.position)))
             {
                 source.OnDamage?.Invoke();
                 if (Attacking.IsDead(collision)) source.OnKill?.Invoke();
