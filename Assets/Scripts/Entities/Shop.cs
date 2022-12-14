@@ -14,6 +14,7 @@ namespace NijiDive.Entities
     public class Shop : Entity
     {
         [Space]
+        // bool is if the contact started or ended
         public UnityEvent<bool> OnPlayerContact;
 
         [SerializeField] private List<Product> productOptions;
@@ -25,6 +26,7 @@ namespace NijiDive.Entities
         private Product[] productsForSale = new Product[FOR_SALE_COUNT];
         private bool[] inStock = new bool[FOR_SALE_COUNT];
 
+        // Shop is the shop that spawned
         public static UnityEvent<Shop> OnShopSpawn = new UnityEvent<Shop>();
         public const int FOR_SALE_COUNT = 3;
 

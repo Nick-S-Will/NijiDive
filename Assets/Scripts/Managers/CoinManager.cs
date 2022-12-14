@@ -40,10 +40,7 @@ namespace NijiDive.Managers.Coins
                 return;
             }
 
-            foreach (var m in EntityManager.singleton.Mobs)
-            {
-                if (m is ICoinDropping) m.OnDeath.AddListener(SpawnCoins);
-            }
+            Mob.OnMobDeath.AddListener(SpawnCoins);
         }
 
         private IEnumerator DelayCoinEnable(Coin coin)

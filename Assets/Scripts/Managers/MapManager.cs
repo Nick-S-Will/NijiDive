@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 using NijiDive.Managers.Levels;
 using NijiDive.Map.Chunks;
 using NijiDive.Map;
+using NijiDive.Map.Tiles;
 
 namespace NijiDive.Managers.Map
 {
@@ -75,6 +76,15 @@ namespace NijiDive.Managers.Map
             {
                 try { _ = entity.Spawn(entityGrid.transform, chunkBounds.min); } 
                 catch (System.NullReferenceException) { Debug.LogError($"Chunk \"{chunk.name}\" has a null entity."); }
+            }
+
+            foreach (var map in maps)
+            {
+                foreach (var cell in chunkBounds.allPositionsWithin)
+                {
+                    var tile = map.GetTile<BaseTile>(cell);
+                    if (tile) tile.Setup(map, cell);
+                }
             }
         }
 

@@ -12,6 +12,7 @@ namespace NijiDive.Controls.Attacks
     {
         [SerializeField] private Weapon startingWeapon;
         [Space]
+        // Weapon is the weapon equipped
         public UnityEvent<Weapon> OnEquip;
         public UnityEvent OnShoot, OnEmpty, OnReload;
 

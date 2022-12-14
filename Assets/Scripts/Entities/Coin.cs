@@ -24,6 +24,7 @@ namespace NijiDive.Entities
             coinCollider = GetComponent<Collider2D>();
             target = EntityManager.singleton.Target;
 
+            OnCollect.AddListener(() => CoinManager.singleton.CollectCoin(value));
             OnCollect.AddListener(SelfDestruct);
         }
 
@@ -31,11 +32,7 @@ namespace NijiDive.Entities
         {
             var maxCollectDistance = body2D.velocity.magnitude * Time.fixedDeltaTime + coinCollider.bounds.extents.magnitude;
             // Done this was so that coins are like triggers to the player but like colliders with other objects
-            if (Vector3.Distance(transform.position, target.position) < maxCollectDistance)
-            {
-                CoinManager.singleton.CollectCoin(value);
-                OnCollect?.Invoke();
-            }
+            if (Vector3.Distance(transform.position, target.position) < maxCollectDistance) OnCollect?.Invoke();
         }
 
         public override void Pause(bool paused)

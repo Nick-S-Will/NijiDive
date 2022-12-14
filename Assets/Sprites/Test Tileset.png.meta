@@ -152,6 +152,9 @@ TextureImporter:
   - first:
       213: -8524922537818104182
     second: Test Tileset_49
+  - first:
+      213: -6427776951384648482
+    second: Test Tileset_50
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -1330,6 +1333,27 @@ TextureImporter:
       bones: []
       spriteID: a8e51ab6e1461b980800000000000000
       internalID: -8524922537818104182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Test Tileset_50
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed456452be2fbc6a0800000000000000
+      internalID: -6427776951384648482
       vertices: []
       indices: 
       edges: []

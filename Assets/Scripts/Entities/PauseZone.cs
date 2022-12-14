@@ -38,7 +38,7 @@ namespace NijiDive.Entities
             if (entity == null) return;
 
             if (entity is PlayerController) PauseManager.PauseAll();
-            else if (entity is Mob mob) mob.OnDeath?.Invoke(mob, this, DamageType.Environment | DamageType.Void);
+            else if (entity is Mob mob) mob.OnDeath?.Invoke(this, DamageType.Environment | DamageType.Void);
         }
 
         protected virtual void OnTriggerExit2D(Collider2D collision)

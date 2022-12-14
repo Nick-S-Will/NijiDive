@@ -11,6 +11,7 @@ namespace NijiDive.Managers.Combo
     [RequireComponent(typeof(PlayerController))]
     public class ComboManager : MonoBehaviour
     {
+        // int is the combo count at the time of the event
         public UnityEvent<int> OnCombo, OnEndCombo;
 
         private PlayerController pc;

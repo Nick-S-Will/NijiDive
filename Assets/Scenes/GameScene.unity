@@ -244,34 +244,34 @@ Tilemap:
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
-      e00: 1.084227e-19
+      e00: 2.5244127e-29
       e01: 0
-      e02: 93.83838
-      e03: 93.83838
-      e10: 7.09e-43
+      e02: -1.3692592e+15
+      e03: -1.3692592e+15
+      e10: 4.46e-43
       e11: 0
-      e12: 2.33e-43
-      e13: 2.33e-43
-      e20: -2.848482e+36
-      e21: -1.091466e-39
-      e22: -4.98328
-      e23: -1.091466e-39
-      e30: 4.5905e-41
-      e31: 7.1e-43
-      e32: 7.08e-43
-      e33: 7.1e-43
+      e12: 4e-45
+      e13: 4e-45
+      e20: -1.9748679e-17
+      e21: 1.7884093e+29
+      e22: -0.0000000011138157
+      e23: 1.7884093e+29
+      e30: 4.5904e-41
+      e31: 4.47e-43
+      e32: 4.44e-43
+      e33: 4.47e-43
   m_TileColorArray:
   - m_RefCount: 0
     m_Data: {r: 6e-45, g: 6e-45, b: 6e-45, a: 6e-45}
   - m_RefCount: 0
     m_Data: {r: 6e-45, g: 6e-45, b: 6e-45, a: 6e-45}
   - m_RefCount: 0
-    m_Data: {r: 4.2513e-41, g: 4.2513e-41, b: 4.2513e-41, a: 4.2513e-41}
+    m_Data: {r: 3.5414e-41, g: 3.5414e-41, b: 3.5414e-41, a: 3.5414e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Origin: {x: -18, y: -22, z: 0}
-  m_Size: {x: 34, y: 75, z: 1}
+  m_Origin: {x: -19, y: -22, z: 0}
+  m_Size: {x: 35, y: 75, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -555,29 +555,29 @@ Tilemap:
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
-      e00: 1.084227e-19
+      e00: 2.5244127e-29
       e01: 0
-      e02: 1.2706774e-26
-      e03: 1.2706774e-26
-      e10: 7.22e-43
+      e02: -1.3692162e+15
+      e03: -1.3692162e+15
+      e10: 4.46e-43
       e11: 0
-      e12: 1.4e-43
-      e13: 1.4e-43
-      e20: -221406200
-      e21: 1.6311522e+29
-      e22: -5.116459
-      e23: 1.6311522e+29
-      e30: 4.5905e-41
-      e31: 7.23e-43
-      e32: 7.2e-43
-      e33: 7.23e-43
+      e12: 4e-45
+      e13: 4e-45
+      e20: -1.9748679e-17
+      e21: 1.7246868e+29
+      e22: -0.0000000014077814
+      e23: 1.7246868e+29
+      e30: 4.5904e-41
+      e31: 4.47e-43
+      e32: 4.44e-43
+      e33: 4.47e-43
   m_TileColorArray:
   - m_RefCount: 0
     m_Data: {r: 6e-45, g: 6e-45, b: 6e-45, a: 6e-45}
   - m_RefCount: 0
     m_Data: {r: 6e-45, g: 6e-45, b: 6e-45, a: 6e-45}
   - m_RefCount: 0
-    m_Data: {r: 3.8323e-41, g: 3.8323e-41, b: 3.8323e-41, a: 3.8323e-41}
+    m_Data: {r: 3.5436e-41, g: 3.5436e-41, b: 3.5436e-41, a: 3.5436e-41}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -873,6 +873,7 @@ MonoBehaviour:
   OnMobDeath:
     m_PersistentCalls:
       m_Calls: []
+  targetTag: Player
   enableDistance: 13
   destroyDistance: 13
 --- !u!1 &1994107538

@@ -13,12 +13,14 @@ namespace NijiDive.Entities
     [RequireComponent(typeof(Collider2D))]
     public abstract class Mob : Entity, IDamageable, IBounceable
     {
-        public UnityEvent<Mob, MonoBehaviour, DamageType> OnDeath;
+        public UnityEvent<MonoBehaviour, DamageType> OnDeath;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] protected DamageType vulnerableTypes;
         [SerializeField] protected float bounceSpeed = 10f;
         [Space]
         [SerializeField] private CollisionData collisions;
+
+        public static UnityEvent<Mob, MonoBehaviour, DamageType> OnMobDeath = new UnityEvent<Mob, MonoBehaviour, DamageType>();
 
         #region Properties
         protected Rigidbody2D Body2d { get; private set; }
@@ -65,6 +67,7 @@ namespace NijiDive.Entities
             }
 
             Health.Reset();
+            OnDeath.AddListener((killedBy, damageType) => OnMobDeath?.Invoke(this, killedBy, damageType));
             OnDeath.AddListener(Death);
         }
 
@@ -88,7 +91,11 @@ namespace NijiDive.Entities
                 Bounce(sourceBehaviour.gameObject, bounceSpeed);
 
                 Health.LoseHealth(damage);
-                if (Health.IsEmpty) OnDeath?.Invoke(this, sourceBehaviour, damageType);
+                if (Health.IsEmpty)
+                {
+                    OnDeath?.Invoke(sourceBehaviour, damageType);
+                    OnMobDeath?.Invoke(this, sourceBehaviour, damageType);
+                }
                 else Flash(spriteRenderer);
             }
 
@@ -241,7 +248,7 @@ namespace NijiDive.Entities
             IsPaused = paused;
         }
 
-        protected virtual void Death(Mob killedMob, MonoBehaviour sourceBehaviour, DamageType damageType)
+        protected virtual void Death(MonoBehaviour sourceBehaviour, DamageType damageType)
         {
             Destroy(gameObject);
         }

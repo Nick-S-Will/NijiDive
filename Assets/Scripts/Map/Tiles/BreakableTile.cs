@@ -1,14 +1,13 @@
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using UnityEngine.Events;
 
 namespace NijiDive.Map.Tiles
 {
     [CreateAssetMenu(menuName = "NijiDive/Tiles/BreakableTile")]
-    public class BreakableTile : Tile, IDamageable
+    public class BreakableTile : BaseTile, IDamageable
     {
-        ///<see cref="GameObject"/> is the source object which broke this tile
-        public UnityEvent<MonoBehaviour> OnBreak;
+        // Vector2 is the position of the break
+        public UnityEvent<Vector2> OnBreak;
         [Space]
         [SerializeField] private DamageType vulnerableTypes = DamageType.Player | DamageType.Projectile;
 
@@ -18,7 +17,7 @@ namespace NijiDive.Map.Tiles
         {
             if (vulnerableTypes.IsVulnerableTo(damageType))
             {
-                OnBreak?.Invoke(sourceBehaviour);
+                OnBreak?.Invoke(point);
                 return true;
             }
 

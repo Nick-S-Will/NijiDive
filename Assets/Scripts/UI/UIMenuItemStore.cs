@@ -7,6 +7,7 @@ namespace NijiDive.UI
 {
     public abstract class UIMenuItemStore : UIMenu
     {
+        // int is the cost of the purchase
         public UnityEvent<int> OnPurchase;
         public UnityEvent OnBroke;
         [SerializeField] protected TextMesh itemNameText, itemDescriptionText;
