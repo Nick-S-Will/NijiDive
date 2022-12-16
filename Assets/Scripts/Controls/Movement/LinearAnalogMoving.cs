@@ -11,7 +11,7 @@ namespace NijiDive.Controls.Movement
         protected override void Move(float input)
         {
             var localMoveAxis = LocalMoveAxis;
-            var xVelocity = mob.velocity.x;
+            var xVelocity = mob.Velocity.x;
 
             if (input == 0f)
             {

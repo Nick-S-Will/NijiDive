@@ -28,6 +28,7 @@ namespace NijiDive.Entities
             OnCollect.AddListener(SelfDestruct);
         }
 
+        // TODO: Add fade effect to coins over lifetime
         private void FixedUpdate()
         {
             var maxCollectDistance = body2D.velocity.magnitude * Time.fixedDeltaTime + coinCollider.bounds.extents.magnitude;

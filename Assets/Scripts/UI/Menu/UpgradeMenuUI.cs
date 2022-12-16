@@ -9,9 +9,9 @@ using NijiDive.Controls.UI;
 using NijiDive.MenuItems;
 using NijiDive.Utilities;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.Menu
 {
-    public class UpgradeMenuUI : UIMenuItemStore
+    public class UpgradeMenuUI : UIItemStore
     {
         [SerializeField] private Character[] characters;
         [SerializeField] private List<Upgrade> upgradeOptions;

@@ -6,18 +6,22 @@ using NijiDive.Managers.Pausing;
 using NijiDive.Managers.Levels;
 using NijiDive.Managers.UI;
 using NijiDive.Controls.UI;
+using NijiDive.Managers.Persistence;
+using NijiDive.Managers.Coins;
+using NijiDive.Managers.Combo;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.Menu
 {
     public class PauseMenuUI : UIMenu
     {
-        [SerializeField] private Vector2 optionBorderSize;
         [Space]
         [SerializeField] protected TextMesh titleText;
         [SerializeField] protected TextMesh levelNameText;
-        [SerializeField] private UnityEvent[] optionEvents;
-        [Space]
         [SerializeField] private UIMenu[] mutuallyExclusiveMenus;
+        [Space]
+        [SerializeField] private UnityEvent[] optionEvents;
+
+        private bool toggleEnabled;
 
         protected void Awake()
         {
@@ -39,20 +43,11 @@ namespace NijiDive.UI
             levelNameText.text = LevelManager.singleton.GetLevelName();
         }
 
-        protected override (Vector2, Vector2) GetSelectedPositionAndSize(Transform selectedTransform)
-        {
-            var textSize = (Vector2)selectedTransform.GetComponent<MeshRenderer>().bounds.size;
-            var position = (Vector2)selectedTransform.position + (textSize.x / 2f * Vector2.right);
-            var size = textSize + optionBorderSize;
-            return (position, size);
-        }
-
         protected override void SetMenuControls(bool enabled)
         {
             var player = UIManager.singleton.Player;
             if (player == null) return;
 
-            player.SetBaseFeatures(!enabled);
             var uiControl = player.GetControlType<UIControl>();
 
             SetEventListeners(
@@ -60,20 +55,6 @@ namespace NijiDive.UI
                 new UnityAction[] { Select, NavigateUp, NavigateDown },
                 enabled);
         }
-
-        private void SetToggleControl(bool enabled)
-        {
-            if (UIManager.singleton.Player == null) return;
-
-            var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
-
-            SetEventListeners(
-                new UnityEvent[] { uiControl.OnCancel },
-                new UnityAction[] { ToggleMenu },
-                enabled);
-        }
-        private void EnableToggle() => SetToggleControl(true);
-        private void DisableToggle() => SetToggleControl(false);
 
         public override void SetVisible(bool visible)
         {
@@ -83,6 +64,7 @@ namespace NijiDive.UI
             levelNameText.gameObject.SetActive(visible);
         }
 
+        #region Toggle
         public void ToggleMenu()
         {
             SetVisible(!IsVisible);
@@ -91,6 +73,23 @@ namespace NijiDive.UI
 
             PauseManager.PauseAll(IsVisible);
         }
+
+        private void SetToggleControl(bool enabled)
+        {
+            if (UIManager.singleton.Player == null || toggleEnabled == enabled) return;
+
+            var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
+
+            SetEventListeners(
+                new UnityEvent[] { uiControl.OnCancel },
+                new UnityAction[] { ToggleMenu },
+                enabled);
+
+            toggleEnabled = enabled;
+        }
+        private void EnableToggle() => SetToggleControl(true);
+        private void DisableToggle() => SetToggleControl(false);
+        #endregion
 
         #region UI Control
         public override void Select()
@@ -110,12 +109,23 @@ namespace NijiDive.UI
         public override void NavigateDown() => Navigate(1);
         #endregion
 
-        #region Pause Options
+        #region Menu Options
         public void Retry()
         {
             ToggleMenu();
 
-            LevelManager.singleton.Restart();
+            // TODO: Create parent class for managers with a reset event to do this
+            UIManager.singleton.Player.Retry();
+            LevelManager.singleton.Retry();
+            CoinManager.Restart();
+            ComboManager.singleton.Retry();
+        }
+
+        // TODO: Add remaining option methods
+        public void RestartToSurface()
+        {
+            PersistenceManager.Restart();
+            LevelManager.singleton.RestartToSurface();
         }
         #endregion
 
@@ -126,6 +136,7 @@ namespace NijiDive.UI
             var optionCount = GetOptionCount();
             if (optionEvents.Length != optionCount)
             {
+                Debug.LogWarning($"{nameof(optionEvents)} must have the same number of elements as options objects.");
                 Array.Resize(ref optionEvents, optionCount);
             }
         }

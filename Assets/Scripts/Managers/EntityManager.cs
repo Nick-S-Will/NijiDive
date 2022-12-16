@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 using NijiDive.Managers.Persistence;
 using NijiDive.Entities;
@@ -10,11 +9,10 @@ namespace NijiDive.Managers.Entities
 {
     public class EntityManager : MonoBehaviour
     {
-        public UnityEvent OnMobDeath;
         [SerializeField] private string targetTag = "Player";
         [SerializeField] private float enableDistance = Constants.CHUNK_SIZE, destroyDistance = Constants.CHUNK_SIZE;
 
-        private List<Transform> disabledEntities = new List<Transform>(), enabledEntities = new List<Transform>();
+        private List<Transform> disabledEntities, enabledEntities;
         private Transform target;
 
         public Entity[] EnabledEntities => enabledEntities.Select(t => t.GetComponent<Entity>()).ToArray();
@@ -43,19 +41,22 @@ namespace NijiDive.Managers.Entities
 
         private void Start()
         {
-            foreach (Transform t in transform)
+            disabledEntities = new List<Transform>();
+            enabledEntities = new List<Transform>();
+            foreach (Transform child in transform)
             {
-                if (t.GetComponent<Entity>() != null)
+                if (child.GetComponent<Entity>() != null)
                 {
-                    disabledEntities.Add(t);
-                    t.gameObject.SetActive(false);
+                    disabledEntities.Add(child);
+                    child.gameObject.SetActive(false);
                 }
             }
         }
 
         private void Update()
         {
-            if (target == null || (disabledEntities.Count == 0 && enabledEntities.Count == 0)) enabled = false;
+            if (disabledEntities.Count == 0 && enabledEntities.Count == 0) enabled = false;
+            if (target == null) return;
 
             EnableEntities();
             DestroyEntities();
@@ -95,14 +96,13 @@ namespace NijiDive.Managers.Entities
 
                 if (mob == null)
                 {
-                    OnMobDeath?.Invoke();
-                    enabledEntities.Remove(mob);
+                    _ = enabledEntities.Remove(mob);
                     continue;
                 }
 
                 if (mob.position.y - target.position.y > destroyDistance)
                 {
-                    enabledEntities.Remove(mob);
+                    _ = enabledEntities.Remove(mob);
                     Destroy(mob.gameObject);
                 }
             }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 using NijiDive.Managers.Combo;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.HUD
 {
     public class ComboTextUI : MonoBehaviour
     {

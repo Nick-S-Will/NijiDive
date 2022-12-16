@@ -29,6 +29,7 @@ namespace NijiDive.Controls.Attacks
                 mob.enabled = false;
             }
             else jumping.OnLand.AddListener(ReloadCurrentWeapon);
+
             var stomping = mob.GetControlType<Stomping>();
             if (stomping == default)
             {
@@ -44,6 +45,18 @@ namespace NijiDive.Controls.Attacks
                 mob.enabled = false;
             }
             else EquipWeapon(startingWeapon);
+        }
+
+        public void Reset()
+        {
+            if (shooting != null)
+            { 
+                mob.StopCoroutine(shooting);
+                shooting = null;
+            }
+
+            bonusAmmo = 0;
+            EquipWeapon(startingWeapon);
         }
 
         public override void Use()

@@ -33,11 +33,10 @@ namespace NijiDive.Controls.Player
         protected override void Awake()
         {
             controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
-
-            base.Awake();
-
             controlCountAtAwake = controls.Count;
             performCollisionChecks = true;
+
+            base.Awake();
 
             LevelManager.singleton.OnLoadLevel.AddListener(MoveToWorldStartPosition);
         }
@@ -61,6 +60,14 @@ namespace NijiDive.Controls.Player
             altDownThisFrame = false;
         }
 
+        public void Retry()
+        {
+            health.Reset();
+            weaponController.Reset();
+
+            EnableBaseFeatures();
+        }
+
         private void MoveToWorldStartPosition()
         {
             transform.position = LevelManager.singleton.GetCurrentWorldPlayerStart();
@@ -71,7 +78,6 @@ namespace NijiDive.Controls.Player
         {
             for (int i = 0; i < controlCountAtAwake; i++) controls[i].enabled = enabled;
 
-            if (enabled) Body2d.velocity = Vector2.zero;
             Body2d.simulated = enabled;
             performCollisionChecks = enabled;
 
@@ -82,5 +88,10 @@ namespace NijiDive.Controls.Player
         public void DisableBaseFeatures() => SetBaseFeatures(false);
 
         public override void Pause(bool pause) { }
+
+        protected override void Death(MonoBehaviour sourceBehaviour, DamageType damageType)
+        {
+            DisableBaseFeatures();
+        }
     }
 }

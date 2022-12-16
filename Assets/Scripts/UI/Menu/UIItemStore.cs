@@ -3,9 +3,9 @@ using UnityEngine.Events;
 
 using NijiDive.MenuItems;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.Menu
 {
-    public abstract class UIMenuItemStore : UIMenu
+    public abstract class UIItemStore : UIMenu
     {
         // int is the cost of the purchase
         public UnityEvent<int> OnPurchase;

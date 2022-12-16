@@ -22,7 +22,7 @@ namespace NijiDive.Controls.Movement
         {
             var localMoveAxis = LocalMoveAxis;
 
-            mob.velocity -= (Vector2)Vector3.Project(mob.velocity, localMoveAxis);
+            mob.Velocity -= (Vector2)Vector3.Project(mob.Velocity, localMoveAxis);
             if (input == 0f)
             {
                 if (wasMoving && IsUnderMinVelocity()) OnStopMove?.Invoke();
@@ -31,7 +31,7 @@ namespace NijiDive.Controls.Movement
             {
                 if (IsUnderMinVelocity()) OnStartMove?.Invoke();
 
-                mob.velocity += (Vector2)(input * moveSpeed * localMoveAxis);
+                mob.Velocity += (Vector2)(input * moveSpeed * localMoveAxis);
             }
 
             wasMoving = !IsUnderMinVelocity();
@@ -39,7 +39,7 @@ namespace NijiDive.Controls.Movement
 
         protected bool IsUnderMinVelocity()
         {
-            return Mathf.Abs(mob.velocity.x) < minVelocity;
+            return Mathf.Abs(mob.Velocity.x) < minVelocity;
         }
     }
 }

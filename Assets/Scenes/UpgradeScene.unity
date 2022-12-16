@@ -280,7 +280,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 11
   m_Sprite: {fileID: 1439849220778586112, guid: b15eb60bd458cc34ca84932642640df1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -431,7 +431,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.5, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1514,9 +1514,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   menuPanel: {fileID: 164258643}
-  optionSelector: {fileID: 378744442}
+  optionSelectorRenderer: {fileID: 378744442}
   optionsParent: {fileID: 2128717336}
   optionSpacing: {x: 3, y: 0}
+  optionBorderSize: {x: 0.5, y: 0.5}
   OnPurchase:
     m_PersistentCalls:
       m_Calls: []
@@ -1565,7 +1566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1400297639
 SpriteRenderer:
   m_ObjectHideFlags: 0

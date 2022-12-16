@@ -9,7 +9,6 @@ namespace NijiDive.UI
 
         [HideInInspector] public bool visibilityIsLocked;
 
-        [ContextMenu("Update Shape")]
         public virtual void UpdateShape() { }
 
         public abstract bool IsVisible { get; }

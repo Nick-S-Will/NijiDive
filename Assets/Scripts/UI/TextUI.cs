@@ -21,6 +21,7 @@ namespace NijiDive.UI
             UpdateShape();
         }
 
+        [ContextMenu("Update Shape")]
         public override void UpdateShape()
         {
             if (textPanel) textPanel.transform.localScale = (Vector2)textMesh.GetComponent<MeshRenderer>().bounds.size + (2f * panelBoarderSize * Vector2.one);

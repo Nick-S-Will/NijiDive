@@ -9,7 +9,7 @@ namespace NijiDive.Managers.UI
 {
     public class UIManager : MonoBehaviour
     {
-        public UIBase[] visibleOnLevelLoad;
+        public UIBase[] consistentGameUI;
 
         public PlayerController Player { get; private set; }
 
@@ -58,7 +58,7 @@ namespace NijiDive.Managers.UI
 
         private void SetGameUIVisible(bool visible)
         {
-            foreach (var ui in visibleOnLevelLoad) ui.SetVisible(visible);
+            foreach (var ui in consistentGameUI) ui.SetVisible(visible);
         }
         private void ShowGameUI() => SetGameUIVisible(true);
         private void HideGameUI() => SetGameUIVisible(false);

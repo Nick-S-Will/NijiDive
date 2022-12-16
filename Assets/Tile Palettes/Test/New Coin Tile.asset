@@ -39,5 +39,5 @@ MonoBehaviour:
       m_Calls: []
   vulnerableTypes: 1073741825
   baseTile: {fileID: 11400000, guid: 4fcd98b1336b02944a348feb8fd65e60, type: 2}
-  coinTileChance: 0.5
+  coinTileChance: 0.05
   coinCount: 6

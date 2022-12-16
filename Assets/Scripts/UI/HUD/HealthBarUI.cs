@@ -3,7 +3,7 @@ using UnityEngine;
 using NijiDive.Controls.Player;
 using NijiDive.Health;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.HUD
 {
     public class HealthBarUI : MonoBehaviour
     {

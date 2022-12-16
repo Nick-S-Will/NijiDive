@@ -50,7 +50,7 @@ namespace NijiDive.Map.Chunks
             toLoad.groundTiles = groundMap.GetTilesBlock(EditorBounds);
             toLoad.platformTiles = platformMap.GetTilesBlock(EditorBounds);
             toLoad.entities = GetEntityPositions();
-            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(toLoad);
         }
 
         public static bool SaveChunkAsset(Chunk newChunk, string nameSuffix = "")

@@ -14,10 +14,12 @@ namespace NijiDive.Managers.Combo
         // int is the combo count at the time of the event
         public UnityEvent<int> OnCombo, OnEndCombo;
 
-        private PlayerController pc;
-        private int currentCombo;
+        private PlayerController playerController;
+        private int currentCombo, maxCombo, totalKillCount;
 
         public int CurrentCombo => currentCombo;
+        public int MaxCombo => maxCombo;
+        public int TotalKillCount => totalKillCount;
 
         public static ComboManager singleton;
 
@@ -34,23 +36,33 @@ namespace NijiDive.Managers.Combo
 
         private void Start()
         {
-            pc = GetComponent<PlayerController>();
-            var stomping = pc.GetControlType<Stomping>();
-            var shooting = pc.GetControlType<WeaponController>();
+            playerController = GetComponent<PlayerController>();
+            var stomping = playerController.GetControlType<Stomping>();
+            var shooting = playerController.GetControlType<WeaponController>();
 
+            playerController.OnDeath.AddListener((monoBehaviour, damageType) => EndCombo());
             stomping.OnKill.AddListener(IncreaseCombo);
             shooting.OnKill.AddListener(IncreaseCombo);
+        }
+
+        public void Retry()
+        {
+            maxCombo = 0;
+            totalKillCount = 0;
         }
 
         private void IncreaseCombo()
         {
             currentCombo++;
+            if (currentCombo > maxCombo) maxCombo = currentCombo;
+            totalKillCount++;
             OnCombo?.Invoke(currentCombo);
         }
 
         private void EndCombo()
         {
             OnEndCombo?.Invoke(currentCombo);
+
             currentCombo = 0;
         }
 
@@ -58,7 +70,7 @@ namespace NijiDive.Managers.Combo
         {
             if (currentCombo == 0) return;
 
-            if (pc.LastGroundCheck && !PauseManager.IsPaused) EndCombo();
+            if (playerController.LastGroundCheck && !PauseManager.IsPaused) EndCombo();
         }
 
         private void OnDestroy()

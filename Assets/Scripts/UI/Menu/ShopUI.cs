@@ -6,9 +6,9 @@ using NijiDive.Entities;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.UI;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.Menu
 {
-    public class ShopUI : UIMenuItemStore
+    public class ShopUI : UIItemStore
     {
         private Shop shop;
 

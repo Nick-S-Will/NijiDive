@@ -22,6 +22,8 @@ namespace NijiDive.Health
             MaxHealth = baseMaxHealth;
             BonusHealth = 0;
             lastDamageTime = -hitInterval;
+
+            OnChangeHealth?.Invoke();
         }
 
         public override void ReceiveHealth(int amount)

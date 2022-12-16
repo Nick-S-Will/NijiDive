@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 namespace NijiDive.Managers.Persistence
 {
@@ -11,27 +10,51 @@ namespace NijiDive.Managers.Persistence
     {
         [SerializeField] private PersistentObject[] persistentObjects;
 
-        private GameObject[] persistentObjectInstances;
-
         public static UnityEvent OnLoaded = new UnityEvent();
-        private static bool loaded;
+
+        private static PersistenceManager singleton;
+        private static GameObject[] persistentObjectInstances;
 
         // Added second condition because loading script causes null array to be set to 0 length
-        public bool IsShowingPersistentObjects => persistentObjectInstances != null && persistentObjectInstances.Length > 0;
-
+        public static bool IsShowingPersistentObjects => persistentObjectInstances != null && persistentObjectInstances.Length > 0;
+        
         private void Awake()
         {
-            if (!loaded)
+            if (singleton == null)
             {
-                if (IsShowingPersistentObjects) HideObjects();
+                if (IsShowingPersistentObjects)
+                {
+                    Debug.LogError("Persistent object previews can't be shown in play mode");
+                    Application.Quit();
+                }
 
-                _ = SpawnPersistentObjects();
+                persistentObjectInstances = SpawnPersistentObjectsAsDontDestroyOnLoad();
 
-                loaded = true;
+                DontDestroyOnLoad(gameObject);
+                singleton = this;
+            }
+        }
+
+        private void Start()
+        {
+            OnLoaded?.Invoke();
+
+            if (singleton != this) Destroy(gameObject);
+        }
+
+        public static void Restart()
+        {
+            if (singleton == null) return;
+
+            if (IsShowingPersistentObjects)
+            {
+                foreach (var gameObject in persistentObjectInstances) Destroy(gameObject);
             }
 
-            OnLoaded?.Invoke();
-            Destroy(gameObject);
+            persistentObjectInstances = null;
+
+            Destroy(singleton.gameObject);
+            singleton = null;
         }
 
         private GameObject[] SpawnPersistentObjects(Func<GameObject, UnityEngine.Object> instantiate)
@@ -49,7 +72,7 @@ namespace NijiDive.Managers.Persistence
             return instances.ToArray();
         }
 
-        private GameObject[] SpawnPersistentObjects()
+        private GameObject[] SpawnPersistentObjectsAsDontDestroyOnLoad()
         {
             var gameObjects = SpawnPersistentObjects(Instantiate);
             foreach (var gameObject in gameObjects) DontDestroyOnLoad(gameObject);
@@ -60,6 +83,9 @@ namespace NijiDive.Managers.Persistence
 #if UNITY_EDITOR
         private GameObject[] SpawnPersistentObjectsAsPrefabs() => SpawnPersistentObjects(PrefabUtility.InstantiatePrefab);
 
+        /// <summary>
+        /// Instantiates objects in <see cref="persistentObjects"/> as prefabs. Only meant for testing outside of play mode
+        /// </summary>
         public void ShowObjects()
         {
             if (Application.isPlaying)
@@ -81,6 +107,9 @@ namespace NijiDive.Managers.Persistence
             persistentObjectInstances = SpawnPersistentObjectsAsPrefabs();
         }
 
+        /// <summary>
+        /// Hides prefabs instatiated in <see cref="ShowObjects"/>. Only meant for testing outside of play mode
+        /// </summary>
         public void HideObjects()
         {
             if (!IsShowingPersistentObjects)
@@ -89,19 +118,13 @@ namespace NijiDive.Managers.Persistence
                 return;
             }
 
-            if (Application.isPlaying)
-            {
-                Debug.LogError("Persistent objects can't be showing in play mode");
-                Application.Quit();
-            }
-            else
+            if (!Application.isPlaying)
             {
                 foreach (var gameObject in persistentObjectInstances) DestroyImmediate(gameObject);
                 persistentObjectInstances = null;
             }
         }
 #endif
-
         [Serializable]
         private class PersistentObject
         {

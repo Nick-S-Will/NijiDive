@@ -14,7 +14,7 @@ namespace NijiDive.Editors
 
             var persistenceManager = (PersistenceManager)target;
 
-            if (persistenceManager.IsShowingPersistentObjects)
+            if (PersistenceManager.IsShowingPersistentObjects)
             {
                 if (GUILayout.Button("Hide Objects")) persistenceManager.HideObjects();
             }

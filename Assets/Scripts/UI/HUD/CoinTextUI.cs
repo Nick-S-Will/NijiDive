@@ -4,7 +4,7 @@ using NijiDive.Managers.Levels;
 using NijiDive.Managers.Coins;
 using NijiDive.Managers.Pausing;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.HUD
 {
     public class CoinTextUI : MonoBehaviour
     {
@@ -23,7 +23,7 @@ namespace NijiDive.UI
 
         private void UpdateCoinText()
         {
-            coinText.SetText(CoinManager.singleton.CoinCount.ToString());
+            coinText.SetText(CoinManager.CoinCount.ToString());
             coinText.SetVisible(visibleDuration);
         }
 

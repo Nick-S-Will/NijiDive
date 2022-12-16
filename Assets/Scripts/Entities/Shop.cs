@@ -23,8 +23,8 @@ namespace NijiDive.Entities
         [SerializeField] private BoxCollider2D purchaseBounds;
 
         private PlayerController player;
-        private Product[] productsForSale = new Product[FOR_SALE_COUNT];
-        private bool[] inStock = new bool[FOR_SALE_COUNT];
+        private readonly Product[] productsForSale = new Product[FOR_SALE_COUNT];
+        private readonly bool[] inStock = new bool[FOR_SALE_COUNT];
 
         // Shop is the shop that spawned
         public static UnityEvent<Shop> OnShopSpawn = new UnityEvent<Shop>();
@@ -110,7 +110,7 @@ namespace NijiDive.Entities
             var product = GetProduct(index);
             if (product == null) return 0;
 
-            if (CoinManager.singleton.CoinCount >= product.Cost)
+            if (CoinManager.CoinCount >= product.Cost)
             {
                 CoinManager.singleton.UseCoins(product.Cost);
                 _ = TakeProduct(index);

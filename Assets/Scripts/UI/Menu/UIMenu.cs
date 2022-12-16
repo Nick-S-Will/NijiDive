@@ -4,17 +4,18 @@ using UnityEngine.Events;
 
 using NijiDive.Managers.UI;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.Menu
 {
     public abstract class UIMenu : UIBase
     {
         public UnityEvent OnOpen, OnClose, OnNavigate;
         [Space]
         [SerializeField] private GameObject menuPanel;
-        [SerializeField] private SpriteRenderer optionSelector;
+        [SerializeField] private SpriteRenderer optionSelectorRenderer;
         [SerializeField] private Transform optionsParent;
         [Space]
-        [SerializeField] private Vector2 optionSpacing;
+        [SerializeField] private Vector2 optionSpacing = Vector2.right + Vector2.down;
+        [SerializeField] private Vector2 optionBorderSize = 0.5f * Vector2.one;
 
         protected float OptionSpacingX => optionSpacing.x;
         protected float OptionSpacingY => optionSpacing.y;
@@ -57,7 +58,14 @@ namespace NijiDive.UI
 
         protected virtual (Vector2, Vector2) GetSelectedPositionAndSize(Transform selectedTransform)
         {
-            return (selectedTransform.position, Vector2.one);
+            var textRenderer = selectedTransform.GetComponent<MeshRenderer>();
+
+            if (textRenderer == null) return (selectedTransform.position, selectedTransform.lossyScale);
+
+            var textSize = (Vector2)textRenderer.bounds.size;
+            var position = (Vector2)selectedTransform.position + (textSize.x / 2f * Vector2.right);
+            var size = textSize;
+            return (position, size);
         }
 
         protected void UpdateSelectedGraphics()
@@ -65,8 +73,8 @@ namespace NijiDive.UI
             if (optionsParent == null || SelectedIndex >= optionsParent.childCount) return;
 
             var positionSize = GetSelectedPositionAndSize(optionsParent.GetChild(SelectedIndex));
-            optionSelector.transform.position = positionSize.Item1;
-            optionSelector.size = positionSize.Item2;
+            optionSelectorRenderer.transform.position = positionSize.Item1;
+            optionSelectorRenderer.size = positionSize.Item2 + optionBorderSize;
         }
 
         protected void UpdateOptionPositions()
@@ -82,11 +90,19 @@ namespace NijiDive.UI
             UpdateSelectedGraphics();
         }
 
+        [ContextMenu("Update Shape")]
+        public override void UpdateShape()
+        {
+            base.UpdateShape();
+
+            UpdateOptionPositions();
+        }
+
         public override bool IsVisible => menuPanel.activeSelf;
         public override void SetVisible(bool visible)
         {
             menuPanel.SetActive(visible);
-            optionSelector.gameObject.SetActive(visible);
+            optionSelectorRenderer.gameObject.SetActive(visible);
             optionsParent.gameObject.SetActive(visible);
 
             if (!Application.isPlaying) return;

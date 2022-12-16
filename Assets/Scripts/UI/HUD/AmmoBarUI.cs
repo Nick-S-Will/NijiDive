@@ -4,7 +4,7 @@ using NijiDive.Controls.Player;
 using NijiDive.Controls.Attacks;
 using NijiDive.Weaponry;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.HUD
 {
     public class AmmoBarUI : MonoBehaviour
     {

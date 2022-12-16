@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.Entities;
 using NijiDive.Entities;
 
 namespace NijiDive.Managers.Coins
@@ -15,11 +14,11 @@ namespace NijiDive.Managers.Coins
         [SerializeField] private Coin[] coinSizes;
         [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f, coinLifeTime = 5f;
 
-        private int coinCount;
-
-        public int CoinCount => coinCount;
-
         public static CoinManager singleton;
+        public static int CoinCount => coinCount;
+        public static int TotalCoinCount => totalCoinCount;
+
+        private static int coinCount, totalCoinCount;
 
         private void Awake()
         {
@@ -41,6 +40,12 @@ namespace NijiDive.Managers.Coins
             }
 
             Mob.OnMobDeath.AddListener(SpawnCoins);
+        }
+
+        public static void Restart()
+        {
+            coinCount = 0;
+            totalCoinCount = 0;
         }
 
         private IEnumerator DelayCoinEnable(Coin coin)
@@ -90,7 +95,9 @@ namespace NijiDive.Managers.Coins
 
         public void CollectCoin(CoinValue value)
         {
-            coinCount += (int)value;
+            var coins = (int)value;
+            coinCount += coins;
+            totalCoinCount += coins;
             OnCoinChange?.Invoke();
         }
         public void UseCoins(int amount)

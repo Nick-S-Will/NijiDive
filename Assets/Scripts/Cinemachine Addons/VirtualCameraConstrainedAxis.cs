@@ -23,7 +23,7 @@ namespace NijiDive.CinemachineAddons
             base.Awake();
 
             if (!Application.isPlaying) return;
-            
+
             SetCamFollow();
             LevelManager.singleton.OnLoadUpgrading.AddListener(MoveCamFollowToMinusOffset2D);
         }
@@ -49,7 +49,7 @@ namespace NijiDive.CinemachineAddons
                 var xShifts = (int)Math.Round((targetPosition.x - xOffset) / Constants.CHUNK_SIZE, MidpointRounding.AwayFromZero);
                 targetPosition.x = xShifts * Constants.CHUNK_SIZE + xOffset;
 
-                if (transitionSpeed == 0f || Time.time < Time.deltaTime)
+                if (transitionSpeed == 0f || Time.timeSinceLevelLoad < Time.deltaTime)
                 {
                     state.RawPosition = targetPosition;
                     prevPos = targetPosition;

@@ -79,9 +79,17 @@ namespace NijiDive.Managers.Levels
             OnLoadLevel?.Invoke();
         }
 
-        public void Restart()
+        public void Retry()
         {
             WorldIndex = 0;
+
+            StartNextLevel();
+        }
+
+        public void RestartToSurface()
+        {
+            WorldIndex = 0;
+            LevelIndex = -1;
 
             StartNextLevel();
         }

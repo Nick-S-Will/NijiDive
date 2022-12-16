@@ -35,7 +35,7 @@ namespace NijiDive.Entities
         public Bounds WallCheckBounds => wallCheckBounds;
         public Bounds CeilingCheckBounds => ceilingCheckBounds;
         public InputData LastInputs { get; private set; }
-        public Vector2 velocity { get => Body2d.velocity; set => Body2d.velocity = value; }
+        public Vector2 Velocity { get => Body2d.velocity; set => Body2d.velocity = value; }
         // Cleaner way to update a single axis of velocity
         public void SetVelocityX(float x) => Body2d.velocity = new Vector2(x, Body2d.velocity.y);
         public void SetVelocityY(float y) => Body2d.velocity = new Vector2(Body2d.velocity.x, y);
@@ -75,7 +75,7 @@ namespace NijiDive.Entities
         {
             if (performCollisionChecks) UpdateCollisionChecks(inputs.lStick.x);
 
-            var dot = Vector2.Dot(transform.right, velocity.normalized);
+            var dot = Vector2.Dot(transform.right, Velocity.normalized);
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
 
             LastInputs = inputs;
@@ -183,7 +183,7 @@ namespace NijiDive.Entities
         /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private Collider2D EdgeCheck(float localRightDirection)
         {
-            var velocityR = Vector3.Project(velocity, transform.right).magnitude;
+            var velocityR = Vector3.Project(Velocity, transform.right).magnitude;
             if (localRightDirection == 0f) localRightDirection = velocityR;
 
             if (localRightDirection == 0f)
@@ -208,7 +208,7 @@ namespace NijiDive.Entities
         /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private Collider2D WallCheck(float localRightDirection)
         {
-            var velocityR = Vector3.Project(velocity, transform.right).magnitude;
+            var velocityR = Vector3.Project(Velocity, transform.right).magnitude;
             if (localRightDirection == 0f) localRightDirection = velocityR;
 
             if (localRightDirection == 0f)

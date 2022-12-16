@@ -17,7 +17,7 @@ namespace NijiDive.Controls.Enemies
         [SerializeField] private Stomping stomping;
         [SerializeField] private Shoving shoving;
 
-        private Vector2 input;
+        private Vector2 inputDirection;
 
         protected override void Awake()
         {
@@ -34,13 +34,13 @@ namespace NijiDive.Controls.Enemies
 
         private void FixedUpdate()
         {
-            UseControls(new InputData(input));
+            UseControls(new InputData(inputDirection));
         }
 
         protected override void CalculateInput()
         {
             var targetDelta = Target.position - transform.position;
-            input = targetDelta.normalized;
+            inputDirection = targetDelta.normalized;
         }
 
         protected override void OnDrawGizmos()
