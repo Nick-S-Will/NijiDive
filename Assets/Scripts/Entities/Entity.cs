@@ -8,7 +8,7 @@ namespace NijiDive.Entities
         [SerializeField] private Material flashMaterial;
         [SerializeField] [Min(0f)] private float flashDuration = 0.1f;
 
-        private Coroutine flashRoutine, periodicFlashRoutine;
+        private Coroutine flashRoutine, periodicFlashRoutine, fadeOutRoutine;
 
         private IEnumerator FlashRoutine(Renderer renderer, float duration)
         {
@@ -22,7 +22,7 @@ namespace NijiDive.Entities
 
             flashRoutine = null;
         }
-        protected void Flash(Renderer renderer)
+        public void Flash(Renderer renderer)
         {
             if (flashRoutine == null) flashRoutine = StartCoroutine(FlashRoutine(renderer, flashDuration));
         }
@@ -41,7 +41,9 @@ namespace NijiDive.Entities
         }
         protected void PeriodicFlashing(Renderer renderer, float flashInterval)
         {
-            if (periodicFlashRoutine == null) periodicFlashRoutine = StartCoroutine(PeriodicFlashingRoutine(renderer, flashInterval));
+            if (periodicFlashRoutine != null) StopCoroutine(periodicFlashRoutine);
+            
+            periodicFlashRoutine = StartCoroutine(PeriodicFlashingRoutine(renderer, flashInterval));
         }
         protected void CancelPeriodicFlashing()
         {
@@ -50,6 +52,36 @@ namespace NijiDive.Entities
                 StopCoroutine(periodicFlashRoutine);
                 periodicFlashRoutine = null;
             }
+        }
+
+        private IEnumerator FadeOutRoutine(Renderer renderer, float fadeDuration)
+        {
+            var spriteRenderer = renderer as SpriteRenderer;
+            var fadeTime = 0f;
+
+            while (fadeTime < fadeDuration)
+            {
+                var color = spriteRenderer ? spriteRenderer.color : renderer.material.color;
+                color.a = Mathf.Lerp(1f, 0f, fadeTime / fadeDuration);
+                if (spriteRenderer) spriteRenderer.color = color;
+                else renderer.material.color = color;
+
+                fadeTime += Time.deltaTime;
+                yield return null;
+            }
+
+            fadeOutRoutine = null;
+        }
+        public void FadeOut(float fadeDuration)
+        {
+            var renderer = GetComponentInChildren<Renderer>();
+            if (renderer == null)
+            {
+                Debug.Log($"{name} has no renderer to fade out");
+                return;
+            }
+
+            if (fadeOutRoutine == null) StartCoroutine(FadeOutRoutine(renderer, fadeDuration));
         }
 
         public virtual bool IsPaused { get; protected set; }

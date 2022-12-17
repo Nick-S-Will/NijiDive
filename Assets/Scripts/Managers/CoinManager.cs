@@ -12,7 +12,9 @@ namespace NijiDive.Managers.Coins
         public UnityEvent OnCoinChange;
         [Space]
         [SerializeField] private Coin[] coinSizes;
-        [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f, coinLifeTime = 5f;
+        [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f;
+        [Tooltip("Set to 0 for indefinite life time")]
+        [SerializeField] [Min(0f)] private float coinLifeTime = 5f;
 
         public static CoinManager singleton;
         public static int CoinCount => coinCount;
@@ -55,6 +57,12 @@ namespace NijiDive.Managers.Coins
             yield return new WaitForSeconds(coinEnableDelay);
 
             coin.enabled = true;
+
+            if (coinLifeTime > 0f)
+            {
+                coin.FadeOut(coinLifeTime);
+                Destroy(coin.gameObject, coinLifeTime);
+            }
         }
 
         #region Coin Spawning
@@ -63,11 +71,10 @@ namespace NijiDive.Managers.Coins
             for (int i = 0; i < count; i++)
             {
                 var coin = Instantiate(coinSizePrefab, spawnPoint, Quaternion.identity, transform);
-                if (coinLifeTime > 0f) Destroy(coin.gameObject, coinLifeTime);
-
+                
                 var body = coin.GetComponent<Rigidbody2D>();
                 body.velocity = UnityEngine.Random.Range(coinSpawnSpeedMin, coinSpawnSpeedMax) * UnityEngine.Random.insideUnitCircle;
-                if (coinEnableDelay > 0f) _ = StartCoroutine(DelayCoinEnable(coin));
+                _ = StartCoroutine(DelayCoinEnable(coin));
             }
         }
 
