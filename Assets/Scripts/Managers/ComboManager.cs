@@ -9,7 +9,7 @@ using NijiDive.Controls.Attacks;
 namespace NijiDive.Managers.Combo
 {
     [RequireComponent(typeof(PlayerController))]
-    public class ComboManager : MonoBehaviour
+    public class ComboManager : Manager
     {
         // int is the combo count at the time of the event
         public UnityEvent<int> OnCombo, OnEndCombo;
@@ -45,11 +45,13 @@ namespace NijiDive.Managers.Combo
             shooting.OnKill.AddListener(IncreaseCombo);
         }
 
-        public void Retry()
+        public override void Retry()
         {
             maxCombo = 0;
             totalKillCount = 0;
         }
+
+        public override void Restart() => Retry();
 
         private void IncreaseCombo()
         {

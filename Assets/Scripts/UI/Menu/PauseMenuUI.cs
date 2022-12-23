@@ -2,13 +2,11 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.Pausing;
+using NijiDive.Managers;
+using NijiDive.Controls.UI;
 using NijiDive.Managers.Levels;
 using NijiDive.Managers.UI;
-using NijiDive.Controls.UI;
-using NijiDive.Managers.Persistence;
-using NijiDive.Managers.Coins;
-using NijiDive.Managers.Combo;
+using NijiDive.Managers.Pausing;
 
 namespace NijiDive.UI.Menu
 {
@@ -40,7 +38,7 @@ namespace NijiDive.UI.Menu
         
         private void UpdateLevelNameText()
         {
-            levelNameText.text = LevelManager.singleton.GetLevelName();
+            levelNameText.text = LevelManager.singleton.GetCurrentLevelName();
         }
 
         protected override void SetMenuControls(bool enabled)
@@ -114,18 +112,13 @@ namespace NijiDive.UI.Menu
         {
             ToggleMenu();
 
-            // TODO: Create parent class for managers with a reset event to do this
-            UIManager.singleton.Player.Retry();
-            LevelManager.singleton.Retry();
-            CoinManager.Restart();
-            ComboManager.singleton.Retry();
+            Manager.RetryAllManagers();
         }
 
         // TODO: Add remaining option methods
         public void RestartToSurface()
         {
-            PersistenceManager.Restart();
-            LevelManager.singleton.RestartToSurface();
+            Manager.RestartAllManagers();
         }
         #endregion
 

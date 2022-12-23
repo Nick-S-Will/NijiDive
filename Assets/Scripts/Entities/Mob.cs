@@ -58,13 +58,7 @@ namespace NijiDive.Entities
             Hitbox = GetComponent<Collider2D>();
             Body2d = GetComponent<Rigidbody2D>();
 
-            foreach (var control in controls)
-            {
-                control.mob = this;
-                control.Awake();
-                control.Start();
-                control.enabled = true;
-            }
+            foreach (var control in controls) control.Setup(this);
 
             Health.Reset();
             OnDeath.AddListener((killedBy, damageType) => OnMobDeath?.Invoke(this, killedBy, damageType));
@@ -79,7 +73,7 @@ namespace NijiDive.Entities
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
 
             LastInputs = inputs;
-            foreach (var control in controls) if (control.enabled) control.Use();
+            foreach (var control in controls) if (control.IsEnabled) control.Use();
         }
 
         public virtual bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)

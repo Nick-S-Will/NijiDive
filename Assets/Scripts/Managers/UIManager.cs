@@ -7,7 +7,7 @@ using NijiDive.Controls.Player;
 
 namespace NijiDive.Managers.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : Manager
     {
         public UIBase[] consistentGameUI;
 
@@ -32,11 +32,13 @@ namespace NijiDive.Managers.UI
             LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
         }
 
+        public override void Retry() { }
+
+        public override void Restart() { }
+
         private void GivePlayerUIControl()
         {
-            var uiControl = new UIControl();
-            uiControl.mob = Player;
-            uiControl.enabled = true;
+            var uiControl = new UIControl(Player, true);
 
             Player.AddControlType(uiControl);
         }

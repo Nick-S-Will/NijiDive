@@ -1,3 +1,4 @@
+using NijiDive.Entities;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +10,7 @@ namespace NijiDive.Controls.UI
 
         private Vector2 lastDirection;
 
-        public UIControl()
+        public UIControl(Mob mob = null, bool enabled = false)
         {
             OnSelect = new UnityEvent();
             OnCancel = new UnityEvent();
@@ -18,6 +19,8 @@ namespace NijiDive.Controls.UI
             OnDown = new UnityEvent();
             OnUp = new UnityEvent();
 
+            this.mob = mob;
+            this.enabled = enabled;
             lastDirection = Vector2.zero;
         }
 

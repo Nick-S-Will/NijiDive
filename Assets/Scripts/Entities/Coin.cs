@@ -28,11 +28,10 @@ namespace NijiDive.Entities
             OnCollect.AddListener(SelfDestruct);
         }
 
-        // TODO: Add fade effect to coins over lifetime
         private void FixedUpdate()
         {
             var maxCollectDistance = body2D.velocity.magnitude * Time.fixedDeltaTime + coinCollider.bounds.extents.magnitude;
-            // Done this was so that coins are like triggers to the player but like colliders with other objects
+            // Done this was so that coins pass through entities
             if (Vector3.Distance(transform.position, target.position) < maxCollectDistance) OnCollect?.Invoke();
         }
 

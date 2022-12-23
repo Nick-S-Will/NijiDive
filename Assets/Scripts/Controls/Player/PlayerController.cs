@@ -76,7 +76,7 @@ namespace NijiDive.Controls.Player
         public bool HasBaseFeaturesEnabled() => performCollisionChecks;
         public void SetBaseFeatures(bool enabled)
         {
-            for (int i = 0; i < controlCountAtAwake; i++) controls[i].enabled = enabled;
+            for (int i = 0; i < controlCountAtAwake; i++) controls[i].SetEnabled(enabled);
 
             Body2d.simulated = enabled;
             performCollisionChecks = enabled;

@@ -8,12 +8,24 @@ namespace NijiDive.Controls
     [Serializable]
     public abstract class Control
     {
-        [HideInInspector] public Mob mob;
-        [HideInInspector] public bool enabled = true;
+        [HideInInspector] protected Mob mob;
+        [HideInInspector] protected bool enabled = true;
+
+        public bool IsEnabled => enabled;
+        public void SetEnabled(bool enabled) => this.enabled = enabled;
 
         public virtual void Awake() { }
 
         public virtual void Start() { }
+
+        public void Setup(Mob mob)
+        {
+            this.mob = mob;
+            enabled = true;
+
+            Awake();
+            Start();
+        }
 
         public abstract void Use();
     }

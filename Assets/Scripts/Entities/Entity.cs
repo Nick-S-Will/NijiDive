@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine;
 
 namespace NijiDive.Entities
@@ -54,17 +55,22 @@ namespace NijiDive.Entities
             }
         }
 
-        private IEnumerator FadeOutRoutine(Renderer renderer, float fadeDuration)
+        private IEnumerator FadeOutRoutine(Renderer renderer, Light2D light2D, float fadeDuration)
         {
             var spriteRenderer = renderer as SpriteRenderer;
             var fadeTime = 0f;
+            var startIntensity = light2D ? light2D.intensity : 0f;
 
             while (fadeTime < fadeDuration)
             {
+                var fadePercent = fadeTime / fadeDuration;
+
                 var color = spriteRenderer ? spriteRenderer.color : renderer.material.color;
-                color.a = Mathf.Lerp(1f, 0f, fadeTime / fadeDuration);
+                color.a = Mathf.Lerp(1f, 0f, fadePercent);
                 if (spriteRenderer) spriteRenderer.color = color;
                 else renderer.material.color = color;
+
+                if (light2D) light2D.intensity = Mathf.Lerp(startIntensity, 0f, fadePercent);
 
                 fadeTime += Time.deltaTime;
                 yield return null;
@@ -81,7 +87,9 @@ namespace NijiDive.Entities
                 return;
             }
 
-            if (fadeOutRoutine == null) StartCoroutine(FadeOutRoutine(renderer, fadeDuration));
+            var light2D = GetComponentInChildren<Light2D>();
+
+            if (fadeOutRoutine == null) StartCoroutine(FadeOutRoutine(renderer, light2D, fadeDuration));
         }
 
         public virtual bool IsPaused { get; protected set; }

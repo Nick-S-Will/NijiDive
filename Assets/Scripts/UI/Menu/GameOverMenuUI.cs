@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.Persistence;
+using NijiDive.Managers;
 using NijiDive.Managers.Levels;
 using NijiDive.Managers.Coins;
 using NijiDive.Managers.Combo;
@@ -30,7 +30,7 @@ namespace NijiDive.UI.Menu
 
         private void UpdateStatTexts()
         {
-            levelNameText.text = LevelManager.singleton.GetLevelName();
+            levelNameText.text = LevelManager.singleton.GetCurrentLevelName();
             coinCountText.text = CoinManager.TotalCoinCount.ToString();
             killCountText.text = ComboManager.singleton.TotalKillCount.ToString();
             maxComboText.text = ComboManager.singleton.MaxCombo.ToString();
@@ -86,17 +86,13 @@ namespace NijiDive.UI.Menu
             SetVisible(false);
             SetMenuControls(false);
 
-            UIManager.singleton.Player.Retry();
-            LevelManager.singleton.Retry();
-            CoinManager.Restart();
-            ComboManager.singleton.Retry();
+            Manager.RetryAllManagers();
         }
 
         // TODO: Add remaining option methods
         public void RestartToSurface()
         {
-            PersistenceManager.Restart();
-            LevelManager.singleton.RestartToSurface();
+            Manager.RestartAllManagers();
         }
         #endregion
 

@@ -7,7 +7,7 @@ using NijiDive.Entities;
 
 namespace NijiDive.Managers.Entities
 {
-    public class EntityManager : MonoBehaviour
+    public class EntityManager : Manager
     {
         [SerializeField] private string targetTag = "Player";
         [SerializeField] private float enableDistance = Constants.CHUNK_SIZE, destroyDistance = Constants.CHUNK_SIZE;
@@ -52,6 +52,10 @@ namespace NijiDive.Managers.Entities
                 }
             }
         }
+
+        public override void Retry() => Start();
+
+        public override void Restart() { }
 
         private void Update()
         {

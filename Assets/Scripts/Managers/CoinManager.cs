@@ -7,7 +7,7 @@ using NijiDive.Entities;
 
 namespace NijiDive.Managers.Coins
 {
-    public class CoinManager : MonoBehaviour
+    public class CoinManager : Manager
     {
         public UnityEvent OnCoinChange;
         [Space]
@@ -17,10 +17,10 @@ namespace NijiDive.Managers.Coins
         [SerializeField] [Min(0f)] private float coinLifeTime = 5f;
 
         public static CoinManager singleton;
+        private static int coinCount, totalCoinCount;
+
         public static int CoinCount => coinCount;
         public static int TotalCoinCount => totalCoinCount;
-
-        private static int coinCount, totalCoinCount;
 
         private void Awake()
         {
@@ -44,11 +44,13 @@ namespace NijiDive.Managers.Coins
             Mob.OnMobDeath.AddListener(SpawnCoins);
         }
 
-        public static void Restart()
+        public override void Retry()
         {
             coinCount = 0;
             totalCoinCount = 0;
         }
+
+        public override void Restart() => Retry();
 
         private IEnumerator DelayCoinEnable(Coin coin)
         {
@@ -71,7 +73,7 @@ namespace NijiDive.Managers.Coins
             for (int i = 0; i < count; i++)
             {
                 var coin = Instantiate(coinSizePrefab, spawnPoint, Quaternion.identity, transform);
-                
+
                 var body = coin.GetComponent<Rigidbody2D>();
                 body.velocity = UnityEngine.Random.Range(coinSpawnSpeedMin, coinSpawnSpeedMax) * UnityEngine.Random.insideUnitCircle;
                 _ = StartCoroutine(DelayCoinEnable(coin));

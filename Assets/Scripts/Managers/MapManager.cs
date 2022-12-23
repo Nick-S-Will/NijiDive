@@ -8,7 +8,7 @@ using NijiDive.Map.Tiles;
 
 namespace NijiDive.Managers.Map
 {
-    public class MapManager : MonoBehaviour, IDamageable
+    public class MapManager : Manager, IDamageable
     {
         [SerializeField] private Tilemap groundMap, platformMap;
         [SerializeField] private Grid entityGrid;
@@ -53,6 +53,14 @@ namespace NijiDive.Managers.Map
             if (currentLevel && generateAtStart) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
         }
 
+        public override void Retry()
+        {
+            foreach (Tilemap map in maps) map.ClearAllTiles();
+            foreach (Transform child in entityGrid.transform) Destroy(child.gameObject);
+        }
+
+        public override void Restart() { }
+
         #region Chunk Bounds
         private BoundsInt NextChunkBounds() => new BoundsInt(Constants.CHUNK_SIZE / 2 * Vector3Int.left + chunkCount * Constants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);
         private BoundsInt ShiftLeft(BoundsInt bounds)
@@ -74,7 +82,7 @@ namespace NijiDive.Managers.Map
             platformMap.SetTilesBlock(chunkBounds, chunk.platformTiles);
             foreach (var entity in chunk.entities)
             {
-                try { _ = entity.Spawn(entityGrid.transform, chunkBounds.min); } 
+                try { _ = entity.Spawn(entityGrid.transform, chunkBounds.min); }
                 catch (System.NullReferenceException) { Debug.LogError($"Chunk \"{chunk.name}\" has a null entity."); }
             }
 

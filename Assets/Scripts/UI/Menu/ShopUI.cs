@@ -34,7 +34,7 @@ namespace NijiDive.UI.Menu
         {
             if (UIManager.singleton.Player == null) return;
 
-            UIManager.singleton.Player.GetControlType<Jumping>().enabled = !enabled;
+            UIManager.singleton.Player.GetControlType<Jumping>().SetEnabled(!enabled);
 
             var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
 

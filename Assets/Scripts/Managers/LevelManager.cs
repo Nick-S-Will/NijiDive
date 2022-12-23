@@ -8,7 +8,7 @@ using NijiDive.Map;
 
 namespace NijiDive.Managers.Levels
 {
-    public class LevelManager : MonoBehaviour
+    public class LevelManager : Manager
     {
         [SerializeField] private string gameSceneName = "GameScene", upgradeSceneName = "UpgradeScene";
         [Space]
@@ -38,6 +38,21 @@ namespace NijiDive.Managers.Levels
             OnLoadLevel?.Invoke();
         }
 
+        public override void Retry()
+        {
+            WorldIndex = 0;
+
+            StartNextLevel();
+        }
+
+        public override void Restart()
+        {
+            WorldIndex = 0;
+            LevelIndex = -1;
+
+            StartNextLevel();
+        }
+
         public Level GetCurrentLevel()
         {
             if (WorldIndex < worlds.Length) return worlds[WorldIndex].levels[LevelIndex];
@@ -48,7 +63,7 @@ namespace NijiDive.Managers.Levels
             }
         }
 
-        public string GetLevelName()
+        public string GetCurrentLevelName()
         {
             return $"{worlds[WorldIndex].name} - {LevelIndex + 1}";
         }
@@ -77,21 +92,6 @@ namespace NijiDive.Managers.Levels
 
             SceneManager.LoadScene(gameSceneName);
             OnLoadLevel?.Invoke();
-        }
-
-        public void Retry()
-        {
-            WorldIndex = 0;
-
-            StartNextLevel();
-        }
-
-        public void RestartToSurface()
-        {
-            WorldIndex = 0;
-            LevelIndex = -1;
-
-            StartNextLevel();
         }
 
         public Vector3 GetCurrentWorldPlayerStart()

@@ -6,13 +6,13 @@ using UnityEngine.Events;
 
 namespace NijiDive.Managers.Persistence
 {
-    public class PersistenceManager : MonoBehaviour
+    public class PersistenceManager : Manager
     {
         [SerializeField] private PersistentObject[] persistentObjects;
 
+        public static PersistenceManager singleton;
         public static UnityEvent OnLoaded = new UnityEvent();
 
-        private static PersistenceManager singleton;
         private static GameObject[] persistentObjectInstances;
 
         // Added second condition because loading script causes null array to be set to 0 length
@@ -42,10 +42,10 @@ namespace NijiDive.Managers.Persistence
             if (singleton != this) Destroy(gameObject);
         }
 
-        public static void Restart()
-        {
-            if (singleton == null) return;
+        public override void Retry() { }
 
+        public override void Restart()
+        {
             if (IsShowingPersistentObjects)
             {
                 foreach (var gameObject in persistentObjectInstances) Destroy(gameObject);
