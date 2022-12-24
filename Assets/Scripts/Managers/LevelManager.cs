@@ -45,14 +45,6 @@ namespace NijiDive.Managers.Levels
             StartNextLevel();
         }
 
-        public override void Restart()
-        {
-            WorldIndex = 0;
-            LevelIndex = -1;
-
-            StartNextLevel();
-        }
-
         public Level GetCurrentLevel()
         {
             if (WorldIndex < worlds.Length) return worlds[WorldIndex].levels[LevelIndex];

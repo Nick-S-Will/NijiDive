@@ -3,7 +3,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
+using NijiDive.Managers.Levels;
+using NijiDive.Managers.Pausing;
 using NijiDive.Entities;
+using NijiDive.Entities.Mobs;
 
 namespace NijiDive.Managers.Coins
 {
@@ -41,29 +44,29 @@ namespace NijiDive.Managers.Coins
                 return;
             }
 
+            if (LevelManager.singleton.WorldIndex == 1)
+            {
+                coinCount = 0;
+                totalCoinCount = 0;
+            }
+
             Mob.OnMobDeath.AddListener(SpawnCoins);
         }
 
-        public override void Retry()
-        {
-            coinCount = 0;
-            totalCoinCount = 0;
-        }
-
-        public override void Restart() => Retry();
+        public override void Retry() { }
 
         private IEnumerator DelayCoinEnable(Coin coin)
         {
             coin.enabled = false;
 
-            yield return new WaitForSeconds(coinEnableDelay);
+            yield return new PauseManager.WaitWhilePausedAndForSeconds(coinEnableDelay, coin);
 
             coin.enabled = true;
 
             if (coinLifeTime > 0f)
             {
-                coin.FadeOut(coinLifeTime);
-                Destroy(coin.gameObject, coinLifeTime);
+                yield return coin.FadeOut(coinLifeTime);
+                Destroy(coin.gameObject);
             }
         }
 

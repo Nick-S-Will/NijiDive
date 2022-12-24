@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Entities;
+using NijiDive.Entities.Mobs;
 
 namespace NijiDive.Controls.Attacks
 {

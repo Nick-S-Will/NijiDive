@@ -6,7 +6,7 @@ using NijiDive.Managers.UI;
 
 namespace NijiDive.UI.Menu
 {
-    public abstract class UIMenu : UIBase
+    public abstract class UIMenu : UIElement
     {
         public UnityEvent OnOpen, OnClose, OnNavigate;
         [Space]

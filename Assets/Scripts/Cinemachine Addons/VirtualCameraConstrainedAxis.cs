@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
-using NijiDive.Controls.Player;
+using NijiDive.Entities.Mobs.Player;
 using NijiDive.Managers.Levels;
 
 namespace NijiDive.CinemachineAddons

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using NijiDive.Managers.Levels;
+using NijiDive.Health;
+using NijiDive.Controls;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.Attacks;
-using NijiDive.Entities;
-using NijiDive.Health;
 
-namespace NijiDive.Controls.Player
+namespace NijiDive.Entities.Mobs.Player
 {
     public class PlayerController : Mob
     {
@@ -39,6 +39,7 @@ namespace NijiDive.Controls.Player
             base.Awake();
 
             LevelManager.singleton.OnLoadLevel.AddListener(MoveToWorldStartPosition);
+            LevelManager.singleton.OnLoadUpgrading.AddListener(weaponController.ReloadCurrentWeapon);
         }
 
         private void Update()

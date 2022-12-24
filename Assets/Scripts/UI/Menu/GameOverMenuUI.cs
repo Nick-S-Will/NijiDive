@@ -8,6 +8,7 @@ using NijiDive.Managers.Coins;
 using NijiDive.Managers.Combo;
 using NijiDive.Managers.UI;
 using NijiDive.Controls.UI;
+using NijiDive.Managers.Persistence;
 
 namespace NijiDive.UI.Menu
 {
@@ -89,10 +90,16 @@ namespace NijiDive.UI.Menu
             Manager.RetryAllManagers();
         }
 
-        // TODO: Add remaining option methods
+        public void ToCharacterSelect()
+        {
+            RestartToSurface();
+
+            LevelManager.singleton.CompleteLevel();
+        }
+
         public void RestartToSurface()
         {
-            Manager.RestartAllManagers();
+            PersistenceManager.singleton.Restart();
         }
         #endregion
 

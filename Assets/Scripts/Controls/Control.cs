@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-using NijiDive.Entities;
+using NijiDive.Entities.Mobs;
 
 namespace NijiDive.Controls
 {

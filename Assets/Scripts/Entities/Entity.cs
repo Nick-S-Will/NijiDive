@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine;
 
+using NijiDive.Managers.Pausing;
+
 namespace NijiDive.Entities
 {
     public abstract class Entity : MonoBehaviour, IPauseable
@@ -16,26 +18,26 @@ namespace NijiDive.Entities
             var startingMaterial = renderer.material;
             renderer.material = flashMaterial;
 
-            yield return new WaitForSeconds(duration);
-            yield return new WaitWhile(() => IsPaused);
+            yield return new PauseManager.WaitWhilePausedAndForSeconds(duration, this);
 
             if (renderer) renderer.material = startingMaterial;
 
             flashRoutine = null;
         }
-        public void Flash(Renderer renderer)
+        public Coroutine Flash(Renderer renderer)
         {
             if (flashRoutine == null) flashRoutine = StartCoroutine(FlashRoutine(renderer, flashDuration));
+
+            return flashRoutine;
         }
 
         private IEnumerator PeriodicFlashingRoutine(Renderer renderer, float flashInterval)
         {
             while (renderer)
             {
-                Flash(renderer);
+                _ = Flash(renderer);
 
-                yield return new WaitForSeconds(flashInterval);
-                yield return new WaitWhile(() => IsPaused);
+                yield return new PauseManager.WaitWhilePausedAndForSeconds(flashInterval, this);
             }
 
             periodicFlashRoutine = null;
@@ -73,23 +75,23 @@ namespace NijiDive.Entities
                 if (light2D) light2D.intensity = Mathf.Lerp(startIntensity, 0f, fadePercent);
 
                 fadeTime += Time.deltaTime;
-                yield return null;
+                yield return new PauseManager.WaitWhilePaused(this);
             }
 
             fadeOutRoutine = null;
         }
-        public void FadeOut(float fadeDuration)
+        public Coroutine FadeOut(float fadeDuration)
         {
             var renderer = GetComponentInChildren<Renderer>();
             if (renderer == null)
             {
                 Debug.Log($"{name} has no renderer to fade out");
-                return;
+                return StartCoroutine(new PauseManager.WaitWhilePausedAndForSeconds(fadeDuration, this));
             }
 
             var light2D = GetComponentInChildren<Light2D>();
 
-            if (fadeOutRoutine == null) StartCoroutine(FadeOutRoutine(renderer, light2D, fadeDuration));
+            return fadeOutRoutine ?? StartCoroutine(FadeOutRoutine(renderer, light2D, fadeDuration));
         }
 
         public virtual bool IsPaused { get; protected set; }

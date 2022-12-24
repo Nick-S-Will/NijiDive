@@ -4,6 +4,7 @@ using UnityEngine;
 
 using NijiDive.Managers.Persistence;
 using NijiDive.Entities;
+using NijiDive.Entities.Mobs;
 
 namespace NijiDive.Managers.Entities
 {
@@ -53,9 +54,7 @@ namespace NijiDive.Managers.Entities
             }
         }
 
-        public override void Retry() => Start();
-
-        public override void Restart() { }
+        public override void Retry() { }
 
         private void Update()
         {

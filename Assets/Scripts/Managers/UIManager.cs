@@ -3,13 +3,13 @@ using UnityEngine;
 using NijiDive.Managers.Levels;
 using NijiDive.UI;
 using NijiDive.Controls.UI;
-using NijiDive.Controls.Player;
+using NijiDive.Entities.Mobs.Player;
 
 namespace NijiDive.Managers.UI
 {
     public class UIManager : Manager
     {
-        public UIBase[] consistentGameUI;
+        [SerializeField] private UIElement[] consistentGameUI;
 
         public PlayerController Player { get; private set; }
 
@@ -32,9 +32,10 @@ namespace NijiDive.Managers.UI
             LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
         }
 
-        public override void Retry() { }
-
-        public override void Restart() { }
+        public override void Retry()
+        {
+            Player.Retry();
+        }
 
         private void GivePlayerUIControl()
         {
@@ -51,7 +52,7 @@ namespace NijiDive.Managers.UI
 
         public void SetAllUIVisible(bool visible)
         {
-            foreach (var ui in GetComponentsInChildren<UIBase>(true)) ui.SetVisible(visible);
+            foreach (var ui in GetComponentsInChildren<UIElement>(true)) ui.SetVisible(visible);
         }
         [ContextMenu("Show All UI")]
         public void ShowAllUI() => SetAllUIVisible(true);
@@ -76,7 +77,7 @@ namespace NijiDive.Managers.UI
         private void OnDestroy()
         {
             if (singleton != this) return;
-                
+
             RemovePlayerUIControl();
             singleton = null;
         }

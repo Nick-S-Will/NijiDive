@@ -3,10 +3,11 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers;
-using NijiDive.Controls.UI;
 using NijiDive.Managers.Levels;
 using NijiDive.Managers.UI;
 using NijiDive.Managers.Pausing;
+using NijiDive.Managers.Persistence;
+using NijiDive.Controls.UI;
 
 namespace NijiDive.UI.Menu
 {
@@ -115,10 +116,22 @@ namespace NijiDive.UI.Menu
             Manager.RetryAllManagers();
         }
 
-        // TODO: Add remaining option methods
+        public void ToCharacterSelect()
+        {
+            RestartToSurface();
+
+            LevelManager.singleton.CompleteLevel();
+        }
+
+        public void ShowOptionsMenu()
+        {
+            print("Not yet implemented");
+            // TODO: Implement game options
+        }
+
         public void RestartToSurface()
         {
-            Manager.RestartAllManagers();
+            PersistenceManager.singleton.Restart();
         }
         #endregion
 

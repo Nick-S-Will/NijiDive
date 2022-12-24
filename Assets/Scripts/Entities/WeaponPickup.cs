@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 
+using NijiDive.Entities.Mobs;
 using NijiDive.Controls.Attacks;
 using NijiDive.Weaponry;
 using NijiDive.MenuItems;

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine.Events;
 using UnityEngine;
 
+using NijiDive.Managers.Pausing;
 using NijiDive.Weaponry;
 using NijiDive.Controls.Movement;
 
@@ -112,12 +113,12 @@ namespace NijiDive.Controls.Attacks
                         OnEmpty?.Invoke();
                         goto endShooting;
                     }
-                    else if (currentWeapon.ProjectilesPerBurst > 1) yield return new WaitForSeconds(currentWeapon.BurstProjectileInterval);
+                    else if (currentWeapon.ProjectilesPerBurst > 1) yield return new PauseManager.WaitWhilePausedAndForSeconds(currentWeapon.BurstProjectileInterval, mob);
                 }
 
                 if (currentWeapon.IsAutomatic)
                 {
-                    yield return new WaitForSeconds(currentWeapon.ShotInterval);
+                    yield return new PauseManager.WaitWhilePausedAndForSeconds(currentWeapon.ShotInterval, mob);
                     if (!mob.LastInputs.actionDown || mob.LastGroundCheck) break;
                 }
             } while (currentWeapon.IsAutomatic && GetLeftInClip() > 0);

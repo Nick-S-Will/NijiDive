@@ -1526,6 +1526,7 @@ MonoBehaviour:
       m_Calls: []
   itemNameText: {fileID: 665881917}
   itemDescriptionText: {fileID: 576278211}
+  playerPosition: {x: 0.5, y: 2}
   characters:
   - {fileID: 11400000, guid: 6534bcc9f7cdc2e4088b25a177fc5a10, type: 2}
   - {fileID: 11400000, guid: f76d5957bd1ea0c46954a80d7ca2ee59, type: 2}

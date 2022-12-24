@@ -53,13 +53,7 @@ namespace NijiDive.Managers.Map
             if (currentLevel && generateAtStart) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
         }
 
-        public override void Retry()
-        {
-            foreach (Tilemap map in maps) map.ClearAllTiles();
-            foreach (Transform child in entityGrid.transform) Destroy(child.gameObject);
-        }
-
-        public override void Restart() { }
+        public override void Retry() { }
 
         #region Chunk Bounds
         private BoundsInt NextChunkBounds() => new BoundsInt(Constants.CHUNK_SIZE / 2 * Vector3Int.left + chunkCount * Constants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);

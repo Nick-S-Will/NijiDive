@@ -33,7 +33,7 @@ namespace NijiDive.Entities
                 if (isDestroyed) Destroy(gameObject);
                 else
                 {
-                    Flash(spriteRenderer);
+                    _ = Flash(spriteRenderer);
                     spriteRenderer.sprite = contentSprites[--spriteIndex];
                 }
 

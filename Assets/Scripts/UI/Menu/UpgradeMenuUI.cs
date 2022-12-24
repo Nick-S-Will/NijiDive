@@ -13,6 +13,8 @@ namespace NijiDive.UI.Menu
 {
     public class UpgradeMenuUI : UIItemStore
     {
+        [Space]
+        [SerializeField] private Vector2 playerPosition;
         [SerializeField] private Character[] characters;
         [SerializeField] private List<Upgrade> upgradeOptions;
 
@@ -27,6 +29,8 @@ namespace NijiDive.UI.Menu
 
             AssignUpgradesToPickFrom();
             UpdateMenuItemSprites(upgradesToPickFrom);
+
+            UIManager.singleton.Player.transform.position = playerPosition;
 
             SetMenuControls(true);
             OnOpen?.Invoke();

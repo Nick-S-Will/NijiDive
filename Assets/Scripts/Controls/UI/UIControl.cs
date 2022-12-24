@@ -1,6 +1,7 @@
-using NijiDive.Entities;
 using UnityEngine;
 using UnityEngine.Events;
+
+using NijiDive.Entities.Mobs;
 
 namespace NijiDive.Controls.UI
 {

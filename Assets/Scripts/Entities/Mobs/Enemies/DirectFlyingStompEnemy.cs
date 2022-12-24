@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using NijiDive.Controls;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.Attacks;
 
-namespace NijiDive.Controls.Enemies
+namespace NijiDive.Entities.Mobs.Enemies
 {
     public class DirectFlyingStompEnemy : Enemy
     {

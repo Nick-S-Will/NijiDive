@@ -7,7 +7,7 @@ using NijiDive.Managers.Map;
 using NijiDive.Controls;
 using NijiDive.Health;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Mobs
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
@@ -90,7 +90,7 @@ namespace NijiDive.Entities
                     OnDeath?.Invoke(sourceBehaviour, damageType);
                     OnMobDeath?.Invoke(this, sourceBehaviour, damageType);
                 }
-                else Flash(spriteRenderer);
+                else _ = Flash(spriteRenderer);
             }
 
             return canDamage;

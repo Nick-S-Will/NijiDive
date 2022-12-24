@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Coins;
-using NijiDive.Controls.Player;
+using NijiDive.Entities.Mobs.Player;
 using NijiDive.MenuItems;
 using NijiDive.Utilities;
 

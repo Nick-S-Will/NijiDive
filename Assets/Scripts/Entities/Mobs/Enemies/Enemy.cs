@@ -1,10 +1,9 @@
 using UnityEngine;
 
 using NijiDive.Managers.Entities;
-using NijiDive.Entities;
 using NijiDive.Health;
 
-namespace NijiDive.Controls.Enemies
+namespace NijiDive.Entities.Mobs.Enemies
 {
     public abstract class Enemy : Mob, ICoinDropping
     {

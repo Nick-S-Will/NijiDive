@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace NijiDive.Managers.Persistence
 {
     public class PersistenceManager : Manager
     {
         [SerializeField] private PersistentObject[] persistentObjects;
+        [SerializeField] private string startingSceneName = "GameScene";
 
         public static PersistenceManager singleton;
         public static UnityEvent OnLoaded = new UnityEvent();
@@ -44,7 +46,7 @@ namespace NijiDive.Managers.Persistence
 
         public override void Retry() { }
 
-        public override void Restart()
+        public void Restart()
         {
             if (IsShowingPersistentObjects)
             {
@@ -55,6 +57,8 @@ namespace NijiDive.Managers.Persistence
 
             Destroy(singleton.gameObject);
             singleton = null;
+
+            SceneManager.LoadScene(startingSceneName);
         }
 
         private GameObject[] SpawnPersistentObjects(Func<GameObject, UnityEngine.Object> instantiate)
@@ -125,6 +129,7 @@ namespace NijiDive.Managers.Persistence
             }
         }
 #endif
+
         [Serializable]
         private class PersistentObject
         {

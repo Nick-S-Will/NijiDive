@@ -1,9 +1,8 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Pausing;
-using NijiDive.Controls.Player;
+using NijiDive.Entities.Mobs.Player;
 using NijiDive.Controls.Attacks;
 
 namespace NijiDive.Managers.Combo
@@ -50,8 +49,6 @@ namespace NijiDive.Managers.Combo
             maxCombo = 0;
             totalKillCount = 0;
         }
-
-        public override void Restart() => Retry();
 
         private void IncreaseCombo()
         {

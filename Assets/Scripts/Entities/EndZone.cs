@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Levels;
-using NijiDive.Controls.Player;
-using NijiDive.Controls.Attacks;
+using NijiDive.Entities.Mobs;
+using NijiDive.Entities.Mobs.Player;
 
 namespace NijiDive.Entities
 {
@@ -25,11 +25,7 @@ namespace NijiDive.Entities
             var entity = collision.GetComponent<Entity>();
             if (entity == null) return;
 
-            if (entity is PlayerController player)
-            {
-                OnEnd?.Invoke();
-                player.GetControlType<WeaponController>().ReloadCurrentWeapon();
-            }
+            if (entity is PlayerController) OnEnd?.Invoke();
             else if (entity is Mob mob) mob.OnDeath?.Invoke(this, DamageType.Environment | DamageType.Void);
         }
     }

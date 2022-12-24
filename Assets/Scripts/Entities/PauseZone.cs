@@ -2,7 +2,8 @@ using UnityEngine;
 
 using NijiDive.Managers.Map;
 using NijiDive.Managers.Pausing;
-using NijiDive.Controls.Player;
+using NijiDive.Entities.Mobs;
+using NijiDive.Entities.Mobs.Player;
 
 namespace NijiDive.Entities
 {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Controls.Player;
+using NijiDive.Entities.Mobs.Player;
 using NijiDive.Controls.Attacks;
 using NijiDive.Weaponry;
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Entities;
+using NijiDive.Entities.Mobs;
 using NijiDive.Controls.Attacks;
 
 namespace NijiDive.MenuItems

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NijiDive.UI
 {
-    public class TextUI : UIBase
+    public class TextUI : UIElement
     {
         [SerializeField] private SpriteRenderer textPanel;
         [SerializeField] protected TextMesh textMesh;
