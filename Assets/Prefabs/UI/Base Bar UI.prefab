@@ -366,7 +366,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4591131922772883427}
-  - component: {fileID: 4591131922772883426}
+  - component: {fileID: 5494619902835438675}
   m_Layer: 0
   m_Name: Base Bar UI
   m_TagString: Untagged
@@ -391,7 +391,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4591131922772883426
+--- !u!114 &5494619902835438675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4591131922772883436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bedef09ff4c52b74a9608925b0bc20e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ab78b3a3c73e8d4895e7971dc32eda9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   visibilityIsLocked: 0
@@ -410,7 +410,7 @@ MonoBehaviour:
   backRenderer: {fileID: 4591131922460366508}
   foreRenderer: {fileID: 4591131922451564324}
   barWidth: 1
-  barHeight: 6
+  barHeight: 5
   barLight: {fileID: 4591131922665753784}
 --- !u!1 &4591131922812281646
 GameObject:

@@ -15,7 +15,7 @@ MonoBehaviour:
   description: Dragon
   worldSprite: {fileID: 0}
   storeUISprite: {fileID: 21300000, guid: 652d4c642ffcde348948b05c38a7bf5b, type: 3}
-  hudSprite: {fileID: 0}
+  hUDSprite: {fileID: 21300000, guid: 652d4c642ffcde348948b05c38a7bf5b, type: 3}
   bonusControls: []
   references:
     version: 1

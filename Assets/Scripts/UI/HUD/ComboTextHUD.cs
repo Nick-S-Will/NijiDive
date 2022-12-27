@@ -4,9 +4,9 @@ using NijiDive.Managers.Combo;
 
 namespace NijiDive.UI.HUD
 {
-    public class ComboTextUI : MonoBehaviour
+    public class ComboTextHUD : MonoBehaviour
     {
-        [SerializeField] private TextUI comboText;
+        [SerializeField] private TextHUD comboText;
         [SerializeField] [Min(1)] private int comboVisibleThreshold = 5;
         [SerializeField] private string sortingLayerName = "Combo Text";
 

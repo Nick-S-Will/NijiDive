@@ -5,9 +5,9 @@ using NijiDive.Health;
 
 namespace NijiDive.UI.HUD
 {
-    public class HealthBarUI : MonoBehaviour
+    public class HealthBarHUD : MonoBehaviour
     {
-        [SerializeField] private BarUI healthBar, bonusHealthBar;
+        [SerializeField] private BarHUD healthBar, bonusHealthBar;
 
         private PlayerHealthData playerHealth;
 

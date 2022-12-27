@@ -77,7 +77,7 @@ namespace NijiDive.UI.Menu
             var upgrade = upgradesToPickFrom[SelectedIndex];
             upgrade.Equip();
             equippedUpgrades.Add(upgrade);
-            OnPurchase?.Invoke(0);
+            OnPurchase?.Invoke(upgrade);
 
             LevelManager.singleton.StartNextLevel();
         }

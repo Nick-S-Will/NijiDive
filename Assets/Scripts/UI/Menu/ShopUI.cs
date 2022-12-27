@@ -53,11 +53,11 @@ namespace NijiDive.UI.Menu
                 return;
             }
 
-            int cost = shop.TryPurchase(SelectedIndex);
-            if (cost > 0)
+            var purchasedProduct = shop.TryPurchase(SelectedIndex);
+            if (purchasedProduct)
             {
                 GetOption<SpriteRenderer>(SelectedIndex).sprite = null;
-                OnPurchase?.Invoke(cost);
+                OnPurchase?.Invoke(purchasedProduct);
             }
             else OnBroke?.Invoke();
         }

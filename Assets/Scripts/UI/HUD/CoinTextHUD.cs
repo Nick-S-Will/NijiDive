@@ -6,9 +6,9 @@ using NijiDive.Managers.Pausing;
 
 namespace NijiDive.UI.HUD
 {
-    public class CoinTextUI : MonoBehaviour
+    public class CoinTextHUD : MonoBehaviour
     {
-        [SerializeField] private TextUI coinText;
+        [SerializeField] private TextHUD coinText;
         [SerializeField] [Min(0f)] private float visibleDuration = 1f;
 
         private void Start()

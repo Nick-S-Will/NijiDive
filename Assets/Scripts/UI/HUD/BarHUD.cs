@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.HUD
 {
-    public class BarUI : TextUI
+    public class BarHUD : TextHUD
     {
         [Space]
         [SerializeField] private SpriteRenderer backRenderer;

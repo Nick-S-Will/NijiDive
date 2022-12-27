@@ -45,6 +45,15 @@ namespace NijiDive.Managers.Levels
             StartNextLevel();
         }
 
+        public int GetLevelCount()
+        {
+            int count = 0;
+
+            foreach (var world in worlds) count += world.levels.Length;
+
+            return count;
+        }
+
         public Level GetCurrentLevel()
         {
             if (WorldIndex < worlds.Length) return worlds[WorldIndex].levels[LevelIndex];

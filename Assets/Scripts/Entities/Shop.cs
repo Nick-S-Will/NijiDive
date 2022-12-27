@@ -105,10 +105,10 @@ namespace NijiDive.Entities
             else return null;
         }
 
-        public int TryPurchase(int index)
+        public Product TryPurchase(int index)
         {
             var product = GetProduct(index);
-            if (product == null) return 0;
+            if (product == null) return null;
 
             if (CoinManager.CoinCount >= product.Cost)
             {
@@ -117,10 +117,10 @@ namespace NijiDive.Entities
 
                 product.UseOn(player);
 
-                return product.Cost;
+                return product;
             }
 
-            return 0;
+            return null;
         }
         #endregion
 

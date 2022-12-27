@@ -6,9 +6,9 @@ using NijiDive.Weaponry;
 
 namespace NijiDive.UI.HUD
 {
-    public class AmmoBarUI : MonoBehaviour
+    public class AmmoBarHUD : MonoBehaviour
     {
-        [SerializeField] private BarUI ammoBar;
+        [SerializeField] private BarHUD ammoBar;
 
         private WeaponController playerWeaponController;
 

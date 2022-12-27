@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace NijiDive.UI
+namespace NijiDive.UI.HUD
 {
-    public class TextUI : UIElement
+    public class TextHUD : UIElement
     {
         [SerializeField] private SpriteRenderer textPanel;
         [SerializeField] protected TextMesh textMesh;
