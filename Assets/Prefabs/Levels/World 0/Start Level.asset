@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startChunks:
   - {fileID: 11400000, guid: 84067ac35ac4a4a419a769c729eca66d, type: 2}
+  shopJunctionChunks: []
   safeZoneChunks: []
   mainChunks: []
   endChunk: {fileID: 0}
-  chunkCount: 1
-  safeZoneChanceAtStart: 0
-  safeZoneChanceAtEnd: 0
+  rowCount: 1
+  safeZoneRowInterval: 1
+  shopChance: 0

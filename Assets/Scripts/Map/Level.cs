@@ -7,26 +7,32 @@ namespace NijiDive.Map
     [CreateAssetMenu(menuName = "NijiDive/Map/Level")]
     public class Level : ScriptableObject
     {
-        public Chunk[] startChunks, safeZoneChunks, mainChunks;
-        public Chunk endChunk;
-        [Tooltip("Number of chunks generated in level. Set to 1 for start screen level")]
-        public int chunkCount = 15;
+        [SerializeField] private Chunk[] startChunks, shopJunctionChunks, safeZoneChunks, mainChunks;
+        [SerializeField] private Chunk endChunk;
+        [Tooltip("Number of chunks generated in level. Set to 1 for start level")]
+        [SerializeField] private int rowCount = 15;
         [Space]
-        [Range(0f, 1f)] public float safeZoneChanceAtStart = 0.05f;
-        [Range(0f, 1f)] public float safeZoneChanceAtEnd = 0.1f;
+        [SerializeField] [Min(1)] private int safeZoneRowInterval = 3;
+        [SerializeField] [Range(0f, 1f)] private float shopChance = 0.5f;
 
-        public Chunk RandomSafeChunk() => safeZoneChunks[Random.Range(0, safeZoneChunks.Length)];
+        public Chunk[] StartChunks => startChunks;
+        public Chunk RandomShopJuntionChunk() => shopJunctionChunks[Random.Range(0, shopJunctionChunks.Length)];
+        public Chunk RandomSafeZoneChunk() => safeZoneChunks[Random.Range(0, safeZoneChunks.Length)];
         public Chunk RandomMainChunk() => mainChunks[Random.Range(0, mainChunks.Length)];
+        public Chunk EndChunk => endChunk;
+        public int RowCount => rowCount;
+        public int SafeZoneIndexInterval => safeZoneRowInterval + 1;
+        public float ShopChance => shopChance;
 
         private void OnValidate()
         {
-            if (chunkCount == 1) return;
+            if (rowCount == 1) return;
 
             var minChunks = startChunks.Length + 1;
-            if (chunkCount < minChunks)
+            if (rowCount < minChunks)
             {
-                Debug.LogWarning($"{nameof(chunkCount)} must be at least 1 more than {nameof(startChunks.Length)} to ensure the {nameof(endChunk)} can generate");
-                chunkCount = minChunks;
+                Debug.LogWarning($"{nameof(rowCount)} must be at least 1 more than the length of {nameof(startChunks)} to ensure the {nameof(endChunk)} can generate");
+                rowCount = minChunks;
             }
         }
     }

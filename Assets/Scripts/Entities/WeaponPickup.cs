@@ -34,11 +34,11 @@ namespace NijiDive.Entities
                 return;
             }
 
-            selectedWeapon = weaponOptions[UnityEngine.Random.Range(0, weaponOptions.Length)];
+            selectedWeapon = weaponOptions[Random.Range(0, weaponOptions.Length)];
             weaponNameTextMesh.text = selectedWeapon.name.Substring(0, 1);
 
             var buffTypes = new BuffType[] { BuffType.Health, BuffType.Ammo };
-            buffType = buffTypes[UnityEngine.Random.Range(0, buffTypes.Length)];
+            buffType = buffTypes[Random.Range(0, buffTypes.Length)];
             pickupBackgroundRenderer.sprite = buffType == BuffType.Health ? healthBackground : ammoBackground;
 
             PeriodicFlashing(pickupBackgroundRenderer, flashInterval);

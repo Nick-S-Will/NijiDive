@@ -10,7 +10,6 @@ namespace NijiDive.Managers.Persistence
     public class PersistenceManager : Manager
     {
         [SerializeField] private PersistentObject[] persistentObjects;
-        [SerializeField] private string startingSceneName = "GameScene";
 
         public static PersistenceManager singleton;
         public static UnityEvent OnLoaded = new UnityEvent();
@@ -58,7 +57,7 @@ namespace NijiDive.Managers.Persistence
             Destroy(singleton.gameObject);
             singleton = null;
 
-            SceneManager.LoadScene(startingSceneName);
+            SceneManager.LoadScene(Constants.GAME_SCENE_NAME);
         }
 
         private GameObject[] SpawnPersistentObjects(Func<GameObject, UnityEngine.Object> instantiate)

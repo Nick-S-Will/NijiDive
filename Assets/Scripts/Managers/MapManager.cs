@@ -19,11 +19,10 @@ namespace NijiDive.Managers.Map
         [SerializeField] private Color gizmoColor = Color.red;
         [SerializeField] private bool showLastDamagePoint, showNextChunkBounds;
 
-        private Level currentLevel;
         private Tilemap[] maps;
+        private Level currentLevel;
         private Vector3 damagePoint;
-        private int chunkCount;
-        private bool safeChunkGenerated;
+        private int rowCount, shopIndex;
 
         /// <summary>
         /// <see cref="LayerMask"/> used for terrain collisions
@@ -44,19 +43,22 @@ namespace NijiDive.Managers.Map
 
             maps = new Tilemap[] { groundMap, platformMap };
             damagePoint = float.MaxValue * Vector3.up;
-            chunkCount = 0;
+            rowCount = 0;
         }
 
         private void Start()
         {
             currentLevel = LevelManager.singleton.GetCurrentLevel();
-            if (currentLevel && generateAtStart) for (int i = 0; i < currentLevel.chunkCount; i++) AddRow();
+            if (currentLevel == null) return;
+
+            shopIndex = GetShopIndex();
+            if (generateAtStart) for (int i = 0; i < currentLevel.RowCount; i++) AddRow();
         }
 
         public override void Retry() { }
 
         #region Chunk Bounds
-        private BoundsInt NextChunkBounds() => new BoundsInt(Constants.CHUNK_SIZE / 2 * Vector3Int.left + chunkCount * Constants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);
+        private BoundsInt NextChunkBounds() => new BoundsInt(Constants.CHUNK_SIZE / 2 * Vector3Int.left + rowCount * Constants.CHUNK_SIZE * Vector3Int.down, Chunk.BoundSize);
         private BoundsInt ShiftLeft(BoundsInt bounds)
         {
             bounds.position += Constants.CHUNK_SIZE * Vector3Int.left;
@@ -70,6 +72,16 @@ namespace NijiDive.Managers.Map
         #endregion
 
         #region Level Generation
+        private int GetShopIndex()
+        {
+            if (Random.Range(0f, 1f) <= currentLevel.ShopChance)
+            {
+                var safeZoneCount = Mathf.CeilToInt((float)currentLevel.RowCount / currentLevel.SafeZoneIndexInterval);
+                return Random.Range(1, safeZoneCount) * currentLevel.SafeZoneIndexInterval;
+            }
+            else return -1;
+        }
+
         private void AddChunk(Chunk chunk, BoundsInt chunkBounds)
         {
             groundMap.SetTilesBlock(chunkBounds, chunk.groundTiles);
@@ -77,7 +89,7 @@ namespace NijiDive.Managers.Map
             foreach (var entity in chunk.entities)
             {
                 try { _ = entity.Spawn(entityGrid.transform, chunkBounds.min); }
-                catch (System.NullReferenceException) { Debug.LogError($"Chunk \"{chunk.name}\" has a null entity."); }
+                catch (System.NullReferenceException) { Debug.LogWarning($"Chunk \"{chunk.name}\" has a null entity."); }
             }
 
             foreach (var map in maps)
@@ -112,7 +124,7 @@ namespace NijiDive.Managers.Map
             AddChunk(baseChunk, chunkBounds);
             AddSideChunks(baseChunk, chunkBounds);
 
-            chunkCount++;
+            rowCount++;
         }
 
         [ContextMenu("Generate New Row")]
@@ -124,24 +136,16 @@ namespace NijiDive.Managers.Map
                 return;
             }
 
-            if (chunkCount < currentLevel.startChunks.Length) AddRow(currentLevel.startChunks[chunkCount]);
-            else if (chunkCount < currentLevel.chunkCount - 1)
+            Chunk toSpawn;
+            if (rowCount < currentLevel.StartChunks.Length) toSpawn = currentLevel.StartChunks[rowCount];
+            else if (rowCount < currentLevel.RowCount - 1)
             {
-                Chunk toSpawn;
-                if (safeChunkGenerated) toSpawn = currentLevel.RandomMainChunk();
-                else
-                {
-                    var safeThreshold = Mathf.Lerp(currentLevel.safeZoneChanceAtStart, currentLevel.safeZoneChanceAtEnd, (float)chunkCount / currentLevel.chunkCount);
-                    if (Random.Range(0f, 100f) > safeThreshold)
-                    {
-                        toSpawn = currentLevel.RandomSafeChunk();
-                        safeChunkGenerated = true;
-                    }
-                    else toSpawn = currentLevel.RandomMainChunk();
-                }
-                AddRow(toSpawn);
+                if (rowCount > 0 && rowCount % currentLevel.SafeZoneIndexInterval == 0) toSpawn = rowCount == shopIndex ? currentLevel.RandomShopJuntionChunk() : currentLevel.RandomSafeZoneChunk();
+                else toSpawn = currentLevel.RandomMainChunk();
             }
-            else AddRow(currentLevel.endChunk);
+            else toSpawn = currentLevel.EndChunk;
+
+            AddRow(toSpawn);
         }
         #endregion
 

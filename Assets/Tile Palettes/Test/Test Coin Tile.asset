@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 457e2de000b93f143b2c79975ea16375, type: 3}
-  m_Name: New Coin Tile
+  m_Name: Test Coin Tile
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: -6427776951384648482, guid: 6f47d12ef3a10d54492a86df93c8e735, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

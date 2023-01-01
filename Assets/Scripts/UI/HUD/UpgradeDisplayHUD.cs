@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-using NijiDive.Managers.Levels;
+//using NijiDive.Managers.Levels;
 using NijiDive.MenuItems;
 using NijiDive.UI.Menu;
 
@@ -11,11 +9,11 @@ namespace NijiDive.UI.HUD
 {
     public class UpgradeDisplayHUD : UIElement
     {
-        [SerializeField] private LevelManager levelManager;
         [SerializeField] private Material rendererMaterial;
         [SerializeField] private Sprite placeholderSprite;
         [SerializeField] private int sortingLayer = 11;
         [Space]
+        [SerializeField] [Min(1)] private int spriteCount = 4;
         [SerializeField] [Min(0f)] private float spriteSpacing = 1f;
         [SerializeField] [Min(0f)] private float centerGap = Constants.CHUNK_SIZE;
 
@@ -36,6 +34,13 @@ namespace NijiDive.UI.HUD
             foreach (Transform child in transform) child.gameObject.SetActive(visible);
         }
 
+        private int IndexCenterDifference(int index, int size)
+        {
+            var center = size / 2;
+            if (size % 2 == 0) return Mathf.Min(Mathf.Abs(center - 1 - index), Mathf.Abs(center - index));
+            else return Mathf.Min(Mathf.Abs(center + 1 - index), Mathf.Abs(center - index));
+        }
+
         public override void UpdateShape()
         {
             base.UpdateShape();
@@ -45,10 +50,10 @@ namespace NijiDive.UI.HUD
             int spriteCount = upgradeSpritesRenderers.Length;
             for (int i = 0; i < spriteCount; i++)
             {
-                var gapOffset = (i < spriteCount / 2f ? -1f : 1f) * centerGap / 2f;
-                var xPosition = (i * spriteSpacing) - ((spriteCount - 1) / 2f * spriteSpacing) + gapOffset;
+                float xPosition = (centerGap / 2f) + (IndexCenterDifference(i, spriteCount) * spriteSpacing);
 
-                upgradeSpritesRenderers[i].transform.localPosition = xPosition * Vector3.right;
+                var xDirection = i < spriteCount / 2f ? -1f : 1f;
+                upgradeSpritesRenderers[i].transform.localPosition = xDirection * xPosition * Vector3.right;
             }
         }
 
@@ -87,10 +92,7 @@ namespace NijiDive.UI.HUD
                 }
             }
             
-            var levelCount = levelManager.GetLevelCount();
-            if (levelCount == 0) return;
-
-            upgradeSpritesRenderers = new SpriteRenderer[levelCount];
+            upgradeSpritesRenderers = new SpriteRenderer[spriteCount];
             for (int i = 0; i < upgradeSpritesRenderers.Length; i++) upgradeSpritesRenderers[i] = CreateSpriteRenderer();
             
             UpdateShape();

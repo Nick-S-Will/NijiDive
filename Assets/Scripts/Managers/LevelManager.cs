@@ -10,8 +10,6 @@ namespace NijiDive.Managers.Levels
 {
     public class LevelManager : Manager
     {
-        [SerializeField] private string gameSceneName = "GameScene", upgradeSceneName = "UpgradeScene";
-        [Space]
         [SerializeField] private World[] worlds;
         [Space]
         public UnityEvent OnLoadLevel, OnLoadLevelPostStart, OnLoadUpgrading;
@@ -79,7 +77,7 @@ namespace NijiDive.Managers.Levels
 
         public void CompleteLevel()
         {
-            SceneManager.LoadScene(upgradeSceneName);
+            SceneManager.LoadScene(Constants.UPGRADE_SCENE_NAME);
             OnLoadUpgrading?.Invoke();
         }
 
@@ -91,7 +89,7 @@ namespace NijiDive.Managers.Levels
                 LevelIndex = 0;
             }
 
-            SceneManager.LoadScene(gameSceneName);
+            SceneManager.LoadScene(Constants.GAME_SCENE_NAME);
             OnLoadLevel?.Invoke();
         }
 

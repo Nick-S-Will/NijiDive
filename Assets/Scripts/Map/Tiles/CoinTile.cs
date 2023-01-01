@@ -16,10 +16,10 @@ namespace NijiDive.Map.Tiles
         {
             base.Setup(tilemap, cell);
 
-            // Removes since setup is called for every instance of this tile, but the event is part of the prefab
-            OnBreak.RemoveListener(TrySpawnCoins);
-            if (Random.Range(0f, 1f) <= coinTileChance) OnBreak.AddListener(TrySpawnCoins);
-            else tilemap.SetTile(cell, baseTile);
+            OnBreak.RemoveAllListeners();
+            OnBreak.AddListener(TrySpawnCoins);
+
+            if (Random.Range(0f, 1f) > coinTileChance) tilemap.SetTile(cell, baseTile);
         }
 
         public void TrySpawnCoins(Vector2 breakPoint)
