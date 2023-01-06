@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3cdd6242c2037c5429e388261ef14596, type: 2}
   safeZoneChunks:
   - {fileID: 11400000, guid: ecd785e5a9f6abb4fb24e5b5525159c7, type: 2}
+  - {fileID: 11400000, guid: 5600a131998f0d846b0de1cfac6207e2, type: 2}
   mainChunks:
   - {fileID: 11400000, guid: c2a897a3ccb336f4a8a8c42f640639b9, type: 2}
   - {fileID: 11400000, guid: a81299ade226946488a96e3a15493f34, type: 2}

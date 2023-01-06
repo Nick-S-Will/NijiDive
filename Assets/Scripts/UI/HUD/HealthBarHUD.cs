@@ -16,7 +16,7 @@ namespace NijiDive.UI.HUD
             var player = FindObjectOfType<PlayerController>();
             if (player == null)
             {
-                Debug.LogError($"No {nameof(PlayerController)} found in scene", this);
+                Debug.LogError($"No {nameof(PlayerController)} found", this);
                 return;
             }
             if (healthBar == null || bonusHealthBar == null)

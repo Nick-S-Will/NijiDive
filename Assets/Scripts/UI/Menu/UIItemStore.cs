@@ -12,7 +12,6 @@ namespace NijiDive.UI.Menu
         public UnityEvent OnBroke;
         [SerializeField] protected TextMesh itemNameText, itemDescriptionText;
 
-
         protected override void Start() => base.Start();
 
         protected void UpdateMenuItemSprites(MenuItem[] items)

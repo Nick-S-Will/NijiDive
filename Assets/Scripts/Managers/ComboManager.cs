@@ -27,7 +27,7 @@ namespace NijiDive.Managers.Combo
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {nameof(ComboManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(ComboManager)}s found", this);
                 gameObject.SetActive(false);
                 return;
             }
@@ -39,9 +39,9 @@ namespace NijiDive.Managers.Combo
             var stomping = playerController.GetControlType<Stomping>();
             var shooting = playerController.GetControlType<WeaponController>();
 
-            playerController.OnDeath.AddListener((monoBehaviour, damageType) => EndCombo());
             stomping.OnKill.AddListener(IncreaseCombo);
             shooting.OnKill.AddListener(IncreaseCombo);
+            playerController.OnDeath.AddListener((monoBehaviour, damageType) => EndCombo());
         }
 
         public override void Retry()

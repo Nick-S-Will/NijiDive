@@ -2,46 +2,57 @@ using UnityEngine;
 
 using NijiDive.Controls.Attacks;
 
-namespace NijiDive.Weaponry
+namespace NijiDive.Entities
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]
-    public class Projectile : MonoBehaviour
+    public class Projectile : Entity
     {
         [SerializeField] [Min(0f)] private float lifeTime = 0.2f;
         [SerializeField] [Min(1)] private int damage = 1;
+        [SerializeField] private LayerMask targetLayers;
         [SerializeField] private DamageType damageType = DamageType.Player | DamageType.Projectile;
 
+        // TODO: remove weapon controller reference and make weapon controller dependant on its projectiles instead
         private WeaponController sourceWeaponController;
         private Rigidbody2D body2D;
-        private float startTime;
-
+        
         private void Start()
         {
             body2D = GetComponent<Rigidbody2D>();
-            startTime = Time.time;
 
             Destroy(gameObject, lifeTime);
         }
 
+        private void FixedUpdate()
+        {
+            var hitInfo = Physics2D.Raycast(transform.position, -transform.up, 2f * body2D.velocity.y * Time.fixedDeltaTime, targetLayers);
+            if (hitInfo.collider && hitInfo.collider != sourceWeaponController.MobCollider2D)
+            {
+                if (Attacking.TryDamageCollider(this, hitInfo.collider, damageType, damage, transform.position))
+                {
+                    sourceWeaponController.OnDamage?.Invoke();
+                    if (Attacking.IsDead(hitInfo.collider)) sourceWeaponController.OnKill?.Invoke();
+                }
+
+                Destroy(gameObject);
+            }
+        }
+
         public void Setup(WeaponController source, float magnitude)
         {
-            this.sourceWeaponController = source;
+            sourceWeaponController = source;
 
             if (body2D == null) body2D = GetComponent<Rigidbody2D>();
             body2D.velocity = magnitude * -transform.up;
         }
 
-        // Switched to trigger from raycast because raycast doesn't work with composite collider
-        private void OnTriggerEnter2D(Collider2D collision)
+        public override void Pause(bool paused)
         {
-            if (Time.time - startTime > Time.fixedDeltaTime && Attacking.TryDamageCollider(this, collision, damageType, damage, collision.ClosestPoint(transform.position)))
-            {
-                sourceWeaponController.OnDamage?.Invoke();
-                if (Attacking.IsDead(collision)) sourceWeaponController.OnKill?.Invoke();
-            }
+            if (IsPaused == paused || this == null) return;
 
-            Destroy(gameObject);
+            body2D.simulated = !paused;
+            IsPaused = paused;
         }
     }
 }

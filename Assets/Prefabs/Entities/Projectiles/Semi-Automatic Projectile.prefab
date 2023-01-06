@@ -46,12 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49bf380ae6521ed43aa11b6045c3f11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 0}
+  flashDuration: 0.1
   lifeTime: 0.25
   damage: 1
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 393
   damageType: 1073741825
-  OnHit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!50 &4832100390576382360
 Rigidbody2D:
   serializedVersion: 4

@@ -21,6 +21,8 @@ namespace NijiDive.Controls.Attacks
         private Coroutine shooting;
         private int bonusAmmo;
 
+        public Collider2D MobCollider2D => mob.GetComponent<Collider2D>();
+
         public override void Start()
         {
             var jumping = mob.GetControlType<Jumping>();

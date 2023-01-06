@@ -244,6 +244,7 @@ namespace NijiDive.Entities.Mobs
 
         protected virtual void Death(MonoBehaviour sourceBehaviour, DamageType damageType)
         {
+            gameObject.SetActive(false);
             Destroy(gameObject);
         }
 

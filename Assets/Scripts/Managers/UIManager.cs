@@ -20,16 +20,20 @@ namespace NijiDive.Managers.UI
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {nameof(UIManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(UIManager)}s found", this);
                 gameObject.SetActive(false);
                 return;
             }
 
             Player = FindObjectOfType<PlayerController>();
-            GivePlayerUIControl();
 
             HideAllUI();
-            LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
+            if (LevelManager.singleton) LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
+        }
+
+        private void Start()
+        {
+            GivePlayerUIControl();
         }
 
         public override void Retry()

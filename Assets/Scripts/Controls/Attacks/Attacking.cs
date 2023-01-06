@@ -19,7 +19,7 @@ namespace NijiDive.Controls.Attacks
         public static bool TryDamageCollider(MonoBehaviour sourceBehaviour, Collider2D collider, DamageType damageType, int damage, Vector3 point)
         {
             var damageable = collider.GetComponentInParent<IDamageable>();
-            if (damageable != null) return damageable.TryDamage(sourceBehaviour, damage, damageType, collider.ClosestPoint(point));
+            if (damageable != null) return damageable.TryDamage(sourceBehaviour, damage, damageType, point);
 
             return false;
         }

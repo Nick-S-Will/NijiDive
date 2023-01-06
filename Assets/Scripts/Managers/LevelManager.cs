@@ -24,7 +24,7 @@ namespace NijiDive.Managers.Levels
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {nameof(LevelManager)}s found in scene.", this);
+                Debug.LogError($"Multiple {nameof(LevelManager)}s found", this);
                 return;
             }
 

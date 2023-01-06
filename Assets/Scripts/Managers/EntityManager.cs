@@ -31,7 +31,7 @@ namespace NijiDive.Managers.Entities
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {nameof(EntityManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(EntityManager)}s found", this);
                 gameObject.SetActive(false);
                 enabled = false;
                 return;

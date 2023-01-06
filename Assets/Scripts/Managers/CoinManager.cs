@@ -30,7 +30,7 @@ namespace NijiDive.Managers.Coins
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {nameof(CoinManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(CoinManager)}s found", this);
                 gameObject.SetActive(false);
                 return;
             }

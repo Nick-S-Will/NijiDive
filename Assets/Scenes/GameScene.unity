@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 822045840}
   - component: {fileID: 822045839}
   m_Layer: 8
-  m_Name: One Way Ground
+  m_Name: Platform
   m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -870,9 +870,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00780a0389bf6584a88a3204ea403c23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnMobDeath:
-    m_PersistentCalls:
-      m_Calls: []
   targetTag: Player
   enableDistance: 13
   destroyDistance: 13

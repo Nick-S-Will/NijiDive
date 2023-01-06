@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+using NijiDive.Entities;
 
 namespace NijiDive.Weaponry
 {

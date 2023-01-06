@@ -21,7 +21,7 @@ namespace NijiDive.Managers.Map
 
         private Tilemap[] maps;
         private Level currentLevel;
-        private Vector3 damagePoint;
+        private Vector3 damagePoint = float.MaxValue * Vector3.up;
         private int rowCount, shopIndex;
 
         /// <summary>
@@ -36,22 +36,21 @@ namespace NijiDive.Managers.Map
             if (singleton == null) singleton = this;
             else
             {
-                Debug.LogError($"Multiple {nameof(MapManager)}s found in scene", this);
+                Debug.LogError($"Multiple {nameof(MapManager)}s found", this);
                 gameObject.SetActive(false);
                 return;
             }
 
             maps = new Tilemap[] { groundMap, platformMap };
-            damagePoint = float.MaxValue * Vector3.up;
             rowCount = 0;
         }
 
         private void Start()
         {
-            currentLevel = LevelManager.singleton.GetCurrentLevel();
+            currentLevel = LevelManager.singleton ? LevelManager.singleton.GetCurrentLevel() : null;
             if (currentLevel == null) return;
 
-            shopIndex = GetShopIndex();
+            shopIndex = GenerateShopIndex();
             if (generateAtStart) for (int i = 0; i < currentLevel.RowCount; i++) AddRow();
         }
 
@@ -72,7 +71,7 @@ namespace NijiDive.Managers.Map
         #endregion
 
         #region Level Generation
-        private int GetShopIndex()
+        private int GenerateShopIndex()
         {
             if (Random.Range(0f, 1f) <= currentLevel.ShopChance)
             {

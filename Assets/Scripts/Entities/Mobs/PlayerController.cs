@@ -37,9 +37,16 @@ namespace NijiDive.Entities.Mobs.Player
             performCollisionChecks = true;
 
             base.Awake();
+        }
 
-            LevelManager.singleton.OnLoadLevel.AddListener(MoveToWorldStartPosition);
-            LevelManager.singleton.OnLoadUpgrading.AddListener(weaponController.ReloadCurrentWeapon);
+        private void Start()
+        {
+            var levelManager = LevelManager.singleton;
+            if (levelManager)
+            {
+                levelManager.OnLoadLevel.AddListener(MoveToWorldStartPosition);
+                levelManager.OnLoadUpgrading.AddListener(weaponController.ReloadCurrentWeapon);
+            }
         }
 
         private void Update()

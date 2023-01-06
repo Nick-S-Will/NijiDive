@@ -73,8 +73,11 @@ namespace NijiDive.UI.Menu
             if (optionsParent == null || SelectedIndex >= optionsParent.childCount) return;
 
             var positionSize = GetSelectedPositionAndSize(optionsParent.GetChild(SelectedIndex));
+
             optionSelectorRenderer.transform.position = positionSize.Item1;
-            optionSelectorRenderer.size = positionSize.Item2 + optionBorderSize;
+
+            var totalSize = positionSize.Item2 + optionBorderSize;
+            optionSelectorRenderer.size.Set(totalSize.x, totalSize.y); // Done this way to prevent "SendMessage cannot be called during Awake, CheckConsistency, or OnValidate" warning
         }
 
         protected void UpdateOptionPositions()

@@ -22,11 +22,16 @@ namespace NijiDive.UI.Menu
 
         protected void Awake()
         {
-            UIManager.singleton.Player.OnDeath.AddListener((monoBehaviour, damageType) => SetVisible(true));
             OnOpen.AddListener(UpdateStatTexts);
-            OnOpen.AddListener(UpdateSelectedGraphics);
             OnOpen.AddListener(EnableMenuControls);
             OnClose.AddListener(DisableMenuControls);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            UIManager.singleton.Player.OnDeath.AddListener((monoBehaviour, damageType) => SetVisible(true));
         }
 
         private void UpdateStatTexts()

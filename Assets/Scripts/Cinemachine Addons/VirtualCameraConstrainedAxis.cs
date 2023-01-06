@@ -25,7 +25,8 @@ namespace NijiDive.CinemachineAddons
             if (!Application.isPlaying) return;
 
             SetCamFollow();
-            LevelManager.singleton.OnLoadUpgrading.AddListener(MoveCamFollowToMinusOffset2D);
+            if (LevelManager.singleton) LevelManager.singleton.OnLoadUpgrading.AddListener(MoveCamFollowToMinusOffset2D);
+            else Debug.LogWarning($"No {nameof(LevelManager)} found");
         }
 
         private void SetCamFollow()
