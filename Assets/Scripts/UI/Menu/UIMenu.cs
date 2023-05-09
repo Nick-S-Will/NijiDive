@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.UI;
+using NijiDive.Utilities;
 
 namespace NijiDive.UI.Menu
 {
@@ -64,8 +65,7 @@ namespace NijiDive.UI.Menu
 
             var textSize = (Vector2)textRenderer.bounds.size;
             var position = (Vector2)selectedTransform.position + (textSize.x / 2f * Vector2.right);
-            var size = textSize;
-            return (position, size);
+            return (position, textSize);
         }
 
         protected void UpdateSelectedGraphics()
@@ -77,7 +77,7 @@ namespace NijiDive.UI.Menu
             optionSelectorRenderer.transform.position = positionSize.Item1;
 
             var totalSize = positionSize.Item2 + optionBorderSize;
-            optionSelectorRenderer.size.Set(totalSize.x, totalSize.y); // Done this way to prevent "SendMessage cannot be called during Awake, CheckConsistency, or OnValidate" warning
+            optionSelectorRenderer.size = totalSize;
         }
 
         protected void UpdateOptionPositions()
@@ -108,7 +108,11 @@ namespace NijiDive.UI.Menu
             optionSelectorRenderer.gameObject.SetActive(visible);
             optionsParent.gameObject.SetActive(visible);
 
-            if (!Application.isPlaying) return;
+            if (!Application.isPlaying)
+            {
+                ScriptingUtilities.SetDirty(transform.GetComponentsInChildren<Transform>());
+                return;
+            }
 
             if (visible) OnOpen?.Invoke();
             else OnClose.Invoke();
@@ -136,9 +140,11 @@ namespace NijiDive.UI.Menu
         public virtual void NavigateDown() { }
         public virtual void NavigateUp() { }
 
+#if UNITY_EDITOR
         protected virtual void OnValidate()
         {
-            UpdateOptionPositions();
+            UnityEditor.EditorApplication.delayCall += UpdateOptionPositions; // Workaround for seemingly useless "SendMessage cannot be called during Awake, CheckConsistency, or OnValidate" warning
         }
+#endif
     }
 }

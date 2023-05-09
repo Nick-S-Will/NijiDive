@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using Cinemachine;
 
-using NijiDive.Entities.Mobs.Player;
 using NijiDive.Managers.Levels;
 
 namespace NijiDive.CinemachineAddons
@@ -31,7 +30,7 @@ namespace NijiDive.CinemachineAddons
 
         private void SetCamFollow()
         {
-            var playerTransform = FindObjectOfType<PlayerController>().transform;
+            var playerTransform = GameObject.FindWithTag(Constants.PLAYER_TAG).transform;
             GetComponent<CinemachineVirtualCamera>().Follow = playerTransform;
         }
 

@@ -35,6 +35,11 @@ namespace NijiDive.Managers.Combo
 
         private void Start()
         {
+            GetPlayerAndAddListeners();
+        }
+
+        private void GetPlayerAndAddListeners()
+        {
             playerController = GetComponent<PlayerController>();
             var stomping = playerController.GetControlType<Stomping>();
             var shooting = playerController.GetControlType<WeaponController>();

@@ -3,7 +3,6 @@ using UnityEngine.Events;
 
 using NijiDive.Managers.Levels;
 using NijiDive.Entities.Mobs;
-using NijiDive.Entities.Mobs.Player;
 
 namespace NijiDive.Entities
 {
@@ -25,7 +24,7 @@ namespace NijiDive.Entities
             var entity = collision.GetComponent<Entity>();
             if (entity == null) return;
 
-            if (entity is PlayerController) OnEnd?.Invoke();
+            if (entity.CompareTag(Constants.PLAYER_TAG)) OnEnd?.Invoke();
             else if (entity is Mob mob) mob.OnDeath?.Invoke(this, DamageType.Environment | DamageType.Void);
         }
     }

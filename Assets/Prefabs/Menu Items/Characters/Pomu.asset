@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: Pomu
   m_EditorClassIdentifier: 
   description: Fairy
-  worldSprite: {fileID: 0}
-  storeUISprite: {fileID: 21300000, guid: 0500f207b0624ae438192fe735c35321, type: 3}
-  hUDSprite: {fileID: 21300000, guid: 0500f207b0624ae438192fe735c35321, type: 3}
-  bonusControls: []
-  references:
-    version: 1
+  worldSprite: {fileID: 21300000, guid: 0500f207b0624ae438192fe735c35321, type: 3}
+  menuUISprite: {fileID: 21300000, guid: 0500f207b0624ae438192fe735c35321, type: 3}
+  newPlayerControllerPrefab: {fileID: 0}

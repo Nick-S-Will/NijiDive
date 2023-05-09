@@ -19,7 +19,7 @@ namespace NijiDive.UI.Menu
             var itemRenderers = GetOptions<SpriteRenderer>();
             for (int i = 0; i < itemRenderers.Length; i++)
             {
-                itemRenderers[i].sprite = items[i].StoreUISprite;
+                itemRenderers[i].sprite = items[i].MenuUISprite;
             }
 
             UpdateSelectedGraphicsAndText(items[SelectedIndex]);

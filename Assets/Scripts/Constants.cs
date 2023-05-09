@@ -7,6 +7,8 @@ namespace NijiDive
         public const string GAME_SCENE_NAME = "GameScene";
         public const string UPGRADE_SCENE_NAME = "UpgradeScene";
 
+        public const string PLAYER_TAG = "Player";
+
         /// <summary>
         /// Width and height of chunks in NijiDive
         /// </summary>

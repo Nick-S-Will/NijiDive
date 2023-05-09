@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//using NijiDive.Managers.Levels;
 using NijiDive.MenuItems;
 using NijiDive.UI.Menu;
 
@@ -113,7 +112,7 @@ namespace NijiDive.UI.HUD
         {
             if (menuItem is Upgrade upgrade)
             {
-                upgradeSpritesRenderers[currentSpriteIndex].sprite = upgrade.HUDSprite;
+                upgradeSpritesRenderers[currentSpriteIndex].sprite = upgrade.MenuUISprite;
                 currentSpriteIndex++;
             }
         }

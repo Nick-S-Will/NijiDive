@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: Finana
   m_EditorClassIdentifier: 
   description: Feesh
-  worldSprite: {fileID: 0}
-  storeUISprite: {fileID: 21300000, guid: 1472bc8ef46b5de4d967c5fed38db450, type: 3}
-  hUDSprite: {fileID: 21300000, guid: 1472bc8ef46b5de4d967c5fed38db450, type: 3}
-  bonusControls: []
-  references:
-    version: 1
+  worldSprite: {fileID: 21300000, guid: 1472bc8ef46b5de4d967c5fed38db450, type: 3}
+  menuUISprite: {fileID: 21300000, guid: 1472bc8ef46b5de4d967c5fed38db450, type: 3}
+  newPlayerControllerPrefab: {fileID: 0}

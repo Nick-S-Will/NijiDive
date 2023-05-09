@@ -11,7 +11,16 @@ namespace NijiDive.Managers.UI
     {
         [SerializeField] private UIElement[] consistentGameUI;
 
-        public PlayerController Player { get; private set; }
+        private PlayerController player;
+
+        public PlayerController Player 
+        { 
+            get
+            {
+                if (player == null) player = FindObjectOfType<PlayerController>();
+                return player;
+            }
+        }
 
         public static UIManager singleton;
 
@@ -24,34 +33,31 @@ namespace NijiDive.Managers.UI
                 gameObject.SetActive(false);
                 return;
             }
-
-            Player = FindObjectOfType<PlayerController>();
-
-            HideAllUI();
-            if (LevelManager.singleton) LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
         }
 
         private void Start()
         {
             GivePlayerUIControl();
+            HideAllUI();
+            if (LevelManager.singleton) LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
         }
 
         public override void Retry()
         {
-            Player.Retry();
+            player.Retry();
         }
 
         private void GivePlayerUIControl()
         {
-            var uiControl = new UIControl(Player, true);
+            var uiControl = new UIControl(player, true);
 
-            Player.AddControlType(uiControl);
+            player.AddControlType(uiControl);
         }
         private void RemovePlayerUIControl()
         {
-            if (Player == null) return; // No error since player may have been destroyed
+            if (player == null) return;
 
-            _ = Player.RemoveControlType<UIControl>();
+            _ = player.RemoveControlType<UIControl>();
         }
 
         public void SetAllUIVisible(bool visible)

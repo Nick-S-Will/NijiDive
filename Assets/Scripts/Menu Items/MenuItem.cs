@@ -7,10 +7,10 @@ namespace NijiDive.MenuItems
         [SerializeField] private string description;
         [Space]
         [SerializeField] protected Sprite worldSprite;
-        [SerializeField] protected Sprite storeUISprite;
+        [SerializeField] protected Sprite menuUISprite;
 
         public string Description => description;
         public Sprite WorldSprite => worldSprite;
-        public Sprite StoreUISprite => storeUISprite;
+        public Sprite MenuUISprite => menuUISprite;
     }
 }

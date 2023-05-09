@@ -2,7 +2,6 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-using NijiDive.Managers.Persistence;
 using NijiDive.Entities;
 using NijiDive.Entities.Mobs;
 
@@ -10,11 +9,9 @@ namespace NijiDive.Managers.Entities
 {
     public class EntityManager : Manager
     {
-        [SerializeField] private string targetTag = "Player";
         [SerializeField] private float enableDistance = Constants.CHUNK_SIZE, destroyDistance = Constants.CHUNK_SIZE;
 
         private List<Transform> disabledEntities, enabledEntities;
-        private Transform target;
 
         public Entity[] EnabledEntities => enabledEntities.Select(t => t.GetComponent<Entity>()).ToArray();
         public Entity[] DisabledEntities => disabledEntities.Select(t => t.GetComponent<Entity>()).ToArray();
@@ -22,7 +19,7 @@ namespace NijiDive.Managers.Entities
         public Mob[] EnabledMobs => GetMobs(enabledEntities);
         public Mob[] DisabledMobs => GetMobs(disabledEntities);
         public Mob[] Mobs => EnabledMobs.Concat(DisabledMobs).ToArray();
-        public Transform Target => target;
+        public Transform Target => GameObject.FindWithTag(Constants.PLAYER_TAG).transform;
 
         public static EntityManager singleton;
 
@@ -36,8 +33,6 @@ namespace NijiDive.Managers.Entities
                 enabled = false;
                 return;
             }
-
-            PersistenceManager.OnLoaded.AddListener(SetTarget);
         }
 
         private void Start()
@@ -59,15 +54,10 @@ namespace NijiDive.Managers.Entities
         private void Update()
         {
             if (disabledEntities.Count == 0 && enabledEntities.Count == 0) enabled = false;
-            if (target == null) return;
+            if (Target == null) return;
 
             EnableEntities();
             DestroyEntities();
-        }
-
-        private void SetTarget()
-        {
-            target = GameObject.FindWithTag(targetTag).transform;
         }
 
         /// <summary>
@@ -77,9 +67,9 @@ namespace NijiDive.Managers.Entities
         {
             foreach (var mob in disabledEntities.ToArray())
             {
-                if (target == null) return;
+                if (Target == null) return;
 
-                if (target.position.y - mob.position.y < enableDistance)
+                if (Target.position.y - mob.position.y < enableDistance)
                 {
                     mob.gameObject.SetActive(true);
                     disabledEntities.Remove(mob);
@@ -95,7 +85,7 @@ namespace NijiDive.Managers.Entities
         {
             foreach (var mob in enabledEntities.ToArray())
             {
-                if (target == null) return;
+                if (Target == null) return;
 
                 if (mob == null)
                 {
@@ -103,7 +93,7 @@ namespace NijiDive.Managers.Entities
                     continue;
                 }
 
-                if (mob.position.y - target.position.y > destroyDistance)
+                if (mob.position.y - Target.position.y > destroyDistance)
                 {
                     _ = enabledEntities.Remove(mob);
                     Destroy(mob.gameObject);

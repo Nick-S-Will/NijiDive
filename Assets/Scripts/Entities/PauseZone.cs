@@ -3,7 +3,6 @@ using UnityEngine;
 using NijiDive.Managers.Map;
 using NijiDive.Managers.Pausing;
 using NijiDive.Entities.Mobs;
-using NijiDive.Entities.Mobs.Player;
 
 namespace NijiDive.Entities
 {
@@ -38,7 +37,7 @@ namespace NijiDive.Entities
             var entity = collision.GetComponent<Entity>();
             if (entity == null) return;
 
-            if (entity is PlayerController) PauseManager.PauseAll();
+            if (entity.CompareTag(Constants.PLAYER_TAG)) PauseManager.PauseAll();
             else if (entity is Mob mob) mob.OnDeath?.Invoke(this, DamageType.Environment | DamageType.Void);
         }
 
@@ -50,7 +49,7 @@ namespace NijiDive.Entities
             bool isInCenter = MapManager.singleton.PointInCenter(entity.transform.position);
             if (!isInCenter) return;
 
-            if (entity is PlayerController) PauseManager.PauseAll(false);
+            if (entity.CompareTag(Constants.PLAYER_TAG)) PauseManager.PauseAll(false);
             else if (PauseManager.IsPaused) entity.Pause(true);
         }
     }

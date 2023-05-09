@@ -77,8 +77,6 @@ MonoBehaviour:
   gizmoColor: {r: 1, g: 1, b: 1, a: 1}
   showPath: 0
   flyingX:
-    mob: {fileID: 0}
-    enabled: 0
     OnStartMove:
       m_PersistentCalls:
         m_Calls: []
@@ -90,8 +88,6 @@ MonoBehaviour:
     reverseForceMultiplier: 1
     extraDeceleration: 0
   flyingY:
-    mob: {fileID: 0}
-    enabled: 0
     OnStartMove:
       m_PersistentCalls:
         m_Calls: []
@@ -103,8 +99,6 @@ MonoBehaviour:
     reverseForceMultiplier: 1
     extraDeceleration: 0
   stomping:
-    mob: {fileID: 0}
-    enabled: 0
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -117,8 +111,6 @@ MonoBehaviour:
     damageType: -2147483646
     damage: 1
   shoving:
-    mob: {fileID: 0}
-    enabled: 0
     OnDamage:
       m_PersistentCalls:
         m_Calls: []

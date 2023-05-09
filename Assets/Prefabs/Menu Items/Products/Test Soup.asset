@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 855ab008900dc494f87c0606a9dbc41f, type: 3}
   m_Name: Test Soup
   m_EditorClassIdentifier: 
-  worldSprite: {fileID: -3411160391176968068, guid: cdcfbfe0181b89f46bea940cc06f8f9b, type: 3}
-  storeUISprite: {fileID: -8283222066077679320, guid: 0506c0dad6e82f44098c04700066c691, type: 3}
   description: Max Health +1
+  worldSprite: {fileID: -3411160391176968068, guid: cdcfbfe0181b89f46bea940cc06f8f9b, type: 3}
+  menuUISprite: {fileID: -8283222066077679320, guid: 0506c0dad6e82f44098c04700066c691, type: 3}
   baseCost: 4
   type: 1
   buffAmount: 1
