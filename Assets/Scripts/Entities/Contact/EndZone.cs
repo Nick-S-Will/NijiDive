@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using NijiDive.Managers.Levels;
 using NijiDive.Entities.Mobs;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Contact
 {
     public class EndZone : PauseZone
     {

@@ -3001,6 +3001,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6599d249fa3f55b4eb7efead99695b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnNewPlayer:
+    m_PersistentCalls:
+      m_Calls: []
   consistentGameUI:
   - {fileID: 4428144722839181230}
   - {fileID: 199587760246259766}

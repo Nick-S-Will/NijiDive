@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Entities.Mobs.Player;
+using NijiDive.Managers.UI;
 using NijiDive.Controls.Attacks;
 
 namespace NijiDive.UI.HUD
@@ -19,20 +19,15 @@ namespace NijiDive.UI.HUD
                 return;
             }
 
-            LookForPlayerAndAddListeners();
+            AddListenersToPlayer();
             UpdateAmmoBar();
+
+            UIManager.singleton.OnNewPlayer.AddListener(AddListenersToPlayer);
         }
 
-        private void LookForPlayerAndAddListeners()
+        private void AddListenersToPlayer()
         {
-            var player = FindObjectOfType<PlayerController>();
-            if (player == null)
-            {
-                Debug.LogError($"No {nameof(PlayerController)} found", this);
-                return;
-            }
-
-            playerWeaponController = player.GetControlType<WeaponController>();
+            playerWeaponController = UIManager.singleton.Player.GetControlType<WeaponController>();
             playerWeaponController.OnEquip.AddListener(weapon => UpdateAmmoBar());
             playerWeaponController.OnShoot.AddListener(UpdateAmmoBar);
             playerWeaponController.OnReload.AddListener(UpdateAmmoBar);
@@ -40,8 +35,6 @@ namespace NijiDive.UI.HUD
 
         private void UpdateAmmoBar()
         {
-            if (playerWeaponController == null) LookForPlayerAndAddListeners();
-
             ammoBar.SetBarFill(playerWeaponController.GetLeftInClip(), playerWeaponController.GetClipSize());
         }
     }

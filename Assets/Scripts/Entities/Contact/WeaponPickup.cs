@@ -5,7 +5,7 @@ using NijiDive.Controls.Attacks;
 using NijiDive.Weaponry;
 using NijiDive.MenuItems;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Contact
 {
     [RequireComponent(typeof(Collider2D))]
     public class WeaponPickup : Entity

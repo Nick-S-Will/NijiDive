@@ -8,7 +8,7 @@ using NijiDive.Entities.Mobs.Player;
 using NijiDive.MenuItems;
 using NijiDive.Utilities;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Terrain
 {
     [RequireComponent(typeof(Collider2D))]
     public class Shop : Entity

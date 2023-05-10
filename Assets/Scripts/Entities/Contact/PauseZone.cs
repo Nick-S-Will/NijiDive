@@ -4,7 +4,7 @@ using NijiDive.Managers.Map;
 using NijiDive.Managers.Pausing;
 using NijiDive.Entities.Mobs;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Contact
 {
     public class PauseZone : Entity
     {

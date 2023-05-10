@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Entities.Mobs.Player;
+using NijiDive.Managers.UI;
 using NijiDive.Health;
 
 namespace NijiDive.UI.HUD
@@ -19,27 +19,20 @@ namespace NijiDive.UI.HUD
                 return;
             }
 
-            LookForPlayerAndAddListeners();
+            AddListenersToPlayer();
             UpdateHealthBar();
+
+            UIManager.singleton.OnNewPlayer.AddListener(AddListenersToPlayer);
         }
 
-        private void LookForPlayerAndAddListeners()
+        private void AddListenersToPlayer()
         {
-            var player = FindObjectOfType<PlayerController>();
-            if (player == null)
-            {
-                Debug.LogError($"No {nameof(PlayerController)} found", this);
-                return;
-            }
-
-            playerHealth = (PlayerHealthData)player.Health;
+            playerHealth = (PlayerHealthData)UIManager.singleton.Player.Health;
             playerHealth.OnChangeHealth.AddListener(UpdateHealthBar);
         }
 
         private void UpdateHealthBar()
         {
-            if (playerHealth == null) LookForPlayerAndAddListeners();
-
             healthBar.SetBarFill(playerHealth.Health, playerHealth.MaxHealth);
             bonusHealthBar.SetBarFill(playerHealth.BonusHealth, playerHealth.MaxBonusHealth);
         }

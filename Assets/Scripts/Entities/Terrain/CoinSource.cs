@@ -2,7 +2,7 @@ using UnityEngine;
 
 using NijiDive.Managers.Coins;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Terrain
 {
     public class CoinSource : Entity, IDamageable
     {

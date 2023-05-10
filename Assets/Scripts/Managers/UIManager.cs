@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Managers.Levels;
 using NijiDive.UI;
@@ -9,6 +10,8 @@ namespace NijiDive.Managers.UI
 {
     public class UIManager : Manager
     {
+        public UnityEvent OnNewPlayer;
+
         [SerializeField] private UIElement[] consistentGameUI;
 
         private PlayerController player;
@@ -17,7 +20,12 @@ namespace NijiDive.Managers.UI
         { 
             get
             {
-                if (player == null) player = FindObjectOfType<PlayerController>();
+                if (player == null)
+                {
+                    player = FindObjectOfType<PlayerController>();
+                    if (player == null) Debug.LogError($"No {nameof(PlayerController)} found", this);
+                    else OnNewPlayer?.Invoke();
+                }
                 return player;
             }
         }

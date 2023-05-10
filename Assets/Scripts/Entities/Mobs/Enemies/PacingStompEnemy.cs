@@ -19,7 +19,7 @@ namespace NijiDive.Entities.Mobs.Enemies
 
         protected override void Awake()
         {
-            controls = new List<Control>() { walking, stomping, shoving };
+            controls.AddRange(new List<Control>() { walking, stomping, shoving });
             xInput = startFacingRight ? 1f : -1f;
 
             base.Awake();

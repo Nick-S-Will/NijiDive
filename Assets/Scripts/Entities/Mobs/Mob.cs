@@ -41,7 +41,7 @@ namespace NijiDive.Entities.Mobs
         public void SetVelocityY(float y) => Body2d.velocity = new Vector2(Body2d.velocity.x, y);
         #endregion
 
-        protected List<Control> controls;
+        protected List<Control> controls = new List<Control>();
         private Bounds groundCheckBounds, edgeCheckBounds, wallCheckBounds, ceilingCheckBounds;
 
         /// <summary>

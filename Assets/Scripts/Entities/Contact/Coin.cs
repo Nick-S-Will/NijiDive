@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using NijiDive.Managers.Entities;
 using NijiDive.Managers.Coins;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Contact
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]

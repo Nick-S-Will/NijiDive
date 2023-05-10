@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.UI;
-using NijiDive.Entities;
+using NijiDive.Entities.Terrain;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.UI;
 

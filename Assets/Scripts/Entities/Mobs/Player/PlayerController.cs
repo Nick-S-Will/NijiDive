@@ -32,7 +32,7 @@ namespace NijiDive.Entities.Mobs.Player
 
         protected override void Awake()
         {
-            controls = new List<Control>() { walking, jumping, weaponController, stomping, headbutting };
+            controls.AddRange(new List<Control>() { walking, jumping, weaponController, stomping, headbutting });
             controlCountAtAwake = controls.Count;
             performCollisionChecks = true;
 

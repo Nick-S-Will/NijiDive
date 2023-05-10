@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Pausing;
-using NijiDive.Entities;
+using NijiDive.Entities.Contact;
 using NijiDive.Entities.Mobs;
 
 namespace NijiDive.Managers.Coins

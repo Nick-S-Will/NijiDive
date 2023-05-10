@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Terrain
 {
     public class BounceEntity : Entity, IDamageable
     {
