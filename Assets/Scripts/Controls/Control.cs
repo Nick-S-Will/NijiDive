@@ -27,6 +27,8 @@ namespace NijiDive.Controls
             Start();
         }
 
-        public abstract void Use();
+        public abstract void TryToUse();
+
+        public virtual void Reset() { }
     }
 }

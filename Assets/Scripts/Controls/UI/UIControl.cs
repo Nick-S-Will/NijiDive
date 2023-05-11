@@ -25,7 +25,7 @@ namespace NijiDive.Controls.UI
             lastDirection = Vector2.zero;
         }
 
-        public override void Use()
+        public override void TryToUse()
         {
             if (mob.LastInputs.actionDownThisFrame) OnSelect?.Invoke();
             if (mob.LastInputs.altDownThisFrame) OnCancel?.Invoke();

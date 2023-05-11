@@ -29,12 +29,8 @@ namespace NijiDive.Entities
             var hitInfo = Physics2D.Raycast(transform.position, -transform.up, 2f * body2D.velocity.y * Time.fixedDeltaTime, targetLayers);
             if (hitInfo.collider && hitInfo.collider != sourceWeaponController.MobCollider2D)
             {
-                if (Attacking.TryDamageCollider(this, hitInfo.collider, damageType, damage, transform.position))
-                {
-                    sourceWeaponController.OnDamage?.Invoke();
-                    if (Attacking.IsDead(hitInfo.collider)) sourceWeaponController.OnKill?.Invoke();
-                }
-
+                _ = sourceWeaponController.TryDamageCollider(this, hitInfo.collider, damageType, damage, transform.position);
+                
                 Destroy(gameObject);
             }
         }

@@ -20,8 +20,6 @@ namespace NijiDive.Entities.Mobs
         [Space]
         [SerializeField] private CollisionData collisions;
 
-        public static UnityEvent<Mob, MonoBehaviour, DamageType> OnMobDeath = new UnityEvent<Mob, MonoBehaviour, DamageType>();
-
         #region Properties
         protected Rigidbody2D Body2d { get; private set; }
         protected Collider2D Hitbox { get; private set; }
@@ -39,10 +37,13 @@ namespace NijiDive.Entities.Mobs
         // Cleaner way to update a single axis of velocity
         public void SetVelocityX(float x) => Body2d.velocity = new Vector2(x, Body2d.velocity.y);
         public void SetVelocityY(float y) => Body2d.velocity = new Vector2(Body2d.velocity.x, y);
+        public bool PerformCollisionChecks { get; protected set; } = true;
         #endregion
 
         protected List<Control> controls = new List<Control>();
         private Bounds groundCheckBounds, edgeCheckBounds, wallCheckBounds, ceilingCheckBounds;
+
+        public static UnityEvent<Mob, MonoBehaviour, DamageType> OnMobDeath = new UnityEvent<Mob, MonoBehaviour, DamageType>();
 
         /// <summary>
         /// Override and set <see cref="controls"/> before calling to initialize them
@@ -65,16 +66,28 @@ namespace NijiDive.Entities.Mobs
             OnDeath.AddListener(Death);
         }
 
-        protected void UseControls(InputData inputs, bool performCollisionChecks = true)
+        protected void UseControls(InputData inputs)
         {
-            if (performCollisionChecks) UpdateCollisionChecks(inputs.lStick.x);
+            if (PerformCollisionChecks) UpdateCollisionChecks(inputs.lStick.x);
 
             var dot = Vector2.Dot(transform.right, Velocity.normalized);
             if (Mathf.Abs(dot) > 0.1f) spriteRenderer.flipX = dot < 0f;
 
             LastInputs = inputs;
-            foreach (var control in controls) if (control.IsEnabled) control.Use();
+            foreach (var control in controls) if (control.IsEnabled) control.TryToUse();
         }
+
+        public void ResetControls()
+        {
+            foreach (var control in controls) control.Reset();
+        }
+
+        public virtual void SetControls(bool enabled)
+        {
+            for (int i = 0; i < controls.Count; i++) controls[i].SetEnabled(enabled);
+        }
+        public virtual void EnableControls() => SetControls(true);
+        public virtual void DisableControls() => SetControls(false);
 
         public virtual bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
         {

@@ -26,7 +26,7 @@ namespace NijiDive.Entities.Mobs.Player
 
         private Vector2 lStick;
         private int controlCountAtAwake;
-        private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame, performCollisionChecks;
+        private bool jumpDown, jumpDownThisFrame, altDown, altDownThisFrame;
 
         public override HealthData Health => health;
 
@@ -34,7 +34,6 @@ namespace NijiDive.Entities.Mobs.Player
         {
             controls.AddRange(new List<Control>() { walking, jumping, weaponController, stomping, headbutting });
             controlCountAtAwake = controls.Count;
-            performCollisionChecks = true;
 
             base.Awake();
 
@@ -60,7 +59,7 @@ namespace NijiDive.Entities.Mobs.Player
 
         private void FixedUpdate()
         {
-            UseControls(new InputData(lStick, jumpDown, jumpDownThisFrame, altDown, altDownThisFrame), performCollisionChecks);
+            UseControls(new InputData(lStick, jumpDown, jumpDownThisFrame, altDown, altDownThisFrame));
             jumpDownThisFrame = false;
             altDownThisFrame = false;
         }
@@ -68,7 +67,7 @@ namespace NijiDive.Entities.Mobs.Player
         public void Retry()
         {
             health.Reset();
-            weaponController.Reset();
+            ResetControls();
 
             EnableBaseFeatures();
         }
@@ -78,13 +77,13 @@ namespace NijiDive.Entities.Mobs.Player
             transform.position = LevelManager.singleton.GetCurrentWorldPlayerStart();
         }
 
-        public bool HasBaseFeaturesEnabled() => performCollisionChecks;
+        public bool HasBaseFeaturesEnabled() => PerformCollisionChecks;
         public void SetBaseFeatures(bool enabled)
         {
             for (int i = 0; i < controlCountAtAwake; i++) controls[i].SetEnabled(enabled);
 
             Body2d.simulated = enabled;
-            performCollisionChecks = enabled;
+            PerformCollisionChecks = enabled;
 
             var animator = GetComponentInChildren<Animator>();
             if (animator) animator.enabled = enabled;

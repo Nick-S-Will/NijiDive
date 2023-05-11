@@ -50,7 +50,7 @@ namespace NijiDive.Controls.Attacks
             else EquipWeapon(startingWeapon);
         }
 
-        public void Reset()
+        public override void Reset()
         {
             if (shooting != null)
             { 
@@ -62,7 +62,7 @@ namespace NijiDive.Controls.Attacks
             EquipWeapon(startingWeapon);
         }
 
-        public override void Use()
+        public override void TryToUse()
         {
             if (!mob.LastGroundCheck && mob.LastInputs.actionDownThisFrame) TryShoot();
         }
