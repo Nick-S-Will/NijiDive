@@ -5,8 +5,8 @@ using UnityEngine.Events;
 using NijiDive.Managers;
 using NijiDive.Managers.Levels;
 using NijiDive.Managers.Coins;
-using NijiDive.Managers.Combo;
-using NijiDive.Managers.UI;
+using NijiDive.Managers.PlayerBased.Combo;
+using NijiDive.Managers.PlayerBased;
 using NijiDive.Controls.UI;
 using NijiDive.Managers.Persistence;
 
@@ -31,7 +31,7 @@ namespace NijiDive.UI.Menu
         {
             base.Start();
 
-            UIManager.singleton.Player.OnDeath.AddListener((monoBehaviour, damageType) => SetVisible(true));
+            PlayerBasedManager.Player.OnDeath.AddListener((monoBehaviour, damageType) => SetVisible(true));
         }
 
         private void UpdateStatTexts()
@@ -44,7 +44,7 @@ namespace NijiDive.UI.Menu
 
         protected override void SetMenuControls(bool enabled)
         {
-            var player = UIManager.singleton.Player;
+            var player = PlayerBasedManager.Player;
             if (player == null) return;
 
             var uiControl = player.GetControlType<UIControl>();

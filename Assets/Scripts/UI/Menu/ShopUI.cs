@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.UI;
+using NijiDive.Managers.PlayerBased;
 using NijiDive.Entities.Terrain;
 using NijiDive.Controls.Movement;
 using NijiDive.Controls.UI;
@@ -32,11 +32,11 @@ namespace NijiDive.UI.Menu
 
         protected override void SetMenuControls(bool enabled)
         {
-            if (UIManager.singleton.Player == null) return;
+            if (PlayerBasedManager.Player == null) return;
 
-            UIManager.singleton.Player.GetControlType<Jumping>().SetEnabled(!enabled);
+            PlayerBasedManager.Player.GetControlType<Jumping>().SetEnabled(!enabled);
 
-            var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
+            var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnSelect, uiControl.OnCancel, uiControl.OnLeft, uiControl.OnRight },

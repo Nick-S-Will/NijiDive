@@ -5,9 +5,9 @@ using UnityEngine;
 using NijiDive.Entities;
 using NijiDive.Entities.Mobs;
 
-namespace NijiDive.Managers.Entities
+namespace NijiDive.Managers.PlayerBased.Entities
 {
-    public class EntityManager : Manager
+    public class EntityManager : PlayerBasedManager
     {
         [SerializeField] private float enableDistance = Constants.CHUNK_SIZE, destroyDistance = Constants.CHUNK_SIZE;
 
@@ -19,11 +19,10 @@ namespace NijiDive.Managers.Entities
         public Mob[] EnabledMobs => GetMobs(enabledEntities);
         public Mob[] DisabledMobs => GetMobs(disabledEntities);
         public Mob[] Mobs => EnabledMobs.Concat(DisabledMobs).ToArray();
-        public Transform Target => GameObject.FindWithTag(Constants.PLAYER_TAG).transform;
 
         public static EntityManager singleton;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (singleton == null) singleton = this;
             else
@@ -54,22 +53,22 @@ namespace NijiDive.Managers.Entities
         private void Update()
         {
             if (disabledEntities.Count == 0 && enabledEntities.Count == 0) enabled = false;
-            if (Target == null) return;
+            if (Player == null) return;
 
             EnableEntities();
             DestroyEntities();
         }
 
         /// <summary>
-        /// Enables mobs within <see cref="enableDistance"/> of <see cref="target"/>
+        /// Enables mobs within <see cref="enableDistance"/> of <see cref="Player"/>
         /// </summary>
         private void EnableEntities()
         {
             foreach (var mob in disabledEntities.ToArray())
             {
-                if (Target == null) return;
+                if (Player == null) return;
 
-                if (Target.position.y - mob.position.y < enableDistance)
+                if (Player.transform.position.y - mob.position.y < enableDistance)
                 {
                     mob.gameObject.SetActive(true);
                     disabledEntities.Remove(mob);
@@ -79,13 +78,13 @@ namespace NijiDive.Managers.Entities
         }
 
         /// <summary>
-        /// Destroys enabled mobs that exceed <see cref="destroyDistance"/> of <see cref="target"/>
+        /// Destroys enabled mobs that exceed <see cref="destroyDistance"/> of <see cref="Player"/>
         /// </summary>
         private void DestroyEntities()
         {
             foreach (var mob in enabledEntities.ToArray())
             {
-                if (Target == null) return;
+                if (Player == null) return;
 
                 if (mob == null)
                 {
@@ -93,7 +92,7 @@ namespace NijiDive.Managers.Entities
                     continue;
                 }
 
-                if (mob.position.y - Target.position.y > destroyDistance)
+                if (mob.position.y - Player.transform.position.y > destroyDistance)
                 {
                     _ = enabledEntities.Remove(mob);
                     Destroy(mob.gameObject);
@@ -113,7 +112,7 @@ namespace NijiDive.Managers.Entities
             return mobs.ToArray();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (singleton == this) singleton = null;
         }

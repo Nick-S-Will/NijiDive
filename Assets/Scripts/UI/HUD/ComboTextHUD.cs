@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Managers.Combo;
+using NijiDive.Managers.PlayerBased.Combo;
 
 namespace NijiDive.UI.HUD
 {

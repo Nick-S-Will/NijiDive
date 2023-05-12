@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 using NijiDive.Managers;
 using NijiDive.Managers.Levels;
-using NijiDive.Managers.UI;
+using NijiDive.Managers.PlayerBased;
 using NijiDive.Managers.Pausing;
 using NijiDive.Managers.Persistence;
 using NijiDive.Controls.UI;
@@ -25,8 +25,8 @@ namespace NijiDive.UI.Menu
         protected void Awake()
         {
             LevelManager.singleton.OnLoadLevel.AddListener(UpdateLevelNameText);
-            LevelManager.singleton.OnLoadLevel.AddListener(EnableToggle);
-            LevelManager.singleton.OnLoadUpgrading.AddListener(DisableToggle);
+            // LevelManager.singleton.OnLoadLevel.AddListener(EnableToggle);
+            // LevelManager.singleton.OnLoadUpgrading.AddListener(DisableToggle);
 
             foreach(var uiMenu in mutuallyExclusiveMenus)
             {
@@ -44,7 +44,7 @@ namespace NijiDive.UI.Menu
 
         protected override void SetMenuControls(bool enabled)
         {
-            var player = UIManager.singleton.Player;
+            var player = PlayerBasedManager.Player;
             if (player == null) return;
 
             var uiControl = player.GetControlType<UIControl>();
@@ -75,9 +75,9 @@ namespace NijiDive.UI.Menu
 
         private void SetToggleControl(bool enabled)
         {
-            if (UIManager.singleton.Player == null || toggleEnabled == enabled) return;
+            if (PlayerBasedManager.Player == null || toggleEnabled == enabled) return;
 
-            var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
+            var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnCancel },

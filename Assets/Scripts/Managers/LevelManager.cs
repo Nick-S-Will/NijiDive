@@ -19,7 +19,7 @@ namespace NijiDive.Managers.Levels
         public int WorldIndex { get; private set; }
         public int LevelIndex { get; private set; }
 
-        private void Awake()
+        private void OnEnable()
         {
             if (singleton == null) singleton = this;
             else
@@ -103,7 +103,7 @@ namespace NijiDive.Managers.Levels
             }
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (singleton == this) singleton = null;
         }

@@ -24,7 +24,7 @@ namespace NijiDive.Managers.Coins
         public static int CoinCount => coinCount;
         public static int TotalCoinCount => totalCoinCount;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (singleton == null) singleton = this;
             else
@@ -126,7 +126,7 @@ namespace NijiDive.Managers.Coins
             }
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (singleton == this) singleton = null;
         }

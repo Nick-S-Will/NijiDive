@@ -3,6 +3,7 @@ using UnityEngine;
 using Cinemachine;
 
 using NijiDive.Managers.Levels;
+using NijiDive.Managers.PlayerBased;
 
 namespace NijiDive.CinemachineAddons
 {
@@ -24,14 +25,16 @@ namespace NijiDive.CinemachineAddons
             if (!Application.isPlaying) return;
 
             SetCamFollow();
+
             if (LevelManager.singleton) LevelManager.singleton.OnLoadUpgrading.AddListener(MoveCamFollowToMinusOffset2D);
             else Debug.LogWarning($"No {nameof(LevelManager)} found");
+
+            PlayerBasedManager.OnNewPlayer.AddListener(SetCamFollow);
         }
 
         private void SetCamFollow()
         {
-            var playerTransform = GameObject.FindWithTag(Constants.PLAYER_TAG).transform;
-            GetComponent<CinemachineVirtualCamera>().Follow = playerTransform;
+            GetComponent<CinemachineVirtualCamera>().Follow = PlayerBasedManager.Player.transform;
         }
 
         // Places camera at [0, 0]

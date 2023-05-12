@@ -1,38 +1,18 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 using NijiDive.Managers.Levels;
 using NijiDive.UI;
 using NijiDive.Controls.UI;
-using NijiDive.Entities.Mobs.Player;
 
-namespace NijiDive.Managers.UI
+namespace NijiDive.Managers.PlayerBased.UI
 {
-    public class UIManager : Manager
+    public class UIManager : PlayerBasedManager
     {
-        public UnityEvent OnNewPlayer;
-
         [SerializeField] private UIElement[] consistentGameUI;
-
-        private PlayerController player;
-
-        public PlayerController Player 
-        { 
-            get
-            {
-                if (player == null)
-                {
-                    player = FindObjectOfType<PlayerController>();
-                    if (player == null) Debug.LogError($"No {nameof(PlayerController)} found", this);
-                    else OnNewPlayer?.Invoke();
-                }
-                return player;
-            }
-        }
 
         public static UIManager singleton;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (singleton == null) singleton = this;
             else
@@ -47,25 +27,27 @@ namespace NijiDive.Managers.UI
         {
             GivePlayerUIControl();
             HideAllUI();
+
             if (LevelManager.singleton) LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
+            OnNewPlayer.AddListener(GivePlayerUIControl);
         }
 
         public override void Retry()
         {
-            player.Retry();
+            Player.Retry();
         }
 
         private void GivePlayerUIControl()
         {
-            var uiControl = new UIControl(player, true);
+            var uiControl = new UIControl(Player, true);
 
-            player.AddControlType(uiControl);
+            Player.AddControlType(uiControl);
         }
         private void RemovePlayerUIControl()
         {
-            if (player == null) return;
+            if (Player == null) return;
 
-            _ = player.RemoveControlType<UIControl>();
+            _ = Player.RemoveControlType<UIControl>();
         }
 
         public void SetAllUIVisible(bool visible)
@@ -92,11 +74,11 @@ namespace NijiDive.Managers.UI
             ShowGameUI();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (singleton != this) return;
 
-            RemovePlayerUIControl();
+            if (Player) RemovePlayerUIControl();
             singleton = null;
         }
     }

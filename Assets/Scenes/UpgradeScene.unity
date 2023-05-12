@@ -1528,9 +1528,9 @@ MonoBehaviour:
   itemDescriptionText: {fileID: 576278211}
   playerPosition: {x: 0.5, y: 2}
   characters:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 6534bcc9f7cdc2e4088b25a177fc5a10, type: 2}
+  - {fileID: 11400000, guid: cfae9bf18169c1843bbf418d2563f700, type: 2}
+  - {fileID: 11400000, guid: e1a4075f78edcf04190013ae57f2061b, type: 2}
   upgradeOptions: []
 --- !u!4 &762102833
 Transform:

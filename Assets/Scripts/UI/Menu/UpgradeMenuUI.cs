@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Levels;
-using NijiDive.Managers.UI;
+using NijiDive.Managers.PlayerBased;
+using NijiDive.Managers.PlayerBased.UI;
 using NijiDive.Controls.UI;
 using NijiDive.MenuItems;
 using NijiDive.Utilities;
@@ -29,7 +30,7 @@ namespace NijiDive.UI.Menu
             AssignUpgradesToPickFrom();
             UpdateMenuItemSprites(upgradesToPickFrom);
 
-            UIManager.singleton.Player.transform.position = playerPosition;
+            PlayerBasedManager.Player.transform.position = playerPosition;
 
             SetMenuControls(true);
             OnOpen?.Invoke();
@@ -60,9 +61,9 @@ namespace NijiDive.UI.Menu
 
         protected override void SetMenuControls(bool enabled)
         {
-            if (UIManager.singleton.Player == null) return;
+            if (PlayerBasedManager.Player == null) return;
 
-            var uiControl = UIManager.singleton.Player.GetControlType<UIControl>();
+            var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnSelect, uiControl.OnLeft, uiControl.OnRight },

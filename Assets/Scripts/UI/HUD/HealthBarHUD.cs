@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Managers.UI;
+using NijiDive.Managers.PlayerBased;
 using NijiDive.Health;
 
 namespace NijiDive.UI.HUD
@@ -22,12 +22,12 @@ namespace NijiDive.UI.HUD
             AddListenersToPlayer();
             UpdateHealthBar();
 
-            UIManager.singleton.OnNewPlayer.AddListener(AddListenersToPlayer);
+            PlayerBasedManager.OnNewPlayer.AddListener(AddListenersToPlayer);
         }
 
         private void AddListenersToPlayer()
         {
-            playerHealth = (PlayerHealthData)UIManager.singleton.Player.Health;
+            playerHealth = (PlayerHealthData)PlayerBasedManager.Player.Health;
             playerHealth.OnChangeHealth.AddListener(UpdateHealthBar);
         }
 

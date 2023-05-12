@@ -33,6 +33,12 @@ namespace NijiDive.Managers.Map
 
         private void Awake()
         {
+            maps = new Tilemap[] { groundMap, platformMap };
+            rowCount = 0;
+        }
+
+        private void OnEnable()
+        {
             if (singleton == null) singleton = this;
             else
             {
@@ -40,9 +46,6 @@ namespace NijiDive.Managers.Map
                 gameObject.SetActive(false);
                 return;
             }
-
-            maps = new Tilemap[] { groundMap, platformMap };
-            rowCount = 0;
         }
 
         private void Start()
@@ -193,7 +196,7 @@ namespace NijiDive.Managers.Map
             }
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (singleton == this) singleton = null;
         }

@@ -2,18 +2,15 @@ using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Pausing;
-using NijiDive.Entities.Mobs.Player;
 using NijiDive.Controls.Attacks;
 
-namespace NijiDive.Managers.Combo
+namespace NijiDive.Managers.PlayerBased.Combo
 {
-    [RequireComponent(typeof(PlayerController))]
-    public class ComboManager : Manager
+    public class ComboManager : PlayerBasedManager
     {
         // int is the combo count at the time of the event
         public UnityEvent<int> OnCombo, OnEndCombo;
 
-        private PlayerController playerController;
         private int currentCombo, maxCombo, totalKillCount;
 
         public int CurrentCombo => currentCombo;
@@ -22,7 +19,7 @@ namespace NijiDive.Managers.Combo
 
         public static ComboManager singleton;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (singleton == null) singleton = this;
             else
@@ -31,22 +28,18 @@ namespace NijiDive.Managers.Combo
                 gameObject.SetActive(false);
                 return;
             }
-        }
 
-        private void Start()
-        {
-            GetPlayerAndAddListeners();
+            OnNewPlayer.AddListener(GetPlayerAndAddListeners);
         }
 
         private void GetPlayerAndAddListeners()
         {
-            playerController = GetComponent<PlayerController>();
-            var stomping = playerController.GetControlType<Stomping>();
-            var shooting = playerController.GetControlType<WeaponController>();
+            var stomping = Player.GetControlType<Stomping>();
+            var shooting = Player.GetControlType<WeaponController>();
 
             stomping.OnKill.AddListener(IncreaseCombo);
             shooting.OnKill.AddListener(IncreaseCombo);
-            playerController.OnDeath.AddListener((monoBehaviour, damageType) => EndCombo());
+            Player.OnDeath.AddListener((monoBehaviour, damageType) => EndCombo());
         }
 
         public override void Retry()
@@ -74,10 +67,10 @@ namespace NijiDive.Managers.Combo
         {
             if (currentCombo == 0) return;
 
-            if (playerController.LastGroundCheck && !PauseManager.IsPaused) EndCombo();
+            if (Player.LastGroundCheck && !PauseManager.IsPaused) EndCombo();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             if (singleton == this) singleton = null;
         }

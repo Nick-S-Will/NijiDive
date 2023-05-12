@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.Entities;
+using NijiDive.Managers.PlayerBased;
 using NijiDive.Managers.Coins;
 
 namespace NijiDive.Entities.Contact
@@ -22,7 +22,7 @@ namespace NijiDive.Entities.Contact
         {
             body2D = GetComponent<Rigidbody2D>();
             coinCollider = GetComponent<Collider2D>();
-            target = EntityManager.singleton.Target;
+            target = PlayerBasedManager.Player.transform;
 
             OnCollect.AddListener(() => CoinManager.singleton.CollectCoin(value));
             OnCollect.AddListener(SelfDestruct);

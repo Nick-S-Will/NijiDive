@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using NijiDive.Managers.PlayerBased;
 using NijiDive.Entities.Mobs.Player;
 
 namespace NijiDive.MenuItems
@@ -13,9 +14,12 @@ namespace NijiDive.MenuItems
         {
             base.Equip();
 
-            var oldPlayer = GameObject.FindWithTag(Constants.PLAYER_TAG);
-            _ = Instantiate(newPlayerControllerPrefab, oldPlayer.transform.position, oldPlayer.transform.rotation, oldPlayer.transform.parent);
-            Destroy(oldPlayer);
+            var oldPlayer = GameObject.FindWithTag(Constants.PLAYER_TAG).transform;
+            var newPlayer = Instantiate(newPlayerControllerPrefab, oldPlayer.position, oldPlayer.rotation, oldPlayer.parent);
+            DontDestroyOnLoad(newPlayer);
+            PlayerBasedManager.Player = newPlayer;
+
+            Destroy(oldPlayer.gameObject);
         }
     }
 }

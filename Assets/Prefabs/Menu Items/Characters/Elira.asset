@@ -15,4 +15,4 @@ MonoBehaviour:
   description: Dragon
   worldSprite: {fileID: 21300000, guid: 652d4c642ffcde348948b05c38a7bf5b, type: 3}
   menuUISprite: {fileID: 21300000, guid: 652d4c642ffcde348948b05c38a7bf5b, type: 3}
-  newPlayerControllerPrefab: {fileID: 0}
+  newPlayerControllerPrefab: {fileID: 6693419749970405238, guid: fa5dd851d1afaad4ba3d91353aafbe89, type: 3}

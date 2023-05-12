@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-using NijiDive.Managers.UI;
+using NijiDive.Managers.PlayerBased;
 using NijiDive.Utilities;
 
 namespace NijiDive.UI.Menu
@@ -25,9 +25,9 @@ namespace NijiDive.UI.Menu
 
         protected virtual void Start()
         {
-            OnOpen.AddListener(UIManager.singleton.Player.DisableBaseFeatures);
+            OnOpen.AddListener(PlayerBasedManager.Player.DisableBaseFeatures);
             OnOpen.AddListener(UpdateSelectedGraphics);
-            OnClose.AddListener(UIManager.singleton.Player.EnableBaseFeatures);
+            OnClose.AddListener(PlayerBasedManager.Player.EnableBaseFeatures);
         }
 
         protected int GetOptionCount() => optionsParent.childCount;
