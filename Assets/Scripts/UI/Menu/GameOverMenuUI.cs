@@ -44,10 +44,7 @@ namespace NijiDive.UI.Menu
 
         protected override void SetMenuControls(bool enabled)
         {
-            var player = PlayerBasedManager.Player;
-            if (player == null) return;
-
-            var uiControl = player.GetControlType<UIControl>();
+            var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnSelect, uiControl.OnUp, uiControl.OnDown },
@@ -59,13 +56,13 @@ namespace NijiDive.UI.Menu
 
         public override void SetVisible(bool visible)
         {
-            base.SetVisible(visible);
-
             titleText.gameObject.SetActive(visible);
             levelNameText.gameObject.SetActive(visible);
             coinCountText.gameObject.SetActive(visible);
             killCountText.gameObject.SetActive(visible);
             maxComboText.gameObject.SetActive(visible);
+
+            base.SetVisible(visible);
         }
 
         #region UI Control

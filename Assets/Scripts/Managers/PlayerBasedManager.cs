@@ -21,15 +21,13 @@ namespace NijiDive.Managers.PlayerBased
 
                 return player;
             }
-            set => UpdatePlayer(value);
+            set
+            {
+                player = value;
+                OnNewPlayer.Invoke();
+            }
         }
 
         private static PlayerController player;
-
-        private static void UpdatePlayer(PlayerController newPlayer)
-        {
-            player = newPlayer;
-            OnNewPlayer.Invoke();
-        }
     }
 }

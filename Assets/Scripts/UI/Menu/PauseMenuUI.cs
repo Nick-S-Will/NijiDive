@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using NijiDive.Managers;
 using NijiDive.Managers.Levels;
 using NijiDive.Managers.PlayerBased;
+using NijiDive.Managers.PlayerBased.UI;
 using NijiDive.Managers.Pausing;
 using NijiDive.Managers.Persistence;
 using NijiDive.Controls.UI;
@@ -20,13 +21,10 @@ namespace NijiDive.UI.Menu
         [Space]
         [SerializeField] private UnityEvent[] optionEvents;
 
-        private bool toggleEnabled;
-
         protected void Awake()
         {
-            LevelManager.singleton.OnLoadLevel.AddListener(UpdateLevelNameText);
-            // LevelManager.singleton.OnLoadLevel.AddListener(EnableToggle);
-            // LevelManager.singleton.OnLoadUpgrading.AddListener(DisableToggle);
+            LevelManager.OnLoadLevel.AddListener(UpdateLevelNameText);
+            UIManager.OnUIControlGiven.AddListener(EnableToggle);
 
             foreach(var uiMenu in mutuallyExclusiveMenus)
             {
@@ -35,7 +33,12 @@ namespace NijiDive.UI.Menu
             }
         }
 
-        protected override void Start() => base.Start();
+        protected override void Start()
+        {
+            base.Start();
+
+            EnableToggle();
+        }
         
         private void UpdateLevelNameText()
         {
@@ -44,10 +47,7 @@ namespace NijiDive.UI.Menu
 
         protected override void SetMenuControls(bool enabled)
         {
-            var player = PlayerBasedManager.Player;
-            if (player == null) return;
-
-            var uiControl = player.GetControlType<UIControl>();
+            var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnSelect, uiControl.OnUp, uiControl.OnDown },
@@ -57,10 +57,10 @@ namespace NijiDive.UI.Menu
 
         public override void SetVisible(bool visible)
         {
-            base.SetVisible(visible);
-
             titleText.gameObject.SetActive(visible);
             levelNameText.gameObject.SetActive(visible);
+
+            base.SetVisible(visible);
         }
 
         #region Toggle
@@ -75,16 +75,12 @@ namespace NijiDive.UI.Menu
 
         private void SetToggleControl(bool enabled)
         {
-            if (PlayerBasedManager.Player == null || toggleEnabled == enabled) return;
-
             var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
 
             SetEventListeners(
                 new UnityEvent[] { uiControl.OnCancel },
                 new UnityAction[] { ToggleMenu },
                 enabled);
-
-            toggleEnabled = enabled;
         }
         private void EnableToggle() => SetToggleControl(true);
         private void DisableToggle() => SetToggleControl(false);

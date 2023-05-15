@@ -26,9 +26,7 @@ namespace NijiDive.CinemachineAddons
 
             SetCamFollow();
 
-            if (LevelManager.singleton) LevelManager.singleton.OnLoadUpgrading.AddListener(MoveCamFollowToMinusOffset2D);
-            else Debug.LogWarning($"No {nameof(LevelManager)} found");
-
+            LevelManager.OnLoadUpgrading.AddListener(MoveCamFollowToMinusOffset2D);
             PlayerBasedManager.OnNewPlayer.AddListener(SetCamFollow);
         }
 
@@ -40,8 +38,10 @@ namespace NijiDive.CinemachineAddons
         // Places camera at [0, 0]
         private void MoveCamFollowToMinusOffset2D()
         {
-            var offset2D = (Vector2)GetComponent<CinemachineVirtualCamera>().GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-            GetComponent<CinemachineVirtualCamera>().Follow.position = -offset2D;
+            var vCam = GetComponent<CinemachineVirtualCamera>();
+            var offset2D = (Vector2)vCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+            vCam.Follow.position = -offset2D;
+            // TODO: Force camera to player immediately
         }
 
         protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)

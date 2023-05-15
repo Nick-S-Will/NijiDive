@@ -29,7 +29,7 @@ namespace NijiDive.Managers.Pausing
             foreach (var pauseable in Object.FindObjectsOfType<MonoBehaviour>(true).OfType<IPauseable>())
             {
                 var behaviour = (MonoBehaviour)pauseable;
-                if (MapManager.singleton.PointInCenter(behaviour.transform.position))
+                if (MapManager.singleton == null || MapManager.singleton.PointInCenter(behaviour.transform.position))
                 {
                     var collider = behaviour.GetComponent<Collider2D>();
                     if (collider && collider.IsTouching(pauseZoneFilter)) continue;

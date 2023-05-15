@@ -117,6 +117,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: 08f1d4e5cb911a64294b215c7de000ec, type: 2}
   flashDuration: 0.1
+  OnLandOnGround:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeath:
     m_PersistentCalls:
       m_Calls: []

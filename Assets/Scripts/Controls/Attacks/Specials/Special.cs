@@ -2,16 +2,43 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
+using NijiDive.Managers.PlayerBased.Combo;
+
 namespace NijiDive.Controls.Attacks.Specials
 {
     [Serializable]
     public abstract class Special : Attacking
     {
-        [SerializeField] private UnityEvent OnUse, OnEmpty;
+        public UnityEvent OnCharge, OnUse, OnEmpty;
 
-        [SerializeField] private int maxCharges = 4;
+        [SerializeField] [Min(1)] private int comboForCharge = 5, maxCharges = 4;
 
-        protected int charges = int.MaxValue; // Max for testing
+        private int comboCountOnLastCharge;
+
+        protected int charges;
+
+        public int Charges => charges;
+        public int MaxCharges => maxCharges;
+
+        public override void Start()
+        {
+            ComboManager.OnCombo.AddListener(TryCharge);
+            ComboManager.OnEndCombo.AddListener(ResetComboCountOnLastCharge);
+        }
+
+        private void TryCharge(int comboCount)
+        {
+            var addedCharge = (comboCount - comboCountOnLastCharge) / comboForCharge;
+
+            if (addedCharge > 0)
+            {
+                charges = Mathf.Min(charges + addedCharge, maxCharges);
+                comboCountOnLastCharge = comboCount;
+                OnCharge.Invoke();
+            }
+        }
+
+        private void ResetComboCountOnLastCharge(int _) => comboCountOnLastCharge = 0;
 
         public sealed override void TryToUse()
         {
@@ -30,6 +57,13 @@ namespace NijiDive.Controls.Attacks.Specials
         public override void Reset()
         {
             charges = 0;
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            ComboManager.OnCombo.RemoveListener(TryCharge);
         }
     }
 }

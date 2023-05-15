@@ -11,7 +11,6 @@ namespace NijiDive.Managers.Coins
 {
     public class CoinManager : Manager
     {
-        public UnityEvent OnCoinChange;
         [Space]
         [SerializeField] private Coin[] coinSizes;
         [SerializeField] [Min(0f)] private float coinSpawnSpeedMin = 1f, coinSpawnSpeedMax = 2f, coinEnableDelay = 0.5f;
@@ -19,6 +18,7 @@ namespace NijiDive.Managers.Coins
         [SerializeField] [Min(0f)] private float coinLifeTime = 5f;
 
         public static CoinManager singleton;
+        public static UnityEvent OnCoinChange = new UnityEvent();
         private static int coinCount, totalCoinCount;
 
         public static int CoinCount => coinCount;

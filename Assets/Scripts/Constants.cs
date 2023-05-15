@@ -8,6 +8,8 @@ namespace NijiDive
         public const string UPGRADE_SCENE_NAME = "UpgradeScene";
 
         public const string PLAYER_TAG = "Player";
+        public const string COMBO_TEXT_SORTING_LAYER = "Combo Text";
+        public const string TEXT_MESH_SORTING_LAYER = "Text Mesh";
 
         /// <summary>
         /// Width and height of chunks in NijiDive

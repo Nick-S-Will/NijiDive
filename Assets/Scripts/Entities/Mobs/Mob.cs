@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 using NijiDive.Managers.Map;
 using NijiDive.Controls;
+using NijiDive.Controls.Attacks.Specials;
 using NijiDive.Health;
 
 namespace NijiDive.Entities.Mobs
@@ -13,7 +15,9 @@ namespace NijiDive.Entities.Mobs
     [RequireComponent(typeof(Collider2D))]
     public abstract class Mob : Entity, IDamageable, IBounceable
     {
+        public UnityEvent OnLandOnGround;
         public UnityEvent<MonoBehaviour, DamageType> OnDeath;
+
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] protected DamageType vulnerableTypes;
         [SerializeField] protected float bounceSpeed = 10f;
@@ -58,6 +62,12 @@ namespace NijiDive.Entities.Mobs
 
             Hitbox = GetComponent<Collider2D>();
             Body2d = GetComponent<Rigidbody2D>();
+
+            if ((from control in controls where control is Special select control).Count() > 1) 
+            {
+                Debug.LogError($"Mobs can only have up to 1 {nameof(Special)}");
+                enabled = false;
+            }
 
             foreach (var control in controls) control.Setup(this);
 
@@ -130,10 +140,7 @@ namespace NijiDive.Entities.Mobs
         public void AddControlType<T>(T newControl) where T : Control
         {
             if (GetControlType<T>() == null) controls.Add(newControl);
-            else
-            {
-                Debug.LogError($"Cannot add duplicate control type {newControl.GetType()}", this);
-            }
+            else Debug.LogError($"Cannot add duplicate control type {newControl.GetType()}", this);
         }
         public T RemoveControlType<T>() where T : Control
         {
@@ -153,7 +160,10 @@ namespace NijiDive.Entities.Mobs
         #region Collision Checks
         private void UpdateCollisionChecks(float localRightInput)
         {
+            var lastGroundCheck = LastGroundCheck;
             LastGroundCheck = GroundCheck();
+            if (LastGroundCheck && !lastGroundCheck) OnLandOnGround.Invoke();
+
             LastEdgeCheck = EdgeCheck(localRightInput);
             LastWallCheck = WallCheck(localRightInput);
             LastCeilingCheck = CeilingCheck();
@@ -167,6 +177,8 @@ namespace NijiDive.Entities.Mobs
         /// <returns>Collider if the physics check collides with the <see cref="Map"/>'s ground mask</returns>
         private Collider2D CollisionCheck(Vector2 boxPos, Vector2 boxSize)
         {
+            if (MapManager.singleton == null) return null;
+
             var collision = Physics2D.OverlapBox(boxPos, boxSize, 0f, MapManager.singleton.GroundMask);
             return collision;
         }
@@ -261,6 +273,11 @@ namespace NijiDive.Entities.Mobs
             Destroy(gameObject);
         }
 
+        private void OnDestroy()
+        {
+            foreach (var control in controls) control.OnDestroy();
+        }
+
         protected virtual void OnDrawGizmos()
         {
             if (collisions.showGroundCheck)
@@ -315,6 +332,8 @@ namespace NijiDive.Entities.Mobs
                 this.altDown = altDown;
                 this.altDownThisFrame = altDownThisFrame;
             }
+
+            public override string ToString() => $"Direction: {lStick}, Action: {(actionDownThisFrame ? 2 : actionDown ? 1 : 0)}, Alt: {(altDownThisFrame ? 2 : altDown ? 1 : 0)}";
         }
     }
 }

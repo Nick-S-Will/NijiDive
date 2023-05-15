@@ -49,3 +49,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: UI
+    uniqueID: 4279058775
+    locked: 0
+  - name: Text Mesh
+    uniqueID: 2194883061
+    locked: 0

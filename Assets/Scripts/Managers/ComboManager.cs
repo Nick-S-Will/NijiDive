@@ -8,18 +8,17 @@ namespace NijiDive.Managers.PlayerBased.Combo
 {
     public class ComboManager : PlayerBasedManager
     {
-        // int is the combo count at the time of the event
-        public UnityEvent<int> OnCombo, OnEndCombo;
-
         private int currentCombo, maxCombo, totalKillCount;
 
         public int CurrentCombo => currentCombo;
         public int MaxCombo => maxCombo;
         public int TotalKillCount => totalKillCount;
 
+        // int is the combo count at the time of the event
+        public static UnityEvent<int> OnCombo = new UnityEvent<int>(), OnEndCombo = new UnityEvent<int>();
         public static ComboManager singleton;
 
-        private void OnEnable()
+        private void Start()
         {
             if (singleton == null) singleton = this;
             else
@@ -29,16 +28,18 @@ namespace NijiDive.Managers.PlayerBased.Combo
                 return;
             }
 
-            OnNewPlayer.AddListener(GetPlayerAndAddListeners);
+            AddListenersToPlayer();
         }
 
-        private void GetPlayerAndAddListeners()
+        private void AddListenersToPlayer()
         {
             var stomping = Player.GetControlType<Stomping>();
             var shooting = Player.GetControlType<WeaponController>();
 
             stomping.OnKill.AddListener(IncreaseCombo);
             shooting.OnKill.AddListener(IncreaseCombo);
+
+            Player.OnLandOnGround.AddListener(CheckCollisionForEndCombo);
             Player.OnDeath.AddListener((monoBehaviour, damageType) => EndCombo());
         }
 
@@ -63,16 +64,18 @@ namespace NijiDive.Managers.PlayerBased.Combo
             currentCombo = 0;
         }
 
-        private void OnCollisionEnter2D(Collision2D _)
+        private void CheckCollisionForEndCombo()
         {
             if (currentCombo == 0) return;
 
             if (Player.LastGroundCheck && !PauseManager.IsPaused) EndCombo();
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            if (singleton == this) singleton = null;
+            if (singleton != this) return;
+            
+            singleton = null;
         }
     }
 }

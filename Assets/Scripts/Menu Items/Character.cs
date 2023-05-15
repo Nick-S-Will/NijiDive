@@ -14,12 +14,12 @@ namespace NijiDive.MenuItems
         {
             base.Equip();
 
-            var oldPlayer = GameObject.FindWithTag(Constants.PLAYER_TAG).transform;
+            var oldPlayer = PlayerBasedManager.Player.transform;
+            Destroy(oldPlayer.gameObject);
+            
             var newPlayer = Instantiate(newPlayerControllerPrefab, oldPlayer.position, oldPlayer.rotation, oldPlayer.parent);
             DontDestroyOnLoad(newPlayer);
             PlayerBasedManager.Player = newPlayer;
-
-            Destroy(oldPlayer.gameObject);
         }
     }
 }

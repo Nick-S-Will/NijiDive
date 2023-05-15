@@ -25,9 +25,9 @@ namespace NijiDive.UI.Menu
 
         protected virtual void Start()
         {
-            OnOpen.AddListener(PlayerBasedManager.Player.DisableBaseFeatures);
+            OnOpen.AddListener(() => PlayerBasedManager.Player.DisableBaseFeatures());
             OnOpen.AddListener(UpdateSelectedGraphics);
-            OnClose.AddListener(PlayerBasedManager.Player.EnableBaseFeatures);
+            OnClose.AddListener(() => PlayerBasedManager.Player.EnableBaseFeatures());
         }
 
         protected int GetOptionCount() => optionsParent.childCount;
@@ -108,14 +108,10 @@ namespace NijiDive.UI.Menu
             optionSelectorRenderer.gameObject.SetActive(visible);
             optionsParent.gameObject.SetActive(visible);
 
-            if (!Application.isPlaying)
-            {
-                ScriptingUtilities.SetDirty(transform.GetComponentsInChildren<Transform>());
-                return;
-            }
-
             if (visible) OnOpen?.Invoke();
             else OnClose.Invoke();
+
+            base.SetVisible(visible);
         }
 
         /// <summary>
@@ -129,8 +125,8 @@ namespace NijiDive.UI.Menu
                 return;
             }
 
+            for (int i = 0; i < events.Length; i++) events[i].RemoveListener(actions[i]);
             if (add) for (int i = 0; i < events.Length; i++) events[i].AddListener(actions[i]);
-            else for (int i = 0; i < events.Length; i++) events[i].RemoveListener(actions[i]);
         }
         protected abstract void SetMenuControls(bool enabled);
 

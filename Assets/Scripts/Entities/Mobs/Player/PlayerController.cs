@@ -37,12 +37,8 @@ namespace NijiDive.Entities.Mobs.Player
 
             base.Awake();
 
-            // Depends on LevelManager calling Awake() first
-            if (LevelManager.singleton)
-            {
-                LevelManager.singleton.OnLoadLevel.AddListener(MoveToWorldStartPosition);
-                LevelManager.singleton.OnLoadUpgrading.AddListener(weaponController.ReloadCurrentWeapon);
-            }
+            LevelManager.OnLoadLevel.AddListener(MoveToWorldStartPosition);
+            LevelManager.OnLoadUpgrading.AddListener(weaponController.ReloadCurrentWeapon);
         }
 
         private void Update()
@@ -52,7 +48,7 @@ namespace NijiDive.Entities.Mobs.Player
             jumpDown = jumpKeys.Any(key => Input.GetKey(key));
             // Different because FixedUpdate won't always line up and catch the single frame
             if (jumpKeys.Any(key => Input.GetKeyDown(key))) jumpDownThisFrame = true;
-
+            
             altDown = altKeys.Any(key => Input.GetKey(key));
             if (altKeys.Any(key => Input.GetKeyDown(key))) altDownThisFrame = true;
         }
@@ -80,6 +76,8 @@ namespace NijiDive.Entities.Mobs.Player
         public bool HasBaseFeaturesEnabled() => PerformCollisionChecks;
         public void SetBaseFeatures(bool enabled)
         {
+            if (LevelManager.IsUpgrading && enabled) return;
+
             for (int i = 0; i < controlCountAtAwake; i++) controls[i].SetEnabled(enabled);
 
             Body2d.simulated = enabled;

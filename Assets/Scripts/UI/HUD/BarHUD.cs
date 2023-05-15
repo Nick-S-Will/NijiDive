@@ -54,6 +54,8 @@ namespace NijiDive.UI.HUD
             backRenderer.enabled = visible;
             foreRenderer.enabled = visible;
             barLight.enabled = visible;
+
+            base.SetVisible(visible);
         }
     }
 }

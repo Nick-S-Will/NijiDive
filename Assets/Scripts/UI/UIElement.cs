@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 using NijiDive.Managers.Pausing;
+using NijiDive.Utilities;
 
 namespace NijiDive.UI
 {
@@ -14,7 +15,14 @@ namespace NijiDive.UI
         public virtual void UpdateShape() { }
 
         public abstract bool IsVisible { get; }
-        public abstract void SetVisible(bool visible);
+        public virtual void SetVisible(bool visible)
+        {
+            if (!Application.isPlaying)
+            {
+                ScriptingUtilities.SetDirty(transform.GetComponentsInChildren<Transform>());
+                return;
+            }
+        }
         [ContextMenu("Show UI")]
         public void ShowUI() => SetVisible(true);
         [ContextMenu("Hide UI")]

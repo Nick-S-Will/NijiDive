@@ -38,7 +38,7 @@ namespace NijiDive.UI.Menu
 
         private void AssignUpgradesToPickFrom()
         {
-            if (LevelManager.singleton.WorldIndex == 0)
+            if (LevelManager.WorldIndex == 0)
             {
                 upgradesToPickFrom = characters;
                 return;
@@ -61,8 +61,6 @@ namespace NijiDive.UI.Menu
 
         protected override void SetMenuControls(bool enabled)
         {
-            if (PlayerBasedManager.Player == null) return;
-
             var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
 
             SetEventListeners(

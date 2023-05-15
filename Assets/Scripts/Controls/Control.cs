@@ -30,5 +30,7 @@ namespace NijiDive.Controls
         public abstract void TryToUse();
 
         public virtual void Reset() { }
+
+        public virtual void OnDestroy() { }
     }
 }

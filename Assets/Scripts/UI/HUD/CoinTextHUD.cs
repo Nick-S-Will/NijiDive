@@ -13,7 +13,7 @@ namespace NijiDive.UI.HUD
 
         private void Start()
         {
-            LevelManager.singleton.OnLoadLevelPostStart.AddListener(AddUpdateCoinTextToCoinManagerOnCoinChange);
+            CoinManager.OnCoinChange.AddListener(UpdateCoinText);
             PauseManager.OnSetPause.AddListener(UpdateTextVisible);
         }
 
@@ -23,18 +23,17 @@ namespace NijiDive.UI.HUD
             _ = coinText.SetVisible(visibleDuration);
         }
 
-        private void AddUpdateCoinTextToCoinManagerOnCoinChange()
-        {
-            if (CoinManager.singleton == null) return;
-
-            CoinManager.singleton.OnCoinChange.AddListener(UpdateCoinText);
-        }
-
         private void UpdateTextVisible()
         {
             coinText.visibilityIsLocked = false;
             coinText.SetVisible(PauseManager.IsPaused);
             coinText.visibilityIsLocked = PauseManager.IsPaused;
+        }
+
+        private void OnDestroy()
+        {
+            CoinManager.OnCoinChange.RemoveListener(UpdateCoinText);
+            PauseManager.OnSetPause.RemoveListener(UpdateTextVisible);
         }
     }
 }

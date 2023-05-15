@@ -31,6 +31,8 @@ namespace NijiDive.UI.HUD
         public override void SetVisible(bool visible)
         {
             foreach (Transform child in transform) child.gameObject.SetActive(visible);
+
+            base.SetVisible(visible);
         }
 
         private int IndexCenterDifference(int index, int size)

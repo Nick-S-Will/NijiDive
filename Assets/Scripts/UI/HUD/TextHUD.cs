@@ -34,6 +34,8 @@ namespace NijiDive.UI.HUD
 
             if (textPanel) textPanel.gameObject.SetActive(visible);
             textMesh.gameObject.SetActive(visible);
+
+            base.SetVisible(visible);
         }
     }
 }

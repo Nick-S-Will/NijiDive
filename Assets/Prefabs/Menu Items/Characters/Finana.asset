@@ -15,4 +15,4 @@ MonoBehaviour:
   description: Feesh
   worldSprite: {fileID: 21300000, guid: 1472bc8ef46b5de4d967c5fed38db450, type: 3}
   menuUISprite: {fileID: 21300000, guid: 1472bc8ef46b5de4d967c5fed38db450, type: 3}
-  newPlayerControllerPrefab: {fileID: 0}
+  newPlayerControllerPrefab: {fileID: 7649105879380685373, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}

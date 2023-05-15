@@ -25,15 +25,12 @@ namespace NijiDive.UI.Menu
 
         private void SetShop(Shop shop)
         {
-            if (this.shop) this.shop.OnPlayerContact.RemoveListener(SetMenuControls);
             this.shop = shop;
             this.shop.OnPlayerContact.AddListener(SetMenuControls);
         }
 
         protected override void SetMenuControls(bool enabled)
         {
-            if (PlayerBasedManager.Player == null) return;
-
             PlayerBasedManager.Player.GetControlType<Jumping>().SetEnabled(!enabled);
 
             var uiControl = PlayerBasedManager.Player.GetControlType<UIControl>();
@@ -56,7 +53,10 @@ namespace NijiDive.UI.Menu
             var purchasedProduct = shop.TryPurchase(SelectedIndex);
             if (purchasedProduct)
             {
+                itemNameText.text = "";
+                itemDescriptionText.text = "";
                 GetOption<SpriteRenderer>(SelectedIndex).sprite = null;
+
                 OnPurchase?.Invoke(purchasedProduct);
             }
             else OnBroke?.Invoke();

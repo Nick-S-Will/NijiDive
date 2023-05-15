@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,7 +19,10 @@ namespace NijiDive.UI.Menu
             var itemRenderers = GetOptions<SpriteRenderer>();
             for (int i = 0; i < itemRenderers.Length; i++)
             {
-                itemRenderers[i].sprite = items[i].MenuUISprite;
+                if (items[i] == null) continue;
+
+                try { itemRenderers[i].sprite = items[i].MenuUISprite; }
+                catch (NullReferenceException) { print($"Renderer: {itemRenderers[i]}, Item: {items[i]}"); }
             }
 
             UpdateSelectedGraphicsAndText(items[SelectedIndex]);

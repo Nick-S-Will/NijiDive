@@ -1,16 +1,21 @@
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Managers.Levels;
 using NijiDive.UI;
 using NijiDive.Controls.UI;
+using NijiDive.Utilities;
 
 namespace NijiDive.Managers.PlayerBased.UI
 {
     public class UIManager : PlayerBasedManager
     {
         [SerializeField] private UIElement[] consistentGameUI;
+        [SerializeField] private MeshRenderer[] backgroundTextMeshes;
 
         public static UIManager singleton;
+        public static UnityEvent OnUIControlGiven = new UnityEvent();
 
         private void OnEnable()
         {
@@ -23,12 +28,12 @@ namespace NijiDive.Managers.PlayerBased.UI
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             GivePlayerUIControl();
             HideAllUI();
 
-            if (LevelManager.singleton) LevelManager.singleton.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
+            LevelManager.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
             OnNewPlayer.AddListener(GivePlayerUIControl);
         }
 
@@ -42,6 +47,8 @@ namespace NijiDive.Managers.PlayerBased.UI
             var uiControl = new UIControl(Player, true);
 
             Player.AddControlType(uiControl);
+
+            OnUIControlGiven.Invoke();
         }
         private void RemovePlayerUIControl()
         {
@@ -58,6 +65,21 @@ namespace NijiDive.Managers.PlayerBased.UI
         public void ShowAllUI() => SetAllUIVisible(true);
         [ContextMenu("Hide All UI")]
         public void HideAllUI() => SetAllUIVisible(false);
+        [ContextMenu("Show Consistent UI")]
+        public void ShowConsistentUI()
+        {
+            HideAllUI();
+            foreach (var ui in consistentGameUI) ui.SetVisible(true);
+        }
+
+        [ContextMenu("Update Text Meshes' Sorting Layers")]
+        public void UpdateTextMeshesSortingLayers()
+        {
+            var meshRenderers = GetComponentsInChildren<MeshRenderer>();
+            foreach (var meshRenderer in meshRenderers) meshRenderer.sortingLayerName = backgroundTextMeshes.Contains(meshRenderer) ? Constants.COMBO_TEXT_SORTING_LAYER : Constants.TEXT_MESH_SORTING_LAYER;
+
+            ScriptingUtilities.SetDirty(meshRenderers);
+        }
 
         private void SetGameUIVisible(bool visible)
         {
@@ -68,9 +90,9 @@ namespace NijiDive.Managers.PlayerBased.UI
 
         private void ShowGameUIAfterWorld0()
         {
-            if (LevelManager.singleton.WorldIndex == 0) return;
+            if (LevelManager.WorldIndex == 0) return;
 
-            LevelManager.singleton.OnLoadLevel.RemoveListener(ShowGameUIAfterWorld0);
+            LevelManager.OnLoadLevel.RemoveListener(ShowGameUIAfterWorld0);
             ShowGameUI();
         }
 
@@ -78,7 +100,6 @@ namespace NijiDive.Managers.PlayerBased.UI
         {
             if (singleton != this) return;
 
-            if (Player) RemovePlayerUIControl();
             singleton = null;
         }
     }

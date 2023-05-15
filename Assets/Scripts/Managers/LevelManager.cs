@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -12,12 +11,13 @@ namespace NijiDive.Managers.Levels
     {
         [SerializeField] private World[] worlds;
         [Space]
-        public UnityEvent OnLoadLevel, OnLoadLevelPostStart, OnLoadUpgrading;
 
         public static LevelManager singleton;
+        public static UnityEvent OnLoadLevel = new UnityEvent(), OnLoadUpgrading = new UnityEvent();
 
-        public int WorldIndex { get; private set; }
-        public int LevelIndex { get; private set; }
+        public static int WorldIndex { get; private set; }
+        public static int LevelIndex { get; private set; }
+        public static bool IsUpgrading { get; private set; }
 
         private void OnEnable()
         {
@@ -28,12 +28,13 @@ namespace NijiDive.Managers.Levels
                 return;
             }
 
-            OnLoadLevel.AddListener(InvokeOnLoadLevelPostStart);
+            OnLoadLevel.AddListener(() => IsUpgrading = false);
+            OnLoadUpgrading.AddListener(() => IsUpgrading = true);
         }
 
         private void Start()
         {
-            OnLoadLevel?.Invoke();
+            OnLoadLevel.Invoke();
         }
 
         public override void Retry()
@@ -67,14 +68,6 @@ namespace NijiDive.Managers.Levels
             return $"{worlds[WorldIndex].name} - {LevelIndex + 1}";
         }
 
-        private IEnumerator DelayEventOneFrameRoutine(UnityEvent unityEvent)
-        {
-            yield return null;
-
-            unityEvent?.Invoke();
-        }
-        private void InvokeOnLoadLevelPostStart() => _ = StartCoroutine(DelayEventOneFrameRoutine(OnLoadLevelPostStart));
-
         public void CompleteLevel()
         {
             SceneManager.LoadScene(Constants.UPGRADE_SCENE_NAME);
@@ -90,7 +83,7 @@ namespace NijiDive.Managers.Levels
             }
 
             SceneManager.LoadScene(Constants.GAME_SCENE_NAME);
-            OnLoadLevel?.Invoke();
+            OnLoadLevel.Invoke();
         }
 
         public Vector3 GetCurrentWorldPlayerStart()

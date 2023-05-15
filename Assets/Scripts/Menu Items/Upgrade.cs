@@ -5,9 +5,6 @@ namespace NijiDive.MenuItems
     [CreateAssetMenu(menuName = "NijiDive/Menu Items/Upgrade")]
     public class Upgrade : MenuItem
     {
-        public virtual void Equip()
-        {
-
-        }
+        public virtual void Equip() { }
     }
 }

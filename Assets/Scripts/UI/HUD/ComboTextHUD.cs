@@ -10,10 +10,10 @@ namespace NijiDive.UI.HUD
         [SerializeField] [Min(1)] private int comboVisibleThreshold = 5;
         [SerializeField] private string sortingLayerName = "Combo Text";
 
-        private void Start()
+        private void OnEnable()
         {
-            ComboManager.singleton.OnCombo.AddListener(UpdateComboText);
-            ComboManager.singleton.OnEndCombo.AddListener(ResetComboText);
+            ComboManager.OnCombo.AddListener(UpdateComboText);
+            ComboManager.OnEndCombo.AddListener(ResetComboText);
         }
 
         [ContextMenu("Update Sorting Layer")]
@@ -35,6 +35,12 @@ namespace NijiDive.UI.HUD
         {
             comboText.SetText("");
             comboText.SetVisible(false);
+        }
+
+        private void OnDisable()
+        {
+            ComboManager.OnCombo.RemoveListener(UpdateComboText);
+            ComboManager.OnEndCombo.RemoveListener(ResetComboText);
         }
     }
 }
