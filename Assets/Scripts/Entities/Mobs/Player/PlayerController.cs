@@ -95,5 +95,38 @@ namespace NijiDive.Entities.Mobs.Player
         {
             DisableBaseFeatures();
         }
+
+        /// <summary>
+        /// Copies all <see cref="PlayerController"/> defined values from another <see cref="PlayerController"/> on this object. For easy child class set up
+        /// </summary>
+        [ContextMenu("Get Values")]
+        public void CopyValues()
+        {
+            var playerControllers = GetComponents<PlayerController>();
+            PlayerController playerController = null;
+            foreach (var pc in playerControllers)
+            {
+                if (this != pc)
+                {
+                    playerController = pc;
+                    break;
+                }
+            }
+
+            if (playerController == null)
+            {
+                Debug.Log($"No other {nameof(PlayerController)} found on this object");
+                return;
+            }
+
+            health = playerController.health;
+            walking = playerController.walking;
+            jumping = playerController.jumping;
+            weaponController = playerController.weaponController;
+            stomping = playerController.stomping;
+            headbutting = playerController.headbutting;
+            jumpKeys = playerController.jumpKeys;
+            altKeys = playerController.altKeys;
+        }
     }
 }

@@ -9,10 +9,10 @@ namespace NijiDive.Managers.PlayerBased
     {
         public static UnityEvent OnNewPlayer = new UnityEvent();
 
-        public static PlayerController Player 
+        public static PlayerController Player
         {
             get
-            { 
+            {
                 if (player == null)
                 {
                     player = FindObjectOfType<PlayerController>();
@@ -29,5 +29,8 @@ namespace NijiDive.Managers.PlayerBased
         }
 
         private static PlayerController player;
+
+        [ContextMenu("Invoke On New Player")]
+        public void InvokeOnNewPlayer() => OnNewPlayer.Invoke();
     }
 }

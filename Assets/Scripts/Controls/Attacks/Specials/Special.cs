@@ -12,10 +12,9 @@ namespace NijiDive.Controls.Attacks.Specials
         public UnityEvent OnCharge, OnUse, OnEmpty;
 
         [SerializeField] [Min(1)] private int comboForCharge = 5, maxCharges = 4;
+        [SerializeField] private bool infiniteCharges;
 
-        private int comboCountOnLastCharge;
-
-        protected int charges;
+        private int charges, comboCountOnLastCharge;
 
         public int Charges => charges;
         public int MaxCharges => maxCharges;
@@ -42,12 +41,12 @@ namespace NijiDive.Controls.Attacks.Specials
 
         public sealed override void TryToUse()
         {
-            if (mob.LastInputs.altDownThisFrame && charges > 0)
+            if (mob.LastInputs.altDownThisFrame && (charges > 0 || infiniteCharges))
             {
                 Use();
                 OnUse.Invoke();
 
-                charges--;
+                charges = Mathf.Max(0, charges - 1);
             }
             else OnEmpty?.Invoke();
         }

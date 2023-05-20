@@ -13,6 +13,7 @@ namespace NijiDive.Managers.PlayerBased.UI
     {
         [SerializeField] private UIElement[] consistentGameUI;
         [SerializeField] private MeshRenderer[] backgroundTextMeshes;
+        [SerializeField] private bool hideUIOnAwake = true;
 
         public static UIManager singleton;
         public static UnityEvent OnUIControlGiven = new UnityEvent();
@@ -31,7 +32,7 @@ namespace NijiDive.Managers.PlayerBased.UI
         private void Awake()
         {
             GivePlayerUIControl();
-            HideAllUI();
+            if (hideUIOnAwake) HideAllUI();
 
             LevelManager.OnLoadLevel.AddListener(ShowGameUIAfterWorld0);
             OnNewPlayer.AddListener(GivePlayerUIControl);

@@ -857,12 +857,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b759d0d81a6495a4f843e4b4faf18383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnCombo:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEndCombo:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &1771453132
 GameObject:
   m_ObjectHideFlags: 0
@@ -1003,9 +997,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92128f009cb637c4b994a292b2fec6de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnCoinChange:
-    m_PersistentCalls:
-      m_Calls: []
   coinSizes:
   - {fileID: 1681736888825824076, guid: 75e4e1276f5ab9946b5a39937961b6b4, type: 3}
   - {fileID: 6974553871622001759, guid: 23e06df5eb65e7649ae35170fc493230, type: 3}

@@ -311,12 +311,14 @@ namespace NijiDive.Entities.Mobs
             [Min(0f)] public float wallCollisionHeightScaler = 0.9f;
             [Space]
             [Min(0f)] public float maxGroundDistance = 0.1f;
-            [Min(0f)] public float groundCollisionWidthScaler = 0.9f, edgeCollisionOffset = 0f;
+            [Min(0f)] public float groundCollisionWidthScaler = 0.9f;
+            [Space]
+            [Min(0f)] public float edgeCollisionOffset = 0f;
 
             [Header("Visualizers")]
             public Color gizmoColorNone = Color.red;
             public Color gizmoColorFound = Color.green;
-            public bool showGroundCheck, showEdgeCheck, showWallCheck, showCeilingCheck;
+            public bool showCeilingCheck, showWallCheck, showGroundCheck, showEdgeCheck;
         }
 
         public struct InputData

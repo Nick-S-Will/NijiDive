@@ -3011,6 +3011,7 @@ MonoBehaviour:
   - {fileID: 2337220307602750426}
   backgroundTextMeshes:
   - {fileID: 7131286622587827228}
+  hideUIOnAwake: 1
 --- !u!1 &5658170065368630674
 GameObject:
   m_ObjectHideFlags: 0

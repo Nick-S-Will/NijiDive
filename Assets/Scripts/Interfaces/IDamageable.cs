@@ -44,5 +44,10 @@ namespace NijiDive
             var count = ((int)(vulnerableTypes & inflictingTypes)).GetBitCount();
             return count > 1;
         }
+
+        public static bool ContainsAny(this DamageType vulnerableTypes, DamageType otherType)
+        {
+            return (vulnerableTypes & otherType) > 0;
+        }
     }
 }

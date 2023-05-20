@@ -15,4 +15,4 @@ MonoBehaviour:
   description: Fairy
   worldSprite: {fileID: 21300000, guid: 0500f207b0624ae438192fe735c35321, type: 3}
   menuUISprite: {fileID: 21300000, guid: 0500f207b0624ae438192fe735c35321, type: 3}
-  newPlayerControllerPrefab: {fileID: 7649105879380685373, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
+  newPlayerControllerPrefab: {fileID: 8963422727327282135, guid: a0869565c47cee24daf8469f707f2bda, type: 3}

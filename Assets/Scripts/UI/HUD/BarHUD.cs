@@ -16,7 +16,7 @@ namespace NijiDive.UI.HUD
         public void SetBarFill(int amount, int max)
         {
             var percent = (float)amount / max;
-            if (percent < 0f || percent > 1f) Debug.LogWarning("Bar fill set outside expected [0, 1] range", this);
+            if (percent < 0f || percent > 1f) Debug.LogWarning($"Bar fill set outside expected [0, 1] range. Percent: {percent}", this);
 
             textMesh.text = amount.ToString();
             var scale = foreRenderer.transform.parent.localScale;

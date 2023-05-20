@@ -130,7 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 0}
   flashDuration: 0
-  vulnerableTypes: 1073741825
+  vulnerableTypes: 1073741827
   bounceSpeed: 7
   minVelocity: 0.1
 --- !u!60 &5573888039873527180

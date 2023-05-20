@@ -5,12 +5,18 @@ namespace NijiDive.Entities.Terrain
     public class BounceEntity : Entity, IDamageable
     {
         [Space]
-        [SerializeField] private DamageType vulnerableTypes = DamageType.Player | DamageType.Projectile;
-        [Space]
         [SerializeField] [Min(0f)] private float bounceSpeed = 2f;
         [SerializeField] [Min(0f)] private float minVelocity = 0.1f;
 
         public float BounceSpeed => bounceSpeed;
+
+        private static DamageType vulnerableTypes = DamageType.Player | DamageType.Stomp | DamageType.Projectile;
+
+        private bool IsFallingFastEnough(MonoBehaviour monoBehaviour)
+        {
+            var rigidBody = monoBehaviour.GetComponent<Rigidbody2D>();
+            return rigidBody && rigidBody.velocity.y <= -minVelocity;
+        } 
 
         public void TryBounce(GameObject sourceObject)
         {
@@ -26,21 +32,12 @@ namespace NijiDive.Entities.Terrain
         {
             if (vulnerableTypes.IsVulnerableTo(damageType))
             {
-                Destroy(gameObject);
+                if (damageType.ContainsAny(DamageType.Stomp) && IsFallingFastEnough(sourceBehaviour)) TryBounce(sourceBehaviour.gameObject);
+                else if (damageType.ContainsAny(DamageType.Projectile)) Destroy(gameObject);
                 return true;
             }
 
             return false;
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision.attachedRigidbody.velocity.y <= -minVelocity) TryBounce(collision.gameObject);
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision.attachedRigidbody.velocity.y >= minVelocity) TryBounce(collision.gameObject);
         }
     }
 }
