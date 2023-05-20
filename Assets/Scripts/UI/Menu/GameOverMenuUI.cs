@@ -31,7 +31,7 @@ namespace NijiDive.UI.Menu
         {
             base.Start();
 
-            PlayerBasedManager.Player.OnDeath.AddListener((monoBehaviour, damageType) => SetVisible(true));
+            PlayerBasedManager.OnNewPlayer.AddListener(() => PlayerBasedManager.Player.OnDeath.AddListener((monoBehaviour, damageType) => SetVisible(true)));
         }
 
         private void UpdateStatTexts()

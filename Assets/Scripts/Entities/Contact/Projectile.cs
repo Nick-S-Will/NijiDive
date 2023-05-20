@@ -2,7 +2,7 @@ using UnityEngine;
 
 using NijiDive.Controls.Attacks;
 
-namespace NijiDive.Entities
+namespace NijiDive.Entities.Contact
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(Collider2D))]

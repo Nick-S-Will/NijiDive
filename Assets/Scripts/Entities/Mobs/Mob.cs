@@ -18,11 +18,11 @@ namespace NijiDive.Entities.Mobs
         public UnityEvent OnLandOnGround;
         public UnityEvent<MonoBehaviour, DamageType> OnDeath;
 
-        [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] protected SpriteRenderer spriteRenderer;
         [SerializeField] protected DamageType vulnerableTypes;
         [SerializeField] protected float bounceSpeed = 10f;
         [Space]
-        [SerializeField] private CollisionData collisions;
+        [SerializeField] protected CollisionData collisions;
 
         #region Properties
         protected Rigidbody2D Body2d { get; private set; }
@@ -303,7 +303,7 @@ namespace NijiDive.Entities.Mobs
         }
 
         [Serializable]
-        private class CollisionData
+        protected class CollisionData
         {
             [Min(0f)] public float maxCeilingDistance = 0.1f, ceilingCollisionWidthScaler = 0.9f;
             [Space]

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-using NijiDive.Entities;
+using NijiDive.Entities.Contact;
 
 namespace NijiDive.Weaponry
 {

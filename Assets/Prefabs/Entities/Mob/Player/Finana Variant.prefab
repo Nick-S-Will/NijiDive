@@ -1,15 +1,15 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &8963422727327282135
+--- !u!114 &6118985308241003579
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428398224054445841}
+  m_GameObject: {fileID: 5532504504467772616}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e4bfba9841202341ab3265c3c6bb571, type: 3}
+  m_Script: {fileID: 11500000, guid: 413699a53aef3ae46a6e0b8c888c0a43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: 08f1d4e5cb911a64294b215c7de000ec, type: 2}
@@ -20,7 +20,7 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
-  spriteRenderer: {fileID: 1428398224457018226}
+  spriteRenderer: {fileID: 5532504504602433707}
   vulnerableTypes: -1610612705
   bounceSpeed: 4
   collisions:
@@ -33,10 +33,10 @@ MonoBehaviour:
     edgeCollisionOffset: 0.05
     gizmoColorNone: {r: 1, g: 0, b: 0, a: 1}
     gizmoColorFound: {r: 0, g: 1, b: 0, a: 1}
+    showCeilingCheck: 0
+    showWallCheck: 0
     showGroundCheck: 0
     showEdgeCheck: 0
-    showWallCheck: 0
-    showCeilingCheck: 0
   health:
     OnChangeHealth:
       m_PersistentCalls:
@@ -60,7 +60,7 @@ MonoBehaviour:
     OnStartMove:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1428398224457018231}
+        - m_Target: {fileID: 5532504504602433710}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: ResetTrigger
           m_Mode: 5
@@ -72,7 +72,7 @@ MonoBehaviour:
             m_StringArgument: StopWalking
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 1428398224457018231}
+        - m_Target: {fileID: 5532504504602433710}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: SetTrigger
           m_Mode: 5
@@ -87,7 +87,7 @@ MonoBehaviour:
     OnStopMove:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1428398224457018231}
+        - m_Target: {fileID: 5532504504602433710}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: ResetTrigger
           m_Mode: 5
@@ -99,7 +99,7 @@ MonoBehaviour:
             m_StringArgument: StartWalking
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 1428398224457018231}
+        - m_Target: {fileID: 5532504504602433710}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: SetTrigger
           m_Mode: 5
@@ -180,7 +180,7 @@ MonoBehaviour:
     damage: 2147483647
   jumpKeys: 200000004a010000
   altKeys: 1b0000005001000051010000
-  jumpBlast:
+  zoneBlast:
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -189,8 +189,8 @@ MonoBehaviour:
         m_Calls: []
     damageLayers:
       serializedVersion: 2
-      m_Bits: 265
-    damageType: 1073741825
+      m_Bits: 0
+    damageType: -2147483648
     damage: 1
     OnCharge:
       m_PersistentCalls:
@@ -204,13 +204,12 @@ MonoBehaviour:
     comboForCharge: 5
     maxCharges: 4
     infiniteCharges: 0
-    blastPosition: {x: 0, y: 1.5}
-    blastSize: {x: 3, y: 3}
-    blastSprite: {fileID: 1439849220778586112, guid: b15eb60bd458cc34ca84932642640df1, type: 3}
-    blastDuration: 0.2
-    jumpSpeedForce: 110
-    jumpDuration: 0.2
---- !u!1001 &8788112597754189089
+    blastPrefab: {fileID: 8593070502494449490, guid: 81565eaef0b7e96498632dabf9451cd4, type: 3}
+    blastPosition: {x: 0, y: 0.4}
+    blastDuration: 0
+    checkSpriteBounds: 0
+    hangDuration: 0.4
+--- !u!1001 &2801365195415004920
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -219,7 +218,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7649105879380685360, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Name
-      value: Pomu Variant
+      value: Finana Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879380685372, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_RootOrder
@@ -267,31 +266,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Color.b
-      value: 0.6264151
+      value: 0.70796394
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.8773585
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Color.r
-      value: 0.9773961
+      value: 0.35922036
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7649105879380685373, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
---- !u!1 &1428398224054445841 stripped
+--- !u!1 &5532504504467772616 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7649105879380685360, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
-  m_PrefabInstance: {fileID: 8788112597754189089}
+  m_PrefabInstance: {fileID: 2801365195415004920}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1428398224457018231 stripped
+--- !u!95 &5532504504602433710 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7649105879782473302, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
-  m_PrefabInstance: {fileID: 8788112597754189089}
+  m_PrefabInstance: {fileID: 2801365195415004920}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &1428398224457018226 stripped
+--- !u!212 &5532504504602433707 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
-  m_PrefabInstance: {fileID: 8788112597754189089}
+  m_PrefabInstance: {fileID: 2801365195415004920}
   m_PrefabAsset: {fileID: 0}

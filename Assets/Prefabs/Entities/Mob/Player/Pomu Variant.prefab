@@ -1,15 +1,15 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &4240038629882559221
+--- !u!114 &8963422727327282135
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412128958143222795}
+  m_GameObject: {fileID: 1428398224054445841}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2766767549d4133469551a4418635830, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e4bfba9841202341ab3265c3c6bb571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: 08f1d4e5cb911a64294b215c7de000ec, type: 2}
@@ -20,9 +20,9 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
-  spriteRenderer: {fileID: 412128958010103912}
+  spriteRenderer: {fileID: 1428398224457018226}
   vulnerableTypes: -1610612705
-  bounceSpeed: 10
+  bounceSpeed: 4
   collisions:
     maxCeilingDistance: 0.1
     ceilingCollisionWidthScaler: 0.9
@@ -33,10 +33,10 @@ MonoBehaviour:
     edgeCollisionOffset: 0.05
     gizmoColorNone: {r: 1, g: 0, b: 0, a: 1}
     gizmoColorFound: {r: 0, g: 1, b: 0, a: 1}
+    showCeilingCheck: 0
+    showWallCheck: 0
     showGroundCheck: 0
     showEdgeCheck: 0
-    showWallCheck: 0
-    showCeilingCheck: 0
   health:
     OnChangeHealth:
       m_PersistentCalls:
@@ -60,7 +60,7 @@ MonoBehaviour:
     OnStartMove:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 412128958010103917}
+        - m_Target: {fileID: 1428398224457018231}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: ResetTrigger
           m_Mode: 5
@@ -72,7 +72,7 @@ MonoBehaviour:
             m_StringArgument: StopWalking
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 412128958010103917}
+        - m_Target: {fileID: 1428398224457018231}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: SetTrigger
           m_Mode: 5
@@ -87,7 +87,7 @@ MonoBehaviour:
     OnStopMove:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 412128958010103917}
+        - m_Target: {fileID: 1428398224457018231}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: ResetTrigger
           m_Mode: 5
@@ -99,7 +99,7 @@ MonoBehaviour:
             m_StringArgument: StartWalking
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 412128958010103917}
+        - m_Target: {fileID: 1428398224457018231}
           m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
           m_MethodName: SetTrigger
           m_Mode: 5
@@ -139,7 +139,7 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 265
-    damageType: -2147483648
+    damageType: 1073741825
     damage: 2147483647
     startingWeapon: {fileID: 11400000, guid: 0eaf9bb479fad67458206ffa57c7ab2d, type: 2}
     OnEquip:
@@ -164,7 +164,7 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 257
-    damageType: -2147483648
+    damageType: 1073741826
     damage: 2147483647
   headbutting:
     OnDamage:
@@ -176,11 +176,11 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 8
-    damageType: -2147483648
+    damageType: 1073741828
     damage: 2147483647
   jumpKeys: 200000004a010000
   altKeys: 1b0000005001000051010000
-  diveBlast:
+  jumpBlast:
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -203,14 +203,14 @@ MonoBehaviour:
         m_Calls: []
     comboForCharge: 5
     maxCharges: 4
-    blastPosition: {x: 0, y: 0}
-    blastSize: {x: 3.5, y: 2.5}
-    blastSprite: {fileID: 1439849220778586112, guid: b15eb60bd458cc34ca84932642640df1, type: 3}
+    infiniteCharges: 0
+    blastPrefab: {fileID: 2698396269745394641, guid: 28854c5c175e5fc4eb31c0f506cd9a87, type: 3}
+    blastPosition: {x: 0, y: 1.5}
     blastDuration: 0.2
-    hangDuration: 0.2
-    diveSpeedForce: 50
-    diveDuration: 0.5
---- !u!1001 &8043209443704383035
+    checkSpriteBounds: 1
+    jumpSpeedForce: 110
+    jumpDuration: 0.2
+--- !u!1001 &8788112597754189089
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -219,7 +219,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7649105879380685360, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Name
-      value: Elira Variant
+      value: Pomu Variant
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879380685372, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_RootOrder
@@ -267,7 +267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Color.b
-      value: 0.9489818
+      value: 0.6264151
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Color.g
@@ -275,23 +275,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
       propertyPath: m_Color.r
-      value: 0.390566
+      value: 0.9773961
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7649105879380685373, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
---- !u!1 &412128958143222795 stripped
+--- !u!1 &1428398224054445841 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7649105879380685360, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
-  m_PrefabInstance: {fileID: 8043209443704383035}
+  m_PrefabInstance: {fileID: 8788112597754189089}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &412128958010103917 stripped
+--- !u!95 &1428398224457018231 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7649105879782473302, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
-  m_PrefabInstance: {fileID: 8043209443704383035}
+  m_PrefabInstance: {fileID: 8788112597754189089}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &412128958010103912 stripped
+--- !u!212 &1428398224457018226 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 7649105879782473299, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
-  m_PrefabInstance: {fileID: 8043209443704383035}
+  m_PrefabInstance: {fileID: 8788112597754189089}
   m_PrefabAsset: {fileID: 0}

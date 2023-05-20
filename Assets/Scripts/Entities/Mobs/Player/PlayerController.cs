@@ -48,7 +48,7 @@ namespace NijiDive.Entities.Mobs.Player
             jumpDown = jumpKeys.Any(key => Input.GetKey(key));
             // Different because FixedUpdate won't always line up and catch the single frame
             if (jumpKeys.Any(key => Input.GetKeyDown(key))) jumpDownThisFrame = true;
-            
+
             altDown = altKeys.Any(key => Input.GetKey(key));
             if (altKeys.Any(key => Input.GetKeyDown(key))) altDownThisFrame = true;
         }
@@ -118,6 +118,13 @@ namespace NijiDive.Entities.Mobs.Player
                 Debug.Log($"No other {nameof(PlayerController)} found on this object");
                 return;
             }
+
+            OnLandOnGround = playerController.OnLandOnGround;
+            OnDeath = playerController.OnDeath;
+            spriteRenderer = playerController.spriteRenderer;
+            vulnerableTypes = playerController.vulnerableTypes;
+            bounceSpeed = playerController.bounceSpeed;
+            collisions = playerController.collisions;
 
             health = playerController.health;
             walking = playerController.walking;
