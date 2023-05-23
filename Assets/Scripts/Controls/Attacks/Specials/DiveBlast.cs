@@ -15,11 +15,6 @@ namespace NijiDive.Controls.Attacks.Specials
 
         private Coroutine diveBlastRoutine;
 
-        protected override void Use()
-        {
-            if (diveBlastRoutine == null) diveBlastRoutine = mob.StartCoroutine(DiveRoutine());
-        }
-
         private IEnumerator DiveRoutine()
         {
             mob.DisableControls();
@@ -48,6 +43,11 @@ namespace NijiDive.Controls.Attacks.Specials
             mob.EnableControls();
 
             diveBlastRoutine = null;
+        }
+        
+        public override void TryToSpecial()
+        {
+            if (diveBlastRoutine == null) diveBlastRoutine = mob.StartCoroutine(DiveRoutine());
         }
     }
 }

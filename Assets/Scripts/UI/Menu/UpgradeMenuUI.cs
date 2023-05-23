@@ -6,7 +6,7 @@ using NijiDive.Managers.Levels;
 using NijiDive.Managers.PlayerBased;
 using NijiDive.Managers.PlayerBased.UI;
 using NijiDive.Controls.UI;
-using NijiDive.MenuItems;
+using NijiDive.MenuItems.Upgrades;
 using NijiDive.Utilities;
 
 namespace NijiDive.UI.Menu

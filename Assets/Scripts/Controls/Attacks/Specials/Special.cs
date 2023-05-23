@@ -43,7 +43,7 @@ namespace NijiDive.Controls.Attacks.Specials
         {
             if (mob.LastInputs.altDownThisFrame && (charges > 0 || infiniteCharges))
             {
-                Use();
+                TryToSpecial();
                 OnUse.Invoke();
 
                 charges = Mathf.Max(0, charges - 1);
@@ -51,11 +51,14 @@ namespace NijiDive.Controls.Attacks.Specials
             else OnEmpty?.Invoke();
         }
 
-        protected abstract void Use();
+        public abstract void TryToSpecial();
 
         public override void Reset()
         {
+            base.Reset();
+
             charges = 0;
+            comboCountOnLastCharge = 0;
         }
 
         public override void OnDestroy()

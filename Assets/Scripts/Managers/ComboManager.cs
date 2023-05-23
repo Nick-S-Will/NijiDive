@@ -33,11 +33,8 @@ namespace NijiDive.Managers.PlayerBased.Combo
 
         private void AddListenersToPlayer()
         {
-            var stomping = Player.GetControlType<Stomping>();
-            var shooting = Player.GetControlType<WeaponController>();
-
-            stomping.OnKill.AddListener(IncreaseCombo);
-            shooting.OnKill.AddListener(IncreaseCombo);
+            foreach (var attack in Player.GetControlTypes<Attacking>()) attack.OnKill.AddListener(IncreaseCombo);
+            // TODO: Make special count to combo
 
             Player.OnLandOnGround.AddListener(CheckCollisionForEndCombo);
             Player.OnDeath.AddListener((monoBehaviour, damageType) => EndCombo());

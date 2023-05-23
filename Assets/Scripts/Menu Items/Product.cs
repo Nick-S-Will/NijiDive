@@ -25,7 +25,7 @@ namespace NijiDive.MenuItems
                     mob.Health.ReceiveHealth(buffAmount);
                     break;
                 case BuffType.MaxHealth:
-                    mob.Health.ReceiveHealth(buffAmount * mob.Health.MaxHealth);
+                    mob.Health.ReceiveHealth(buffAmount * mob.Health.MaxHealthPoints);
                     break;
                 case BuffType.Ammo:
                     mob.GetControlType<WeaponController>().AddBonusAmmo(buffAmount);

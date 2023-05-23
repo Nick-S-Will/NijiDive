@@ -136,10 +136,10 @@ MonoBehaviour:
     edgeCollisionOffset: 0.05
     gizmoColorNone: {r: 1, g: 0, b: 0, a: 1}
     gizmoColorFound: {r: 0, g: 1, b: 0, a: 1}
+    showCeilingCheck: 0
+    showWallCheck: 0
     showGroundCheck: 0
     showEdgeCheck: 0
-    showWallCheck: 0
-    showCeilingCheck: 0
   health:
     OnChangeHealth:
       m_PersistentCalls:
@@ -156,10 +156,13 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    hitInterval: 0.5
     baseMaxHealth: 4
     maxBonusHealth: 4
-    hitInterval: 2
   walking:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnStartMove:
       m_PersistentCalls:
         m_Calls:
@@ -219,6 +222,9 @@ MonoBehaviour:
     reverseForceMultiplier: 2
     extraDeceleration: 2
   jumping:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     jumpForce: 10
     variableGravityForce: 5
     jumpBufferTime: 0.25
@@ -233,6 +239,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   weaponController:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -258,6 +267,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   stomping:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -270,6 +282,9 @@ MonoBehaviour:
     damageType: 1073741826
     damage: 2147483647
   headbutting:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []

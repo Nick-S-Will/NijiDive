@@ -843,7 +843,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1682971554
 MonoBehaviour:
@@ -944,7 +944,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1994107540
 MonoBehaviour:
@@ -960,7 +960,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   persistentObjects:
   - gameObject: {fileID: 8746725528240767669, guid: 09598439ea5285e488060e4f88b574df, type: 3}
-    transformIndex: 2
+    transformIndex: 3
     enabled: 1
   - gameObject: {fileID: 7649105879380685360, guid: 189505cb9fee0cf47a692a30eb656d3b, type: 3}
     transformIndex: 1
@@ -979,7 +979,7 @@ GameObject:
   - component: {fileID: 2114206611}
   - component: {fileID: 2114206610}
   m_Layer: 0
-  m_Name: Coin Parent
+  m_Name: Coin Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -15,11 +15,6 @@ namespace NijiDive.Controls.Attacks.Specials
 
         private Coroutine jumpBlastRoutine;
 
-        protected override void Use()
-        {
-            if (jumpBlastRoutine == null) jumpBlastRoutine = mob.StartCoroutine(JumpRoutine());
-        }
-
         private IEnumerator JumpRoutine()
         {
             mob.DisableControls();
@@ -40,6 +35,11 @@ namespace NijiDive.Controls.Attacks.Specials
             mob.EnableControls();
 
             jumpBlastRoutine = null;
+        }
+
+        public override void TryToSpecial()
+        {
+            if (jumpBlastRoutine == null) jumpBlastRoutine = mob.StartCoroutine(JumpRoutine());
         }
     }
 }

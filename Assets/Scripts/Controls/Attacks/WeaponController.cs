@@ -52,6 +52,8 @@ namespace NijiDive.Controls.Attacks
 
         public override void Reset()
         {
+            base.Reset();
+
             if (shooting != null)
             { 
                 mob.StopCoroutine(shooting);

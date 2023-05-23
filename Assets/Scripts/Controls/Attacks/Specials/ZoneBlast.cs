@@ -14,11 +14,6 @@ namespace NijiDive.Controls.Attacks.Specials
 
         private Coroutine zoneBlastRoutine;
 
-        protected override void Use()
-        {
-            if (zoneBlastRoutine == null) zoneBlastRoutine = mob.StartCoroutine(ZoneRoutine());
-        }
-
         private IEnumerator ZoneRoutine()
         {
             mob.DisableControls();
@@ -37,6 +32,11 @@ namespace NijiDive.Controls.Attacks.Specials
             mob.EnableControls();
 
             zoneBlastRoutine = null;
+        }
+
+        public override void TryToSpecial()
+        {
+            if (zoneBlastRoutine == null) zoneBlastRoutine = mob.StartCoroutine(ZoneRoutine());
         }
     }
 }

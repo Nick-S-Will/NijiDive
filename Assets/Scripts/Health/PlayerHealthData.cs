@@ -8,20 +8,16 @@ namespace NijiDive.Health
     public class PlayerHealthData : HealthData
     {
         [SerializeField] [Min(1)] private int maxBonusHealth = 4;
-        [SerializeField] [Min(0f)] private float hitInterval = 2f;
 
-        public override int MaxHealth { get; protected set; }
+        public override int MaxHealthPoints { get; protected set; }
         public int MaxBonusHealth => maxBonusHealth;
         public int BonusHealth { get; private set; }
-
-        private float lastDamageTime;
 
         public override void Reset()
         {
             base.Reset();
-            MaxHealth = baseMaxHealth;
+            MaxHealthPoints = baseMaxHealth;
             BonusHealth = 0;
-            lastDamageTime = -hitInterval;
 
             OnChangeHealth?.Invoke();
         }
@@ -30,26 +26,16 @@ namespace NijiDive.Health
         {
             if (amount < 1) return;
 
-            Health += amount;
-            int surplus = Health > MaxHealth ? Health - MaxHealth : 0;
+            HealthPoints += amount;
+            int surplus = HealthPoints > MaxHealthPoints ? HealthPoints - MaxHealthPoints : 0;
 
             BonusHealth += surplus;
             int healthUp = BonusHealth / maxBonusHealth;
 
-            MaxHealth += healthUp;
+            MaxHealthPoints += healthUp;
 
-            Health = Mathf.Min(Health, MaxHealth);
+            HealthPoints = Mathf.Min(HealthPoints, MaxHealthPoints);
             BonusHealth %= maxBonusHealth;
-
-            OnChangeHealth?.Invoke();
-        }
-
-        public override void LoseHealth(int amount)
-        {
-            if (amount < 1 || Time.time < lastDamageTime + hitInterval) return;
-
-            Health = Mathf.Max(0, Health - amount);
-            lastDamageTime = Time.time;
 
             OnChangeHealth?.Invoke();
         }

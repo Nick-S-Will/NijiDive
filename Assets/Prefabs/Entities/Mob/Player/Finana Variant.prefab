@@ -57,6 +57,9 @@ MonoBehaviour:
     maxBonusHealth: 4
     hitInterval: 2
   walking:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnStartMove:
       m_PersistentCalls:
         m_Calls:
@@ -116,6 +119,9 @@ MonoBehaviour:
     reverseForceMultiplier: 2
     extraDeceleration: 2
   jumping:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     jumpForce: 10
     variableGravityForce: 5
     jumpBufferTime: 0.25
@@ -130,6 +136,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   weaponController:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -155,6 +164,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   stomping:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -167,6 +179,9 @@ MonoBehaviour:
     damageType: 1073741826
     damage: 2147483647
   headbutting:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -181,6 +196,9 @@ MonoBehaviour:
   jumpKeys: 200000004a010000
   altKeys: 1b0000005001000051010000
   zoneBlast:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -190,8 +208,8 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 0
-    damageType: -2147483648
-    damage: 1
+    damageType: 0
+    damage: 0
     OnCharge:
       m_PersistentCalls:
         m_Calls: []
@@ -207,7 +225,6 @@ MonoBehaviour:
     blastPrefab: {fileID: 8593070502494449490, guid: 81565eaef0b7e96498632dabf9451cd4, type: 3}
     blastPosition: {x: 0, y: 0.4}
     blastDuration: 0
-    checkSpriteBounds: 0
     hangDuration: 0.4
 --- !u!1001 &2801365195415004920
 PrefabInstance:

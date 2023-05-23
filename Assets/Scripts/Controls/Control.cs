@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 using NijiDive.Entities.Mobs;
 
@@ -8,6 +9,8 @@ namespace NijiDive.Controls
     [Serializable]
     public abstract class Control
     {
+        [HideInInspector] public UnityEvent OnReset = new UnityEvent();
+
         [HideInInspector] protected Mob mob;
         [HideInInspector] protected bool enabled = true;
 
@@ -18,7 +21,7 @@ namespace NijiDive.Controls
 
         public virtual void Start() { }
 
-        public void Setup(Mob mob)
+        public virtual void Setup(Mob mob)
         {
             this.mob = mob;
             enabled = true;
@@ -29,7 +32,7 @@ namespace NijiDive.Controls
 
         public abstract void TryToUse();
 
-        public virtual void Reset() { }
+        public virtual void Reset() { OnReset.Invoke(); }
 
         public virtual void OnDestroy() { }
     }

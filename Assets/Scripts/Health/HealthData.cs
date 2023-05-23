@@ -9,20 +9,29 @@ namespace NijiDive.Health
     {
         public UnityEvent OnChangeHealth;
         [Space]
+        [SerializeField] [Min(0f)] private float hitInterval = 0f;
+        [Space]
         [SerializeField] [Min(1)] protected int baseMaxHealth = 1;
 
-        public int Health { get; protected set; }
-        public virtual int MaxHealth { get => baseMaxHealth; protected set => baseMaxHealth = value; }
-        public bool IsEmpty => Health == 0;
+        public float BonusHitInterval { get; set; }
+        public int HealthPoints { get; protected set; }
+        public virtual int MaxHealthPoints { get => baseMaxHealth; protected set => baseMaxHealth = value; }
+        public bool IsEmpty => HealthPoints == 0;
+
+        private float lastDamageTime;
 
         public virtual void Reset()
         {
-            Health = baseMaxHealth;
+            HealthPoints = baseMaxHealth;
+            lastDamageTime = -hitInterval;
+            BonusHitInterval = 0;
         }
+
+        public bool CanLoseHealth() => Time.time >= lastDamageTime + hitInterval + BonusHitInterval;
 
         private void ChangeHealth(int amount)
         {
-            Health = Mathf.Clamp(Health + amount, 0, baseMaxHealth);
+            HealthPoints = Mathf.Clamp(HealthPoints + amount, 0, baseMaxHealth);
 
             OnChangeHealth?.Invoke();
         }
@@ -35,8 +44,10 @@ namespace NijiDive.Health
 
         public virtual void LoseHealth(int amount)
         {
-            if (amount < 1) return;
+            if (amount < 1 || !CanLoseHealth()) return;
+
             ChangeHealth(-amount);
+            lastDamageTime = Time.time;
         }
     }
 }

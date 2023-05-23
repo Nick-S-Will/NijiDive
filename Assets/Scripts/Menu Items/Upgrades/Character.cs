@@ -3,11 +3,12 @@ using UnityEngine;
 using NijiDive.Managers.PlayerBased;
 using NijiDive.Entities.Mobs.Player;
 
-namespace NijiDive.MenuItems
+namespace NijiDive.MenuItems.Upgrades
 {
     [CreateAssetMenu(menuName = "NijiDive/Menu Items/Character")]
     public class Character : Upgrade
     {
+        [Space]
         [SerializeField] private PlayerController newPlayerControllerPrefab;
 
         public override void Equip()

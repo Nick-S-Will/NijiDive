@@ -32,6 +32,15 @@ TextureImporter:
   - first:
       213: -3411160391176968068
     second: Soup
+  - first:
+      213: 2852499858874660989
+    second: Blast Module
+  - first:
+      213: -8138187742457482893
+    second: Candle
+  - first:
+      213: 2687685024305281532
+    second: Apple
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -404,6 +413,69 @@ TextureImporter:
       bones: []
       spriteID: c78a30482bf19a0d0800000000000000
       internalID: -3411160391176968068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Blast Module
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 13
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d78731a228d169720800000000000000
+      internalID: 2852499858874660989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Candle
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 17
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 371326fbd595f0f80800000000000000
+      internalID: -8138187742457482893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Apple
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 286
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf97ad52a439c4520800000000000000
+      internalID: 2687685024305281532
       vertices: []
       indices: 
       edges: []

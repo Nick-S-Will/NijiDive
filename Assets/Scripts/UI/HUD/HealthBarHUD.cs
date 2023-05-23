@@ -33,7 +33,7 @@ namespace NijiDive.UI.HUD
 
         private void UpdateHealthBar()
         {
-            healthBar.SetBarFill(playerHealth.Health, playerHealth.MaxHealth);
+            healthBar.SetBarFill(playerHealth.HealthPoints, playerHealth.MaxHealthPoints);
             bonusHealthBar.SetBarFill(playerHealth.BonusHealth, playerHealth.MaxBonusHealth);
         }
     }

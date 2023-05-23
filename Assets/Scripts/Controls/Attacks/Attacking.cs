@@ -13,7 +13,7 @@ namespace NijiDive.Controls.Attacks
         public UnityEvent OnDamage, OnKill;
         [SerializeField] protected LayerMask damageLayers;
         [SerializeField] protected DamageType damageType = DamageType.Enemy;
-        [SerializeField] protected int damage = 1;
+        [SerializeField] [Min(0)] protected int damage = 1;
 
         protected Collider2D CheckBounds(Bounds bounds) => Physics2D.OverlapBox(bounds.center, bounds.size, 0f, damageLayers);
         protected (Collider2D, Vector2)[] SampleBounds(Bounds bounds, int xSamples, int ySamples)

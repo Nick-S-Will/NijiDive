@@ -4,11 +4,12 @@ using UnityEngine;
 
 using NijiDive.Managers.Pausing;
 using NijiDive.Entities.Contact;
+using NijiDive.Entities.Mobs;
 
 namespace NijiDive.Controls.Attacks.Specials
 {
     [Serializable]
-    public abstract class Blast : Special
+    public class Blast : Special
     {
         [Space]
         [SerializeField] private GameObject blastPrefab;
@@ -16,7 +17,7 @@ namespace NijiDive.Controls.Attacks.Specials
         [Tooltip("Set to 0 for blast to exist indefinitely")]
         [SerializeField] [Min(0f)] private float blastDuration = 0.2f;
 
-        protected Coroutine blastRoutine;
+        private Coroutine blastRoutine;
 
         private IEnumerator DamageSpriteBounds(SpriteRenderer spriteRenderer)
         {
@@ -40,11 +41,18 @@ namespace NijiDive.Controls.Attacks.Specials
             else
             {
                 var spriteRenderer = blastObject.GetComponentInChildren<SpriteRenderer>();
-                if (spriteRenderer == null) Debug.LogError($"{nameof(blastPrefab)} must have a sprite in it's lineage to {nameof(DamageSpriteBounds)}");
+                if (spriteRenderer == null) Debug.LogError($"{nameof(blastPrefab)} must have a sprite in it's lineage to use {nameof(DamageSpriteBounds)}");
                 else yield return DamageSpriteBounds(spriteRenderer);
             }
 
             if (blastDuration > 0f) UnityEngine.Object.Destroy(blastObject);
+
+            blastRoutine = null;
+        }
+
+        public override void TryToSpecial()
+        {
+            if (blastRoutine == null) blastRoutine = mob.StartCoroutine(BlastRoutine());
         }
     }
 }

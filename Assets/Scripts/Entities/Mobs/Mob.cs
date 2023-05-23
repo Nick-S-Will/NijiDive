@@ -101,10 +101,9 @@ namespace NijiDive.Entities.Mobs
 
         public virtual bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
         {
-            var canDamage = vulnerableTypes.IsVulnerableTo(damageType);
+            var canDamage = vulnerableTypes.IsVulnerableTo(damageType) && Health.CanLoseHealth();
             if (canDamage)
             {
-                Bounce(bounceSpeed);
                 Bounce(sourceBehaviour.gameObject, bounceSpeed);
 
                 Health.LoseHealth(damage);
@@ -123,18 +122,29 @@ namespace NijiDive.Entities.Mobs
 
         private void Bounce(GameObject other, float velocity)
         {
+            Bounce(bounceSpeed);
+
             var bounceable = other.GetComponent<IBounceable>();
             if (bounceable != null) bounceable.Bounce(velocity);
         }
 
         public void AddForce(Vector2 force) => Body2d.AddForce(force);
 
-        #region Controls
+        #region Access Controls
         public T GetControlType<T>() where T : Control
         {
             foreach (var type in controls) if (type is T t) return t;
 
             return null;
+        }
+
+        public T[] GetControlTypes<T>() where T : Control
+        {
+            var types = new List<T>();
+
+            foreach (var control in controls) if (control is T typeControl) types.Add(typeControl);
+
+            return types.ToArray();
         }
 
         public void AddControlType<T>(T newControl) where T : Control

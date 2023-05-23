@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using NijiDive.MenuItems;
+using NijiDive.MenuItems.Upgrades;
 using NijiDive.UI.Menu;
 
 namespace NijiDive.UI.HUD
