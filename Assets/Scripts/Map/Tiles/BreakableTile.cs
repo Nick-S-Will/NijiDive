@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 namespace NijiDive.Map.Tiles
 {
-    [CreateAssetMenu(menuName = "NijiDive/Tiles/BreakableTile")]
+    [CreateAssetMenu(menuName = "NijiDive/Tiles/Breakable Tile")]
     public class BreakableTile : BaseTile, IDamageable
     {
         // Vector2 is the position of the break

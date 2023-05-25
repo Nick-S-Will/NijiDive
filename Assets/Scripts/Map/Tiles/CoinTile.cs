@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 
 namespace NijiDive.Map.Tiles
 {
-    [CreateAssetMenu(menuName = "NijiDive/Tiles/CoinTile")]
+    [CreateAssetMenu(menuName = "NijiDive/Tiles/Coin Tile")]
     public class CoinTile : BreakableTile
     {
         [Space]

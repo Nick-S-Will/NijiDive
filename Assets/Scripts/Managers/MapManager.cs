@@ -10,7 +10,7 @@ namespace NijiDive.Managers.Map
 {
     public class MapManager : Manager, IDamageable
     {
-        [SerializeField] private Tilemap groundMap, platformMap;
+        [SerializeField] private Tilemap groundMap, platformMap, waterMap;
         [SerializeField] private Grid entityGrid;
         [SerializeField] private LayerMask groundMask;
         [SerializeField] private bool generateAtStart = true;
@@ -33,7 +33,7 @@ namespace NijiDive.Managers.Map
 
         private void Awake()
         {
-            maps = new Tilemap[] { groundMap, platformMap };
+            maps = new Tilemap[] { groundMap, platformMap, waterMap };
             rowCount = 0;
         }
 
@@ -51,10 +51,26 @@ namespace NijiDive.Managers.Map
         private void Start()
         {
             currentLevel = LevelManager.singleton ? LevelManager.singleton.GetCurrentLevel() : null;
-            if (currentLevel == null) return;
+            if (currentLevel == null)
+            {
+                SetupTiles(NextChunkBounds());
+                return;
+            }
 
             shopIndex = GenerateShopIndex();
             if (generateAtStart) for (int i = 0; i < currentLevel.RowCount; i++) AddRow();
+        }
+
+        private void SetupTiles(BoundsInt tileBounds)
+        {
+            foreach (var map in maps)
+            {
+                foreach (var cell in tileBounds.allPositionsWithin)
+                {
+                    var tile = map.GetTile<BaseTile>(cell);
+                    if (tile) tile.Setup(map, cell);
+                }
+            }
         }
 
         public override void Retry() { }
@@ -88,20 +104,14 @@ namespace NijiDive.Managers.Map
         {
             groundMap.SetTilesBlock(chunkBounds, chunk.groundTiles);
             platformMap.SetTilesBlock(chunkBounds, chunk.platformTiles);
+            waterMap.SetTilesBlock(chunkBounds, chunk.waterTiles);
             foreach (var entity in chunk.entities)
             {
                 try { _ = entity.Spawn(entityGrid.transform, chunkBounds.min); }
                 catch (System.NullReferenceException) { Debug.LogWarning($"Chunk \"{chunk.name}\" has a null entity."); }
             }
 
-            foreach (var map in maps)
-            {
-                foreach (var cell in chunkBounds.allPositionsWithin)
-                {
-                    var tile = map.GetTile<BaseTile>(cell);
-                    if (tile) tile.Setup(map, cell);
-                }
-            }
+            SetupTiles(chunkBounds);
         }
 
         private void AddSideChunks(Chunk baseChunk, BoundsInt baseBounds)

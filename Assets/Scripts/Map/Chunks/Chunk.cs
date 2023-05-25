@@ -7,7 +7,7 @@ namespace NijiDive.Map.Chunks
     [CreateAssetMenu(menuName = "NijiDive/Map/Chunk")]
     public class Chunk : ScriptableObject
     {
-        public TileBase[] groundTiles = new TileBase[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE], platformTiles = new TileBase[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE];
+        public TileBase[] groundTiles = new TileBase[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE], platformTiles = new TileBase[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE], waterTiles = new TileBase[Constants.CHUNK_SIZE * Constants.CHUNK_SIZE];
         public EntityPosition[] entities = new EntityPosition[0];
         [Space]
         public Chunk leftChunk;
@@ -15,19 +15,21 @@ namespace NijiDive.Map.Chunks
 
         public static readonly Vector3Int BoundSize = new Vector3Int(Constants.CHUNK_SIZE, Constants.CHUNK_SIZE, 1);
 
-        private void OnValidate()
+        private void CheckTileLength(ref TileBase[] tiles)
         {
             var fixedArrayLength = Constants.CHUNK_SIZE * Constants.CHUNK_SIZE;
-            if (groundTiles.Length != fixedArrayLength)
+            if (tiles.Length != fixedArrayLength)
             {
-                Debug.LogWarning($"{nameof(groundTiles)}'s length must be {nameof(Chunk)}.{nameof(Constants.CHUNK_SIZE)} squared.");
-                Array.Resize(ref groundTiles, Constants.CHUNK_SIZE);
+                Debug.LogWarning($"{nameof(tiles)}'s length must be {nameof(Constants.CHUNK_SIZE)} squared.");
+                Array.Resize(ref tiles, Constants.CHUNK_SIZE);
             }
-            if (platformTiles.Length != fixedArrayLength)
-            {
-                Debug.LogWarning($"{nameof(platformTiles)}'s length must be {nameof(Chunk)}.{nameof(Constants.CHUNK_SIZE)} squared.");
-                Array.Resize(ref platformTiles, Constants.CHUNK_SIZE);
-            }
+        }
+
+        private void OnValidate()
+        {
+            CheckTileLength(ref groundTiles);
+            CheckTileLength(ref platformTiles);
+            CheckTileLength(ref waterTiles);
         }
 
         [Serializable]
