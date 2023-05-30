@@ -29,8 +29,5 @@ namespace NijiDive.Managers.PlayerBased
         }
 
         private static PlayerController player;
-
-        [ContextMenu("Invoke On New Player")]
-        public void InvokeOnNewPlayer() => OnNewPlayer.Invoke();
     }
 }

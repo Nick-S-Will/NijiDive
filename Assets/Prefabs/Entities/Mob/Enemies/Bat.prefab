@@ -48,11 +48,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: 08f1d4e5cb911a64294b215c7de000ec, type: 2}
   flashDuration: 0.1
+  OnLandOnGround:
+    m_PersistentCalls:
+      m_Calls: []
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
   spriteRenderer: {fileID: 2957843517798356015}
-  vulnerableTypes: 1610612771
+  vulnerableTypes: 805306603
   bounceSpeed: 10
   collisions:
     maxCeilingDistance: 0.1
@@ -64,19 +67,23 @@ MonoBehaviour:
     edgeCollisionOffset: 0
     gizmoColorNone: {r: 1, g: 0, b: 0, a: 1}
     gizmoColorFound: {r: 0, g: 1, b: 0, a: 1}
+    showCeilingCheck: 0
+    showWallCheck: 0
     showGroundCheck: 0
     showEdgeCheck: 0
-    showWallCheck: 0
-    showCeilingCheck: 0
   health:
     OnChangeHealth:
       m_PersistentCalls:
         m_Calls: []
+    hitInterval: 0
     baseMaxHealth: 3
   coinsToDrop: 9
   gizmoColor: {r: 1, g: 1, b: 1, a: 1}
   showPath: 0
   flyingX:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnStartMove:
       m_PersistentCalls:
         m_Calls: []
@@ -88,6 +95,9 @@ MonoBehaviour:
     reverseForceMultiplier: 1
     extraDeceleration: 0
   flyingY:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnStartMove:
       m_PersistentCalls:
         m_Calls: []
@@ -99,6 +109,9 @@ MonoBehaviour:
     reverseForceMultiplier: 1
     extraDeceleration: 0
   stomping:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -108,9 +121,12 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 128
-    damageType: -2147483646
+    damageType: 1073741826
     damage: 1
   shoving:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -120,7 +136,7 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 128
-    damageType: -2147483632
+    damageType: 1073741840
     damage: 1
 --- !u!50 &2957843517561446910
 Rigidbody2D:

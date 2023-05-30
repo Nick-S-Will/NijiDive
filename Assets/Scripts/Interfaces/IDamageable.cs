@@ -24,11 +24,13 @@ namespace NijiDive
     public enum DamageType
     {
         // Damage sources
-        Enemy = 1 << 31,
-        Player = 1 << 30,
-        Environment = 1 << 29,
+        Enemy = 1 << 30,
+        Player = 1 << 29,
+        Environment = 1 << 28,
 
         // Damage types
+        Lava = 1 << 7,
+        Poison = 1 << 6,
         Void = 1 << 5,
         Shove = 1 << 4,
         Suffocation = 1 << 3,

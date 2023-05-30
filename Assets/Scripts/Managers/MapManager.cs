@@ -21,7 +21,7 @@ namespace NijiDive.Managers.Map
 
         private Tilemap[] maps;
         private Level currentLevel;
-        private Vector3 damagePoint = float.MaxValue * Vector3.up;
+        private Vector3 lastDamagePoint = float.MaxValue * Vector3.up;
         private int rowCount, shopIndex;
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace NijiDive.Managers.Map
 
         public bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
         {
-            damagePoint = point;
+            lastDamagePoint = point;
 
             var tileCell = groundMap.WorldToCell(point);
             if (groundMap.GetTile(tileCell) is IDamageable damageable && damageable.TryDamage(sourceBehaviour, damage, damageType, point))
@@ -197,7 +197,7 @@ namespace NijiDive.Managers.Map
             Gizmos.color = gizmoColor;
             if (showLastDamagePoint)
             {
-                Gizmos.DrawSphere(damagePoint, 0.1f);
+                Gizmos.DrawSphere(lastDamagePoint, 0.1f);
             }
             if (showNextChunkBounds)
             {

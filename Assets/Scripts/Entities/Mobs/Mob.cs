@@ -19,7 +19,7 @@ namespace NijiDive.Entities.Mobs
         public UnityEvent<MonoBehaviour, DamageType> OnDeath;
 
         [SerializeField] protected SpriteRenderer spriteRenderer;
-        [SerializeField] protected DamageType vulnerableTypes;
+        [SerializeField] protected DamageType vulnerableTypes = (DamageType)~0;
         [SerializeField] protected float bounceSpeed = 10f;
         [Space]
         [SerializeField] protected CollisionData collisions;
@@ -76,6 +76,7 @@ namespace NijiDive.Entities.Mobs
             OnDeath.AddListener(Death);
         }
 
+        #region Controls
         protected void UseControls(InputData inputs)
         {
             if (PerformCollisionChecks) UpdateCollisionChecks(inputs.lStick.x);
@@ -99,38 +100,6 @@ namespace NijiDive.Entities.Mobs
         public virtual void EnableControls() => SetControls(true);
         public virtual void DisableControls() => SetControls(false);
 
-        public virtual bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
-        {
-            var canDamage = vulnerableTypes.IsVulnerableTo(damageType) && Health.CanLoseHealth();
-            if (canDamage)
-            {
-                Bounce(sourceBehaviour.gameObject, bounceSpeed);
-
-                Health.LoseHealth(damage);
-                if (Health.IsEmpty)
-                {
-                    OnDeath?.Invoke(sourceBehaviour, damageType);
-                    OnMobDeath?.Invoke(this, sourceBehaviour, damageType);
-                }
-                else _ = Flash(spriteRenderer);
-            }
-
-            return canDamage;
-        }
-
-        public virtual void Bounce(float velocity) => SetVelocityY(velocity);
-
-        private void Bounce(GameObject other, float velocity)
-        {
-            Bounce(bounceSpeed);
-
-            var bounceable = other.GetComponent<IBounceable>();
-            if (bounceable != null) bounceable.Bounce(velocity);
-        }
-
-        public void AddForce(Vector2 force) => Body2d.AddForce(force);
-
-        #region Access Controls
         public T GetControlType<T>() where T : Control
         {
             foreach (var type in controls) if (type is T t) return t;
@@ -265,6 +234,37 @@ namespace NijiDive.Entities.Mobs
             return CollisionCheck(boxPos, boxSize);
         }
         #endregion
+
+        public virtual bool TryDamage(MonoBehaviour sourceBehaviour, int damage, DamageType damageType, Vector2 point)
+        {
+            var canDamage = vulnerableTypes.IsVulnerableTo(damageType) && Health.CanLoseHealth();
+            if (canDamage)
+            {
+                Bounce(sourceBehaviour.gameObject, bounceSpeed);
+
+                Health.LoseHealth(damage);
+                if (Health.IsEmpty)
+                {
+                    OnDeath?.Invoke(sourceBehaviour, damageType);
+                    OnMobDeath?.Invoke(this, sourceBehaviour, damageType);
+                }
+                else _ = Flash(spriteRenderer);
+            }
+
+            return canDamage;
+        }
+
+        public virtual void Bounce(float velocity) => SetVelocityY(velocity);
+
+        private void Bounce(GameObject other, float velocity)
+        {
+            Bounce(bounceSpeed);
+
+            var bounceable = other.GetComponent<IBounceable>();
+            if (bounceable != null) bounceable.Bounce(velocity);
+        }
+
+        public void AddForce(Vector2 force) => Body2d.AddForce(force);
 
         public override void Pause(bool paused)
         {

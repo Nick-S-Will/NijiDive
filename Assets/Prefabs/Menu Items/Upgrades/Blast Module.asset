@@ -28,7 +28,7 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 265
-    damageType: 1073741825
+    damageType: 536870913
     damage: 2147483647
     OnCharge:
       m_PersistentCalls:

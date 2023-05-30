@@ -21,7 +21,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   spriteRenderer: {fileID: 1428398224457018226}
-  vulnerableTypes: -1610612705
+  vulnerableTypes: 1342177503
   bounceSpeed: 4
   collisions:
     maxCeilingDistance: 0.1
@@ -53,10 +53,13 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    hitInterval: 2
     baseMaxHealth: 4
     maxBonusHealth: 4
-    hitInterval: 2
   walking:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnStartMove:
       m_PersistentCalls:
         m_Calls:
@@ -116,6 +119,9 @@ MonoBehaviour:
     reverseForceMultiplier: 2
     extraDeceleration: 2
   jumping:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     jumpForce: 10
     variableGravityForce: 5
     jumpBufferTime: 0.25
@@ -130,6 +136,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   weaponController:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -138,8 +147,8 @@ MonoBehaviour:
         m_Calls: []
     damageLayers:
       serializedVersion: 2
-      m_Bits: 265
-    damageType: 1073741825
+      m_Bits: 9
+    damageType: 536870913
     damage: 2147483647
     startingWeapon: {fileID: 11400000, guid: 0eaf9bb479fad67458206ffa57c7ab2d, type: 2}
     OnEquip:
@@ -155,6 +164,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   stomping:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -163,10 +175,13 @@ MonoBehaviour:
         m_Calls: []
     damageLayers:
       serializedVersion: 2
-      m_Bits: 257
-    damageType: 1073741826
+      m_Bits: 1
+    damageType: 536870914
     damage: 2147483647
   headbutting:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -176,11 +191,14 @@ MonoBehaviour:
     damageLayers:
       serializedVersion: 2
       m_Bits: 8
-    damageType: 1073741828
+    damageType: 536870916
     damage: 2147483647
   jumpKeys: 200000004a010000
   altKeys: 1b0000005001000051010000
   jumpBlast:
+    OnReset:
+      m_PersistentCalls:
+        m_Calls: []
     OnDamage:
       m_PersistentCalls:
         m_Calls: []
@@ -189,8 +207,8 @@ MonoBehaviour:
         m_Calls: []
     damageLayers:
       serializedVersion: 2
-      m_Bits: 265
-    damageType: 1073741825
+      m_Bits: 9
+    damageType: 536870913
     damage: 1
     OnCharge:
       m_PersistentCalls:
@@ -207,7 +225,6 @@ MonoBehaviour:
     blastPrefab: {fileID: 2698396269745394641, guid: 28854c5c175e5fc4eb31c0f506cd9a87, type: 3}
     blastPosition: {x: 0, y: 1.5}
     blastDuration: 0.2
-    checkSpriteBounds: 1
     jumpSpeedForce: 110
     jumpDuration: 0.2
 --- !u!1001 &8788112597754189089

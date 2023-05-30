@@ -136,11 +136,9 @@ namespace NijiDive.UI.Menu
         public virtual void NavigateDown() { }
         public virtual void NavigateUp() { }
 
-#if UNITY_EDITOR
         protected virtual void OnValidate()
         {
-            UnityEditor.EditorApplication.delayCall += UpdateOptionPositions; // Workaround for seemingly useless "SendMessage cannot be called during Awake, CheckConsistency, or OnValidate" warning
+            ScriptingUtilities.DelayCall(UpdateOptionPositions);
         }
-#endif
     }
 }
