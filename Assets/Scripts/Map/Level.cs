@@ -28,11 +28,16 @@ namespace NijiDive.Map
         {
             if (rowCount == 1) return;
 
-            var minChunks = startChunks.Length + 1;
+            var minChunks = startChunks.Length;
             if (rowCount < minChunks)
             {
-                Debug.LogWarning($"{nameof(rowCount)} must be at least 1 more than the length of {nameof(startChunks)} to ensure the {nameof(endChunk)} can generate");
+                Debug.LogWarning($"{nameof(rowCount)} must be at least the length of {nameof(startChunks)} to ensure the all {nameof(startChunks)} can generate");
                 rowCount = minChunks;
+            }
+            else if (rowCount == minChunks && endChunk)
+            {
+                Debug.LogWarning($"{nameof(rowCount)} must be at least 1 more than the length of {nameof(startChunks)} to ensure the {nameof(endChunk)} can generate");
+                rowCount = minChunks + 1;
             }
         }
     }

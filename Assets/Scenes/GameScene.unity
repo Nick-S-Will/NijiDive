@@ -789,7 +789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundMap: {fileID: 325134715}
   platformMap: {fileID: 822045838}
-  waterMap: {fileID: 0}
+  waterMap: {fileID: 1996553649}
   entityGrid: {fileID: 1771453133}
   groundMask:
     serializedVersion: 2

@@ -52,15 +52,30 @@ MonoBehaviour:
   - name: "\u306B"
     levels:
     - {fileID: 11400000, guid: be33d33ac3e7fc94388cd8da009b08b6, type: 2}
-    - {fileID: 11400000, guid: fe79a733000ce1e46a2f06d08172eda3, type: 2}
     playerStartPos: {x: 0, y: 0.5, z: 0}
     color: {r: 0.5019608, g: 0, b: 1, a: 1}
-  OnLoadLevel:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLoadLevelPostStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLoadUpgrading:
-    m_PersistentCalls:
-      m_Calls: []
+  - name: "\u3058"
+    levels:
+    - {fileID: 11400000, guid: be33d33ac3e7fc94388cd8da009b08b6, type: 2}
+    playerStartPos: {x: 0, y: 0.5, z: 0}
+    color: {r: 0, g: 0, b: 1, a: 1}
+  - name: "\u3055"
+    levels:
+    - {fileID: 11400000, guid: fae3fb0813fb65541ac65501a2ec7030, type: 2}
+    playerStartPos: {x: 0, y: 0.5, z: 0}
+    color: {r: 0, g: 1, b: 0, a: 1}
+  - name: "\u3093"
+    levels:
+    - {fileID: 11400000, guid: 1b150f87d78a59847bd4c9fa79ab7c40, type: 2}
+    playerStartPos: {x: 0, y: 0.5, z: 0}
+    color: {r: 1, g: 0.49803922, b: 0, a: 1}
+  - name: "\u3058"
+    levels:
+    - {fileID: 11400000, guid: aaaa0f2914a1dba4ebaac8420c2219e9, type: 2}
+    playerStartPos: {x: 0, y: 0.5, z: 0}
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - name: '!'
+    levels:
+    - {fileID: 11400000, guid: 194120ad20ee1e44eac7217e11f4ec40, type: 2}
+    playerStartPos: {x: 0, y: 0.5, z: 0}
+    color: {r: 1, g: 1, b: 1, a: 1}

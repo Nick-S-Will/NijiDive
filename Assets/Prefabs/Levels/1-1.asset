@@ -26,4 +26,4 @@ MonoBehaviour:
   endChunk: {fileID: 11400000, guid: c7f7eb3c0a90a114fbdb07278bbea166, type: 2}
   rowCount: 10
   safeZoneRowInterval: 3
-  shopChance: 0.9
+  shopChance: 0.95

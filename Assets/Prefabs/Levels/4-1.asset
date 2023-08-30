@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28681b7403b0b4149b667ef9eca5c5a7, type: 3}
-  m_Name: Start Level
+  m_Name: 4-1
   m_EditorClassIdentifier: 
-  startChunks:
-  - {fileID: 11400000, guid: 84067ac35ac4a4a419a769c729eca66d, type: 2}
+  startChunks: []
   shopJunctionChunks: []
   safeZoneChunks: []
   mainChunks: []
-  endChunk: {fileID: 0}
-  rowCount: 1
-  safeZoneRowInterval: 1
-  shopChance: 0
+  endChunk: {fileID: 11400000, guid: c7f7eb3c0a90a114fbdb07278bbea166, type: 2}
+  rowCount: 15
+  safeZoneRowInterval: 3
+  shopChance: 0.8

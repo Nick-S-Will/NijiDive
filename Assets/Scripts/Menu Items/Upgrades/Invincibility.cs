@@ -5,7 +5,7 @@ using NijiDive.Managers.PlayerBased;
 namespace NijiDive.MenuItems.Upgrades
 {
     [CreateAssetMenu(menuName = "NijiDive/Menu Items/Upgrades/Candle")]
-    public class Candle : Upgrade
+    public class Invincibility : Upgrade
     {
         [Space]
         [SerializeField] [Min(0f)] private float extraInvincibilityDuration = 1f;

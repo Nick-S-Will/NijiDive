@@ -14,7 +14,7 @@ namespace NijiDive.CinemachineAddons
     {
         [SerializeField] private float xOffset;
         [Tooltip("Set to 0 for snap transition")]
-        [SerializeField] [Min(0f)] private float transitionSpeed = Constants.CHUNK_SIZE;
+        [SerializeField][Min(0f)] private float transitionSpeed = Constants.CHUNK_SIZE;
 
         private Vector3 prevPos;
 
@@ -41,7 +41,8 @@ namespace NijiDive.CinemachineAddons
             var vCam = GetComponent<CinemachineVirtualCamera>();
             var offset2D = (Vector2)vCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
             vCam.Follow.position = -offset2D;
-            // TODO: Force camera to player immediately
+            prevPos = Vector2.zero;
+            vCam.ForceCameraPosition(Vector3.zero, Quaternion.identity);
         }
 
         protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
@@ -52,16 +53,9 @@ namespace NijiDive.CinemachineAddons
                 var xShifts = (int)Math.Round((targetPosition.x - xOffset) / Constants.CHUNK_SIZE, MidpointRounding.AwayFromZero);
                 targetPosition.x = xShifts * Constants.CHUNK_SIZE + xOffset;
 
-                if (transitionSpeed == 0f || Time.timeSinceLevelLoad < Time.deltaTime)
-                {
-                    state.RawPosition = targetPosition;
-                    prevPos = targetPosition;
-                }
-                else
-                {
-                    state.RawPosition = Vector3.MoveTowards(prevPos, targetPosition, transitionSpeed * Time.deltaTime);
-                    prevPos = state.RawPosition;
-                }
+                var snapToTarget = transitionSpeed == 0f || Time.timeSinceLevelLoad < Time.deltaTime;
+                state.RawPosition = snapToTarget ? targetPosition : Vector3.MoveTowards(prevPos, targetPosition, transitionSpeed * Time.deltaTime);
+                prevPos = state.RawPosition;
             }
         }
     }

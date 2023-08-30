@@ -11,7 +11,7 @@ namespace NijiDive.Map.Chunks
 {
     public class ChunkEditor : MonoBehaviour
     {
-        [SerializeField] private Tilemap groundMap, platformMap;
+        [SerializeField] private Tilemap groundMap, platformMap, waterMap;
         [SerializeField] private Grid entityGrid;
         [Space]
         [SerializeField] private Chunk toLoad;
@@ -32,9 +32,10 @@ namespace NijiDive.Map.Chunks
 
             ClearEntities();
 
-            Undo.RecordObjects(new Object[] { groundMap, platformMap }, "Chunk Editor Tile Clear");
+            Undo.RecordObjects(new Object[] { groundMap, platformMap, waterMap }, "Chunk Editor Tile Clear");
             groundMap.SetTilesBlock(EditorBounds, toLoad.groundTiles);
             platformMap.SetTilesBlock(EditorBounds, toLoad.platformTiles);
+            waterMap.SetTilesBlock(EditorBounds, toLoad.waterTiles);
             CreateEntities();
         }
 
@@ -49,6 +50,7 @@ namespace NijiDive.Map.Chunks
             Undo.RecordObject(toLoad, "Chunk Editor Overwrite");
             toLoad.groundTiles = groundMap.GetTilesBlock(EditorBounds);
             toLoad.platformTiles = platformMap.GetTilesBlock(EditorBounds);
+            toLoad.waterTiles = waterMap.GetTilesBlock(EditorBounds);
             toLoad.entities = GetEntityPositions();
             EditorUtility.SetDirty(toLoad);
         }
@@ -86,6 +88,7 @@ namespace NijiDive.Map.Chunks
             newChunk.name = newChunkFileName;
             newChunk.groundTiles = groundMap.GetTilesBlock(EditorBounds);
             newChunk.platformTiles = platformMap.GetTilesBlock(EditorBounds);
+            newChunk.waterTiles = waterMap.GetTilesBlock(EditorBounds);
             newChunk.entities = GetEntityPositions();
 
             SaveChunkAssetSafe(newChunk);
@@ -123,10 +126,11 @@ namespace NijiDive.Map.Chunks
 
         public void ClearEditor()
         {
-            Undo.RecordObjects(new Object[] { groundMap, platformMap }, "Chunk Editor Tile Clear");
+            Undo.RecordObjects(new Object[] { groundMap, platformMap, waterMap }, "Chunk Editor Tile Clear");
 
             groundMap.ClearAllTiles();
             platformMap.ClearAllTiles();
+            waterMap.ClearAllTiles();
             ClearEntities();
         }
 
