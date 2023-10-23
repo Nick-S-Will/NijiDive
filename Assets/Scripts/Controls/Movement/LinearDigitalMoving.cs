@@ -12,7 +12,7 @@ namespace NijiDive.Controls.Movement
         protected bool wasMoving;
 
         protected abstract Vector2 MoveAxis { get; }
-        protected Vector2 LocalMoveAxis => Quaternion.AngleAxis(mob.transform.rotation.z, Vector3.forward)* MoveAxis;
+        protected Vector2 LocalMoveAxis => Quaternion.AngleAxis(mob.transform.rotation.z, Vector3.forward) * MoveAxis;
 
         /// <summary>
         /// Updates <see cref="Mob.Rb2d"/>'s velocity on <see cref="moveAxis"/>

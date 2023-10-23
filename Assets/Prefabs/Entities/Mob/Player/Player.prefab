@@ -217,10 +217,8 @@ MonoBehaviour:
             m_StringArgument: StopWalking
             m_BoolArgument: 0
           m_CallState: 2
-    moveSpeed: 25
+    moveSpeed: 30
     minVelocity: 0.1
-    reverseForceMultiplier: 2
-    extraDeceleration: 2
   jumping:
     OnReset:
       m_PersistentCalls:
@@ -311,7 +309,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0.3
+  m_LinearDrag: 2
   m_AngularDrag: 0.05
   m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: bc3674e0675fb3c42a935c42f85b7353, type: 2}
